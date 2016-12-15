@@ -42,7 +42,50 @@ import com.jkoolcloud.tnt4j.streams.utils.SyslogUtils;
 
 /**
  * Implements an activity data parser that assumes each activity data item is an Syslog server event
- * {@link SyslogServerEventIF}. Event data is mapped to activity TODO.
+ * {@link SyslogServerEventIF}. Parser resolved event data fields are put into {@link Map} and afterwards mapped into
+ * activity fields and properties according to defined parser configuration.
+ * <p>
+ * Map entries containing values as internal {@link Map}s are automatically mapped into activity properties. If only
+ * particular inner map entries are needed, then in parser fields mapping configuration define those properties as
+ * separate fields.
+ * <p>
+ * This parser resolved data map may contain such entries:
+ * <ul>
+ * <li>for activity fields:</li>
+ * <ul>
+ * <li>EventType</li>
+ * <li>EventName</li>
+ * <li>Exception</li>
+ * <li>UserName</li>
+ * <li>ResourceName</li>
+ * <li>Location</li>
+ * <li>Tag</li>
+ * <li>Correlator</li>
+ * <li>ProcessId</li>
+ * <li>ThreadId</li>
+ * <li>Message</li>
+ * <li>Severity</li>
+ * <li>ApplName</li>
+ * <li>ServerName</li>
+ * <li>EndTime</li>
+ * <li>ElapsedTime</li>
+ * <li>MsgCharSet</li>
+ * </ul>
+ * <li>for activity properties:</li>
+ * <ul>
+ * <li>facility</li>
+ * <li>level</li>
+ * <li>hostname</li>
+ * <li>hostaddr</li>
+ * </ul>
+ * <li>maps of resolved additional custom activity properties:</li>
+ * <ul>
+ * <li>SyslogMap - map of resolved RFC 5424 structured data</li>
+ * <li>SyslogVars - map of resolved application message contained (varName=varValue) variables</li>
+ * </ul>
+ * </ul>
+ * <p>
+ * This activity parser supports properties from {@link AbstractActivityMapParser} (and higher hierarchy parsers).
  *
  * @version $Revision: 1 $
  */
@@ -146,7 +189,8 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 
 		// extract name=value pairs if available
 		SyslogUtils.extractVariables(event.getMessage(), dataMap);
-		String locationKey = (String) dataMap.get(Location.name()) + '/' + (String) dataMap.get(ResourceName.name());
+		String locationKey = String.format("%s/%s", dataMap.get(Location.name()), // NON-NLS
+				(String) dataMap.get(ResourceName.name()));
 		dataMap.put(EndTime.name(), date.getTime() * 1000);
 		dataMap.put(ElapsedTime.name(), SyslogUtils.getUsecSinceLastEvent(locationKey));
 

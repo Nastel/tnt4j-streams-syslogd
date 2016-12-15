@@ -23,8 +23,7 @@ import static com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants.*;
 
 import java.io.IOException;
 import java.lang.Exception;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +37,56 @@ import com.jkoolcloud.tnt4j.streams.utils.SyslogUtils;
 import com.jkoolcloud.tnt4j.streams.utils.Utils;
 
 /**
- * TODO
+ * Implements an activity data parser that assumes each activity data item is an Syslog log line {@link String}. Parser
+ * resolved log line fields are put into {@link Map} and afterwards mapped into activity fields and properties according
+ * to defined parser configuration.
+ * <p>
+ * Map entries containing values as internal {@link Map}s are automatically mapped into activity properties. If only
+ * particular inner map entries are needed, then in parser fields mapping configuration define those properties as
+ * separate fields.
+ * <p>
+ * This parser resolved data map may contain such entries:
+ * <ul>
+ * <li>for activity fields:</li>
+ * <ul>
+ * <li>EventType</li>
+ * <li>EventName</li>
+ * <li>Exception</li>
+ * <li>UserName</li>
+ * <li>ResourceName</li>
+ * <li>Location</li>
+ * <li>Tag</li>
+ * <li>Correlator</li>
+ * <li>ProcessId</li>
+ * <li>ThreadId</li>
+ * <li>Message</li>
+ * <li>Severity</li>
+ * <li>ApplName</li>
+ * <li>ServerName</li>
+ * <li>EndTime</li>
+ * <li>ElapsedTime</li>
+ * <li>MsgCharSet</li>
+ * </ul>
+ * <li>for activity properties:</li>
+ * <ul>
+ * <li>facility</li>
+ * <li>level</li>
+ * <li>hostname</li>
+ * <li>hostaddr</li>
+ * <li>version</li>
+ * <li>priority</li>
+ * </ul>
+ * <li>maps of resolved additional custom activity properties:</li>
+ * <ul>
+ * <li>SyslogMap - map of resolved RFC 5424 structured data</li>
+ * <li>SyslogVars - map of resolved application message contained (varName=varValue) variables</li>
+ * </ul>
+ * </ul>
+ * <p>
+ * This parser supports the following properties (in addition to those supported by {@link AbstractActivityMapParser}):
+ * <ul>
+ * <li>CharSet - name of char set used by syslog lines parser. Default value - 'UTF-8'. (Optional)</li>
+ * </ul>
  *
  * @version $Revision: 1 $
  */
@@ -147,6 +195,9 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		return "SYSLOG LINE"; // NON-NLS
 	}
 
+	/**
+	 * Syslog log lines parser for RFC 3164 and 5424.
+	 */
 	private class SyslogParser {
 		private static final String SYSLOG_STRUCT_ID = "struct.id"; // NON-NLS
 
@@ -154,54 +205,54 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		private static final int MAX_SUPPORTED_VERSION = 1;
 
 		/**
-		 * Construct a new Syslog protocol parser. Tags are parsed, and the encoding is assumed to be UTF-8.
+		 * Construct a new Syslog log lines parser.
 		 */
 		public SyslogParser() {
 		}
 
-		private ByteBuffer stringToBytes(String msg) {
-			byte[] bytes = msg.getBytes();
-			ByteBuffer bb = ByteBuffer.allocate(bytes.length);
-			bb.put(bytes);
-			bb.rewind();
+		private CharBuffer stringToBuffer(String msg) {
+			CharBuffer cb = CharBuffer.wrap(msg);
+			cb.rewind();
 
-			return bb;
+			return cb;
 		}
 
 		/**
-		 * Read the next Syslog message from the stream.
+		 * Parse Syslog log line string making map of parsed fields.
 		 *
-		 * @return a map, or null if message is empty.
+		 * @param logLine
+		 *            syslog log line
+		 * @return a map, or null if line is empty.
 		 *
 		 * @throws IOException
-		 *             if the underlying stream fails, or unexpected bytes are seen.
+		 *             if the underlying stream fails, or unexpected chars occurs.
 		 */
-		public Map<String, Object> parseSyslogMessage(String msg) throws IOException {
-			ByteBuffer bb = stringToBytes(msg);
+		public Map<String, Object> parseSyslogMessage(String logLine) throws IOException {
+			CharBuffer cb = stringToBuffer(logLine);
 
 			Integer priority = null;
-			int c = read(bb);
+			int c = read(cb);
 
 			if (c == -1) {
 				return null;
 			}
 
-			if (c == '<') {
-				priority = readInt(bb);
+			if (c == LT) {
+				priority = readInt(cb);
 
-				expect(bb, '>');
+				expect(cb, GT);
 			} else {
-				unread(bb);
+				unread(cb);
 			}
 
 			int version = 0;
 			Calendar cal;
 
-			if (Character.isDigit(peek(bb))) {
+			if (Character.isDigit(peek(cb))) {
 				// Assume ISO date and time
-				int y = readInt(bb);
+				int y = readInt(cb);
 
-				c = read(bb);
+				c = read(cb);
 
 				if (c == SPACE) {
 					// Assume this is a RFC 5424 message.
@@ -213,59 +264,59 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 										"ActivitySyslogLineParser.unsupported.version", version));
 					}
 
-					skipSpaces(bb);
-					y = readInt(bb);
-					expect(bb, MINUS);
+					skipSpaces(cb);
+					y = readInt(cb);
+					expect(cb, MINUS);
 				} else if (c != MINUS) {
 					throw new IOException(
 							StreamsResources.getStringFormatted(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
 									"ActivitySyslogLineParser.unexpected.char", MINUS, (char) c));
 				}
 
-				int m = readInt(bb);
-				expect(bb, MINUS);
-				int d = readInt(bb);
+				int m = readInt(cb);
+				expect(cb, MINUS);
+				int d = readInt(cb);
 
-				c = read(bb);
+				c = read(cb);
 
-				if (c != 'T' && c != SPACE) {
+				if (c != TZ && c != SPACE) {
 					throw new IOException(
 							StreamsResources.getStringFormatted(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-									"ActivitySyslogLineParser.unexpected.char", 'T', (char) c));
+									"ActivitySyslogLineParser.unexpected.char", TZ, (char) c));
 				}
 
-				int hh = readInt(bb);
-				expect(bb, COLON);
-				int mm = readInt(bb);
-				expect(bb, COLON);
-				int ss = readInt(bb);
+				int hh = readInt(cb);
+				expect(cb, COLON);
+				int mm = readInt(cb);
+				expect(cb, COLON);
+				int ss = readInt(cb);
 				double sf = 0;
 
-				c = read(bb);
+				c = read(cb);
 
-				if (c == '.') {
+				if (c == DOT) {
 					// Fractions of seconds
-					sf = readFractions(bb);
-					c = read(bb);
+					sf = readFractions(cb);
+					c = read(cb);
 				}
 
 				int tz = 0;
 
-				if (c == 'Z') {
-					// UTC
+				if (c == UTC) {
+					// UTC time zone found
 				} else if (c == MINUS) {
-					tz = readInt(bb);
+					tz = readInt(cb);
 
-					if (peek(bb) == COLON) {
-						read(bb);
-						tz = -(tz * 60 + readInt(bb));
+					if (peek(cb) == COLON) {
+						read(cb);
+						tz = -(tz * 60 + readInt(cb));
 					}
-				} else if (c == '+') {
-					tz = readInt(bb);
+				} else if (c == PLUS) {
+					tz = readInt(cb);
 
-					if (peek(bb) == COLON) {
-						read(bb);
-						tz = tz * 60 + readInt(bb);
+					if (peek(cb) == COLON) {
+						read(cb);
+						tz = tz * 60 + readInt(cb);
 					}
 				}
 
@@ -276,25 +327,25 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 				cal.add(Calendar.MINUTE, tz);
 			} else {
 				// Assume BSD date and time
-				int m = readMonthAbbreviation(bb);
+				int m = readMonthAbbreviation(cb);
 
-				expect(bb, SPACE);
-				skipSpaces(bb);
+				expect(cb, SPACE);
+				skipSpaces(cb);
 
-				int d = readInt(bb);
+				int d = readInt(cb);
 
-				expect(bb, SPACE);
-				skipSpaces(bb);
+				expect(cb, SPACE);
+				skipSpaces(cb);
 
-				int hh = readInt(bb);
+				int hh = readInt(cb);
 
-				expect(bb, COLON);
+				expect(cb, COLON);
 
-				int mm = readInt(bb);
+				int mm = readInt(cb);
 
-				expect(bb, COLON);
+				expect(cb, COLON);
 
-				int ss = readInt(bb);
+				int ss = readInt(cb);
 
 				cal = new GregorianCalendar(Locale.ROOT);
 
@@ -306,12 +357,12 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 				cal.set(Calendar.MILLISECOND, 0);
 			}
 
-			expect(bb, SPACE);
-			skipSpaces(bb);
+			expect(cb, SPACE);
+			skipSpaces(cb);
 
-			String hostName = readWord(bb, 32);
+			String hostName = readWord(cb, 32);
 
-			expect(bb, SPACE);
+			expect(cb, SPACE);
 
 			String appName = null;
 			String procId = null;
@@ -319,65 +370,53 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 			Map<String, Object> structuredData = null;
 
 			if (version >= 1) {
-				appName = readWordOrNil(bb, 20);
-				expect(bb, SPACE);
-				procId = readWordOrNil(bb, 20);
-				expect(bb, SPACE);
-				msgId = readWordOrNil(bb, 20);
-				expect(bb, SPACE);
-				structuredData = readStructuredData(bb);
-				expect(bb, SPACE);
+				appName = readWordOrNil(cb, 20);
+				expect(cb, SPACE);
+				procId = readWordOrNil(cb, 20);
+				expect(cb, SPACE);
+				msgId = readWordOrNil(cb, 20);
+				expect(cb, SPACE);
+				structuredData = readStructuredData(cb);
+				expect(cb, SPACE);
 			} else if (version == 0) {
 				// Try to find a colon terminated tag.
-				appName = readTag(bb);
-				if (peek(bb) == OB) {
-					procId = readPid(bb);
+				appName = readTag(cb);
+				if (peek(cb) == OB) {
+					procId = readPid(cb);
 				}
-				expect(bb, COLON);
+				expect(cb, COLON);
 			}
 
 			appName = StringUtils.isEmpty(appName) ? UNKNOWN : appName;
 
-			skipSpaces(bb);
+			skipSpaces(cb);
 
-			String appMsg = readLine(bb, 128);
+			String appMsg = readLine(cb, 128);
 
 			return createFieldMap(version, priority, cal, hostName, appName, procId, msgId, structuredData, appMsg);
 		}
 
 		/**
-		 * Skip an entire line. The line is terminated by new line. End of line is silently ignored. Useful if a parsing
-		 * failure has occurred and you want to skip the message.
-		 */
-		public void skipLine(ByteBuffer bb) {
-			int c;
-
-			do {
-				c = read(bb);
-			} while (c != NL && c != -1);
-		}
-
-		/**
-		 * Create a map from the given parameters.
+		 * Create a map from the parsed fields data.
 		 *
 		 * @param version
-		 *            the syslog version, 0 for RFC 3164
+		 *            the resolved syslog version: 0 for RFC 3164
 		 * @param priority
-		 *            the syslog priority, according to RFC 5424
+		 *            the resolved syslog priority according to RFC 5424
 		 * @param date
-		 *            the timestamp of the message. Note that timezone matters
+		 *            the resolved timestamp with timezone
 		 * @param hostName
-		 *            the host name
+		 *            the resolved host name
 		 * @param appName
-		 *            the application name
+		 *            the resolved application name
 		 * @param procId
-		 *            the process id
+		 *            the resolved process id
 		 * @param msgId
-		 *            the RFC 5424 msg-id
+		 *            the resolved message id according to RFC 5424
 		 * @param structuredData
-		 *            the RFC 5424 structured-data
+		 *            the resolved structured data map according to RFC 5424
 		 * @param appMsg
-		 *            the application message body
+		 *            the resolved application message
 		 */
 		private Map<String, Object> createFieldMap(int version, Integer priority, Calendar date, String hostName,
 				String appName, String procId, String msgId, Map<String, Object> structuredData, String appMsg) {
@@ -419,7 +458,8 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 			map.put(ServerName.name(), hostName);
 
 			SyslogUtils.extractVariables(appMsg, map);
-			String locationKey = (String) map.get(Location.name()) + '/' + (String) map.get(ResourceName.name());
+			String locationKey = String.format("%s/%s", (String) map.get(Location.name()), // NON-NLS
+					(String) map.get(ResourceName.name()));
 			map.put(EndTime.name(), date.getTimeInMillis() * 1000);
 			map.put(ElapsedTime.name(), SyslogUtils.getUsecSinceLastEvent(locationKey)); // TODO: calculate from real
 																							// timestamp differences
@@ -427,69 +467,69 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		}
 
 		/**
-		 * Read a month value as an English abbreviation. See RFC 3164, Sec. 4.1.2.
+		 * Read a month value as an English abbreviation. See RFC 3164 sec. 4.1.2.
 		 *
-		 * @param bb
-		 *            byte buffer containing log line to read
+		 * @param cb
+		 *            char buffer containing log line to read
 		 * @return resolved month index, or {@code -1} if unknown
 		 */
-		private int readMonthAbbreviation(ByteBuffer bb) {
-			int c = read(bb);
+		private int readMonthAbbreviation(CharBuffer cb) {
+			int c = read(cb);
 
 			switch (c) {
 			case 'A':
-				switch (read(bb)) {
+				switch (read(cb)) {
 				case 'p':
-					skipWord(bb);
+					skipWord(cb);
 					return Calendar.APRIL;
 				case 'u':
-					skipWord(bb);
+					skipWord(cb);
 					return Calendar.AUGUST;
 				default:
 					return -1;
 				}
 			case 'D':
-				skipWord(bb);
+				skipWord(cb);
 				return Calendar.DECEMBER;
 			case 'F':
-				skipWord(bb);
+				skipWord(cb);
 				return Calendar.FEBRUARY;
 			case 'J':
-				read(bb); // Second letter is ambiguous.
-				read(bb); // Third letter is also ambiguous.
-				switch (read(bb)) {
+				read(cb); // Second letter is ambiguous.
+				read(cb); // Third letter is also ambiguous.
+				switch (read(cb)) {
 				case 'e':
-					skipWord(bb);
+					skipWord(cb);
 					return Calendar.JUNE;
 				case 'u':
-					skipWord(bb);
+					skipWord(cb);
 					return Calendar.JANUARY;
 				case 'y':
-					skipWord(bb);
+					skipWord(cb);
 					return Calendar.JULY;
 				default:
 					return -1;
 				}
 			case 'M':
-				read(bb); // Second letter is ambiguous.
-				switch (read(bb)) {
+				read(cb); // Second letter is ambiguous.
+				switch (read(cb)) {
 				case 'r':
-					skipWord(bb);
+					skipWord(cb);
 					return Calendar.MARCH;
 				case 'y':
-					skipWord(bb);
+					skipWord(cb);
 					return Calendar.MAY;
 				default:
 					return -1;
 				}
 			case 'N':
-				skipWord(bb);
+				skipWord(cb);
 				return Calendar.NOVEMBER;
 			case 'O':
-				skipWord(bb);
+				skipWord(cb);
 				return Calendar.OCTOBER;
 			case 'S':
-				skipWord(bb);
+				skipWord(cb);
 				return Calendar.SEPTEMBER;
 			default:
 				return -1;
@@ -497,13 +537,20 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		}
 
 		/**
-		 * Read a byte and assert the value.
+		 * Read a char and assert the value.
+		 *
+		 * @param cb
+		 *            char buffer containing log line to read
+		 * @param c
+		 *            expected character
 		 *
 		 * @throws IOException
-		 *             if the character was unexpected
+		 *             if expected and found characters differs
+		 *
+		 * @see #read(CharBuffer)
 		 */
-		private void expect(ByteBuffer bb, int c) throws IOException {
-			int d = read(bb);
+		private void expect(CharBuffer cb, int c) throws IOException {
+			int d = read(cb);
 
 			if (d != c) {
 				throw new IOException(StreamsResources.getStringFormatted(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
@@ -512,146 +559,204 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		}
 
 		/**
-		 * Read until a non-whitespace ASCII byte is seen.
+		 * Read until a non-whitespace char is found.
+		 *
+		 * @param cb
+		 *            char buffer containing log line to read
+		 *
+		 * @see #read(CharBuffer)
+		 * @see #unread(CharBuffer)
 		 */
-		private void skipSpaces(ByteBuffer bb) {
+		private void skipSpaces(CharBuffer cb) {
 			int c;
 
-			while ((c = read(bb)) == SPACE) {
+			while ((c = read(cb)) == SPACE) {
 				continue;
 			}
 
-			unread(bb);
+			unread(cb);
 		}
 
 		/**
-		 * Read the next byte, but then unread it again.
+		 * Read the next char, but then unread it.
+		 *
+		 * @param cb
+		 *            char buffer containing log line to read
+		 *
+		 * @see #read(CharBuffer)
+		 * @see #unread(CharBuffer)
 		 */
-		private int peek(ByteBuffer bb) {
-			int c = read(bb);
+		private int peek(CharBuffer cb) {
+			int c = read(cb);
 
-			unread(bb);
+			unread(cb);
 
 			return c;
 		}
 
 		/**
-		 * Read the next byte.
+		 * Read the next char from buffer.
 		 *
-		 * @return the byte.
+		 * @param cb
+		 *            char buffer containing log line to read
+		 * @return next char, or {@code -1} if no more chars
+		 *
+		 * @see CharBuffer#mark()
+		 * @see CharBuffer#get()
 		 */
-		private int read(ByteBuffer bb) {
-			bb.mark();
+		private int read(CharBuffer cb) {
+			cb.mark();
 			try {
-				return (char) bb.get();
-			} catch (BufferUnderflowException exc) {
+				return cb.get();
+			} catch (RuntimeException exc) {
 				return -1;
 			}
 		}
 
 		/**
-		 * Push back a character. Only a single character can be pushed back simultaneously.
+		 * Push back character position to previous.
+		 *
+		 * @param cb
+		 *            char buffer containing log line to read
+		 *
+		 * @see CharBuffer#reset()
 		 */
-		private void unread(ByteBuffer bb) {
-			bb.reset();
+		private void unread(CharBuffer cb) {
+			cb.reset();
 		}
 
 		/**
-		 * Read a positive integer and convert it from decimal text form. End of line silently terminates the number.
+		 * Read a positive integer from buffer.
+		 *
+		 * @param cb
+		 *            char buffer containing log line to read
+		 *
+		 * @see #read(CharBuffer)
+		 * @see #unread(CharBuffer)
+		 * @see Character#isDigit(char)
 		 */
-		private int readInt(ByteBuffer bb) {
+		private int readInt(CharBuffer cb) {
 			int c;
 			int ret = 0;
 
-			while (Character.isDigit(c = read(bb))) {
+			while (Character.isDigit(c = read(cb))) {
 				ret = ret * 10 + (c - ZERO);
 			}
 
 			if (c != -1) {
-				unread(bb);
+				unread(cb);
 			}
 
 			return ret;
 		}
 
 		/**
-		 * Read fractions (digits after a decimal point.)
+		 * Read fractional part of number - digits after a decimal point.
 		 *
-		 * @return a value in the range [0, 1).
+		 * @param cb
+		 *            char buffer containing log line to read
+		 * @return a value in the range [0, 1)
+		 *
+		 * @see #read(CharBuffer)
+		 * @see #unread(CharBuffer)
+		 * @see Character#isDigit(char)
 		 */
-		private double readFractions(ByteBuffer bb) {
+		private double readFractions(CharBuffer cb) {
 			int c;
 			int ret = 0;
 			int order = 1;
 
-			while (Character.isDigit(c = read(bb))) {
+			while (Character.isDigit(c = read(cb))) {
 				ret = ret * 10 + (c - ZERO);
 				order *= 10;
 			}
 
 			if (c != -1) {
-				unread(bb);
+				unread(cb);
 			}
 
 			return (double) ret / order;
 		}
 
 		/**
-		 * Read until a space or end of line. The input is discarded.
+		 * Read until a end of the word and discard read chars. Word is terminated by whitespace char (' ') or end of
+		 * buffer.
+		 *
+		 * @param cb
+		 *            char buffer containing log line to read
+		 *
+		 * @see #read(CharBuffer)
+		 * @see #unread(CharBuffer)
 		 */
-		private void skipWord(ByteBuffer bb) {
+		private void skipWord(CharBuffer cb) {
 			int c;
 
 			do {
-				c = read(bb);
+				c = read(cb);
 			} while (c != SPACE && c != -1);
 
 			if (c != -1) {
-				unread(bb);
+				unread(cb);
 			}
 		}
 
 		/**
-		 * Read a word into the given output stream. Usually the output stream will be a StringBuilder.
+		 * Read a word into the given {@link StringBuilder}. Word is terminated by whitespace char (' ') or end of
+		 * buffer.
+		 *
+		 * @param cb
+		 *            char buffer containing log line to read
+		 * @param sb
+		 *            string builder to fill
+		 *
+		 * @see #read(CharBuffer)
+		 * @see #unread(CharBuffer)
+		 * @see StringBuilder#append(char)
 		 */
-		private void readWord(ByteBuffer bb, StringBuilder sb) {
+		private void readWord(CharBuffer cb, StringBuilder sb) {
 			int c;
 
-			while ((c = read(bb)) != SPACE && c != -1) {
+			while ((c = read(cb)) != SPACE && c != -1) {
 				sb.append((char) c);
 			}
 
 			if (c != -1) {
-				unread(bb);
+				unread(cb);
 			}
 		}
 
 		/**
-		 * Read a word (until next ASCII space or end of line) as a byte array.
+		 * Read a word from buffer as a string. Word is terminated by whitespace char (' ') or end of buffer.
 		 *
+		 * @param cb
+		 *            char buffer containing log line to read
 		 * @param sizeHint
-		 *            an guess on how large string will be, in bytes.
-		 *
+		 *            an guess on how large string will be, in chars
 		 * @return a valid, but perhaps empty, word.
+		 *
+		 * @see #readWord(CharBuffer, StringBuilder)
 		 */
-		private String readWord(ByteBuffer bb, int sizeHint) {
+		private String readWord(CharBuffer cb, int sizeHint) {
 			StringBuilder sb = new StringBuilder(sizeHint);
-			readWord(bb, sb);
+			readWord(cb, sb);
 
 			return sb.toString();
 		}
 
 		/**
-		 * Read a word (until next space or end of line) to a string. If the complete word is "-", returns {@code null}.
+		 * Read a word from buffer as a string. Word is terminated by whitespace char (' ') or end of buffer. If the
+		 * complete word is "-", returns {@code null}.
 		 *
+		 * @param cb
+		 *            char buffer containing log line to read
 		 * @param sizeHint
-		 *            an guess on how large string will be, in bytes
-		 * @param bb
-		 *            byte buffer containing log line to read
-		 * @return word string read from log line
+		 *            an guess on how large string will be, in chars
+		 * @return word string read from buffer
+		 *
+		 * @see #readWord(CharBuffer, int)
 		 */
-		private String readWordOrNil(ByteBuffer bb, int sizeHint) {
-			String ret = readWord(bb, sizeHint);
+		private String readWordOrNil(CharBuffer cb, int sizeHint) {
+			String ret = readWord(cb, sizeHint);
 
 			if (ret.length() == 1 && ret.charAt(0) == MINUS) {
 				return null;
@@ -661,43 +766,50 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		}
 
 		/**
-		 * Read a defined number of chars (or until EOL).
+		 * Read a defined number of chars or until end of buffer.
 		 *
-		 * @param bb
-		 *            byte buffer containing log line to read
+		 * @param cb
+		 *            char buffer containing log line to read
 		 * @param count
 		 *            number of chars to read
 		 * @return string containing read characters
+		 *
+		 * @see #read(CharBuffer)
+		 * @see #unread(CharBuffer)
+		 * @see StringBuilder#append(char)
 		 */
-		private String readChars(ByteBuffer bb, int count) {
+		private String readChars(CharBuffer cb, int count) {
 			StringBuilder sb = new StringBuilder(count);
 			int c;
 			int i = 0;
 
-			while ((c = read(bb)) != -1 && i < count) {
+			while ((c = read(cb)) != -1 && i < count) {
 				sb.append((char) c);
 				i++;
 			}
 
-			unread(bb);
+			unread(cb);
 
 			return sb.toString();
 		}
 
 		/**
-		 * Read a line until next '\n' or EOL to a string.
+		 * Read a line from buffer as a string. Line is terminated by new line char ('\n') or end of buffer.
 		 *
-		 * @param bb
-		 *            byte buffer containing log line to read
+		 * @param cb
+		 *            char buffer containing log line to read
 		 * @param sizeHint
-		 *            an guess on how large the line will be, in bytes.
+		 *            an guess on how large the line will be, in chars.
 		 * @return read line string
+		 *
+		 * @see #read(CharBuffer)
+		 * @see StringBuilder#append(char)
 		 */
-		private String readLine(ByteBuffer bb, int sizeHint) {
+		private String readLine(CharBuffer cb, int sizeHint) {
 			StringBuilder sb = new StringBuilder(sizeHint);
 			int c;
 
-			while ((c = read(bb)) != NL && c != -1) {
+			while ((c = read(cb)) != NL && c != -1) {
 				if (c != RC) {
 					sb.append((char) c);
 				}
@@ -707,43 +819,50 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		}
 
 		/**
-		 * Read a RFC 3164 tag. Tags end with one of: ':[\r\n'.
+		 * Read a RFC 3164 tag. Tags is terminated by one of: ':[\r\n'.
 		 *
-		 * @param bb
-		 *            byte buffer containing log line to read
+		 * @param cb
+		 *            char buffer containing log line to read
 		 * @return resolved tag string
 		 *
+		 * @see #read(CharBuffer)
+		 * @see #unread(CharBuffer)
+		 * @see StringBuilder#append(char)
 		 */
-		private String readTag(ByteBuffer bb) {
+		private String readTag(CharBuffer cb) {
 			StringBuilder sb = new StringBuilder(16);
 			int c;
 
-			while ((c = read(bb)) != COLON && c != OB && c != RC && c != NL) {
+			while ((c = read(cb)) != COLON && c != OB && c != RC && c != NL) {
 				sb.append((char) c);
 			}
 
-			unread(bb);
+			unread(cb);
 
 			return sb.toString();
 		}
 
 		/**
-		 * Read a RFC 3164 pid. The format is "[1234]".
+		 * Read a RFC 3164 pid. Pid format is: '[1234]'.
 		 *
-		 * @param bb
-		 *            byte buffer containing log line to read
+		 * @param cb
+		 *            char buffer containing log line to read
 		 * @return resolved process id string
 		 *
 		 * @throws IOException
 		 *             if unexpected character is found while parsing
+		 *
+		 * @see #read(CharBuffer)
+		 * @see #expect(CharBuffer, int)
+		 * @see StringBuilder#append(char)
 		 */
-		private String readPid(ByteBuffer bb) throws IOException {
+		private String readPid(CharBuffer cb) throws IOException {
 			StringBuilder sb = new StringBuilder(8);
 			int c;
 
-			expect(bb, OB);
+			expect(cb, OB);
 
-			while ((c = read(bb)) != CB && c != RC && c != NL) {
+			while ((c = read(cb)) != CB && c != RC && c != NL) {
 				sb.append((char) c);
 			}
 
@@ -753,15 +872,15 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		/**
 		 * Read RFC 5424 structured data map.
 		 *
-		 * @param bb
-		 *            byte buffer containing log line to read
-		 * @return resolved structured data map
+		 * @param cb
+		 *            char buffer containing log line to read
+		 * @return map of resolved structured data
 		 *
 		 * @throws IOException
 		 *             if unexpected character is found while parsing
 		 */
-		private Map<String, Object> readStructuredData(ByteBuffer bb) throws IOException {
-			int c = read(bb);
+		private Map<String, Object> readStructuredData(CharBuffer cb) throws IOException {
+			int c = read(cb);
 
 			if (c == MINUS) {
 				return null;
@@ -777,7 +896,7 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 			StringBuilder sb = new StringBuilder();
 			while (c == OB) {
 				// Read structured data id
-				while ((c = read(bb)) != SPACE && c != CB) {
+				while ((c = read(cb)) != SPACE && c != CB) {
 					sb.append((char) c);
 				}
 				sdm.put(SYSLOG_STRUCT_ID, sb.toString());
@@ -786,27 +905,27 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 				String paramName;
 				while (c == SPACE) {
 					// Read parameter name
-					while ((c = read(bb)) != EQ) {
+					while ((c = read(cb)) != EQ) {
 						sb.append((char) c);
 					}
 					paramName = sb.toString();
 					sb.setLength(0);
 
-					expect(bb, QUOTE);
+					expect(cb, QUOTE);
 
 					// Read parameter data
-					while ((c = read(bb)) != QUOTE) {
+					while ((c = read(cb)) != QUOTE) {
 						sb.append((char) c);
 
 						if (c == SyslogStreamConstants.SLASH) {
-							c = read(bb);
+							c = read(cb);
 							sb.append((char) c);
 						}
 					}
 					sdm.put(paramName, sb.toString());
 					sb.setLength(0);
 
-					c = read(bb);
+					c = read(cb);
 				}
 
 				if (c != CB) {
@@ -815,10 +934,10 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 									"ActivitySyslogLineParser.unexpected.char", CB, (char) c));
 				}
 
-				c = read(bb);
+				c = read(cb);
 			}
 
-			unread(bb);
+			unread(cb);
 
 			return sdm;
 		}

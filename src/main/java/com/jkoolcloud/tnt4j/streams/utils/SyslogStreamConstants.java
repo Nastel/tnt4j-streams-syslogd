@@ -33,27 +33,27 @@ public class SyslogStreamConstants {
 	public static final String RESOURCE_BUNDLE_NAME = "tnt4j-streams-syslog"; // NON-NLS
 
 	/**
-	 * Constant for name of built-in {@value} property.
+	 * Constant for name of built-in stream {@value} property.
 	 */
 	public static final String PROP_PROTOCOL = "Protocol"; // NON-NLS
 
 	/**
-	 * Constant for name of built-in {@value} property.
+	 * Constant for name of built-in stream {@value} property.
 	 */
 	public static final String PROP_TIMEOUT = "Timeout"; // NON-NLS
 
 	/**
-	 * Constant for name of built-in {@value} property.
+	 * Constant for name of built-in stream {@value} property.
 	 */
 	public static final String PROP_FACILITY = "Facility"; // NON-NLS
 
 	/**
-	 * Constant for name of built-in {@value} property.
+	 * Constant for name of built-in stream {@value} property.
 	 */
 	public static final String PROP_LEVEL = "Level"; // NON-NLS
 
 	/**
-	 * Constant for name of built-in {@value} property.
+	 * Constant for name of built-in parser {@value} property.
 	 */
 	public static final String PROP_CHAR_SET = "CharSet"; // NON-NLS
 
@@ -61,7 +61,106 @@ public class SyslogStreamConstants {
 	 * Log facilities enum in syslog order.
 	 */
 	public enum Facility {
-		KERN, USER, MAIL, DAEMON, AUTH, SYSLOG, LPR, NEWS, UUCP, CRON, AUTHPRIV, FTP, NTP, AUDIT, ALERT, CLOCK, LOCAL0, LOCAL1, LOCAL2, LOCAL3, LOCAL4, LOCAL5, LOCAL6, LOCAL7, UNKNOWN;
+		/**
+		 * Kern facility.
+		 */
+		KERN,
+		/**
+		 * User facility.
+		 */
+		USER,
+		/**
+		 * Mail facility.
+		 */
+		MAIL,
+		/**
+		 * Daemon facility.
+		 */
+		DAEMON,
+		/**
+		 * Auth facility.
+		 */
+		AUTH,
+		/**
+		 * Syslog facility.
+		 */
+		SYSLOG,
+		/**
+		 * Lpr facility.
+		 */
+		LPR,
+		/**
+		 * News facility.
+		 */
+		NEWS,
+		/**
+		 * Uucp facility.
+		 */
+		UUCP,
+		/**
+		 * Cron facility.
+		 */
+		CRON,
+		/**
+		 * Authpriv facility.
+		 */
+		AUTHPRIV,
+		/**
+		 * Ftp facility.
+		 */
+		FTP,
+		/**
+		 * Ntp facility.
+		 */
+		NTP,
+		/**
+		 * Audit facility.
+		 */
+		AUDIT,
+		/**
+		 * Alert facility.
+		 */
+		ALERT,
+		/**
+		 * Clock facility.
+		 */
+		CLOCK,
+		/**
+		 * Local 0 facility.
+		 */
+		LOCAL0,
+		/**
+		 * Local 1 facility.
+		 */
+		LOCAL1,
+		/**
+		 * Local 2 facility.
+		 */
+		LOCAL2,
+		/**
+		 * Local 3 facility.
+		 */
+		LOCAL3,
+		/**
+		 * Local 4 facility.
+		 */
+		LOCAL4,
+		/**
+		 * Local 5 facility.
+		 */
+		LOCAL5,
+		/**
+		 * Local 6 facility.
+		 */
+		LOCAL6,
+		/**
+		 * Local 7 facility.
+		 */
+		LOCAL7,
+		/**
+		 * Unknown facility.
+		 */
+		UNKNOWN;
 
 		/**
 		 * Returns enumeration member matching defined ordinal.
@@ -90,7 +189,13 @@ public class SyslogStreamConstants {
 			OpLevel.DEBUG, // debug
 			OpLevel.NONE };
 
+	/**
+	 * Constant for default syslog facility 'USER'.
+	 */
 	public static final int DEFAULT_FACILITY = Facility.USER.ordinal();
+	/**
+	 * Constant for default syslog entry level 'INFO'.
+	 */
 	public static final int DEFAULT_LEVEL = 6;
 
 	/**
@@ -127,17 +232,77 @@ public class SyslogStreamConstants {
 	 */
 	public static final String FIELD_PRIORITY = "priority"; // NON-NLS
 
+	/**
+	 * Constant for string value '{@value}'.
+	 */
 	public static final String UNKNOWN = "unknown"; // NON-NLS
 
+	/**
+	 * Constant for SPACE character '{@value}'.
+	 */
 	public static final char SPACE = ' ';
+	/**
+	 * Constant for MINUS character '{@value}'.
+	 */
 	public static final char MINUS = '-';
+	/**
+	 * Constant for PLUS character '{@value}'.
+	 */
+	public static final char PLUS = '+';
+	/**
+	 * Constant for COLON character '{@value}'.
+	 */
 	public static final char COLON = ':';
+	/**
+	 * Constant for QUOTE character '{@value}'.
+	 */
 	public static final char QUOTE = '"';
+	/**
+	 * Constant for NL character '{@value}'.
+	 */
 	public static final char NL = '\n';
+	/**
+	 * Constant for RC character '{@value}'.
+	 */
 	public static final char RC = '\r';
+	/**
+	 * Constant for ZERO character '{@value}'.
+	 */
 	public static final char ZERO = '0';
+	/**
+	 * Constant for OB character '{@value}'.
+	 */
 	public static final char OB = '[';
+	/**
+	 * Constant for CB character '{@value}'.
+	 */
 	public static final char CB = ']';
+	/**
+	 * Constant for EQ character '{@value}'.
+	 */
 	public static final char EQ = '=';
+	/**
+	 * Constant for SLASH character '{@value}'.
+	 */
 	public static final char SLASH = '\\';
+	/**
+	 * Constant for LT character '{@value}'.
+	 */
+	public static final char LT = '<';
+	/**
+	 * Constant for GT character '{@value}'.
+	 */
+	public static final char GT = '>';
+	/**
+	 * Constant for TZ character '{@value}'.
+	 */
+	public static final char TZ = 'T';
+	/**
+	 * Constant for DOT character '{@value}'.
+	 */
+	public static final char DOT = '.';
+	/**
+	 * Constant for UTC character '{@value}'.
+	 */
+	public static final char UTC = 'Z';
 }
