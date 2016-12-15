@@ -201,11 +201,11 @@ public class SyslogStreamConstants {
 	/**
 	 * Constant for name of built-in syslog property field map {@value} for structured syslog data.
 	 */
-	public static String FIELD_SYSLOG_MAP = "SyslogMap"; // NON-NLS
+	public static final String FIELD_SYSLOG_MAP = "SyslogMap"; // NON-NLS
 	/**
 	 * Constant for name of built-in syslog property field map {@value} for syslog message contained variables.
 	 */
-	public static String FIELD_SYSLOG_VARS = "SyslogVars"; // NON-NLS
+	public static final String FIELD_SYSLOG_VARS = "SyslogVars"; // NON-NLS
 
 	/**
 	 * Constant for name of built-in syslog property field {@value}.
