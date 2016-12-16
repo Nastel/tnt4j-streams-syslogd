@@ -35,7 +35,7 @@ import com.jkoolcloud.tnt4j.streams.utils.StreamsResources;
 import com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants;
 
 /**
- * Implements Syslog server {@link SyslogServerIF} based activities stream, where each syslog event data is assumed to
+ * Implements Syslog server {@link SyslogServerIF} based activities stream, where each Syslog event data is assumed to
  * represent a single activity or event which should be recorded.
  * <p>
  * This activity stream requires parsers that can support JMS {@link SyslogServerEventIF} data.

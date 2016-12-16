@@ -58,7 +58,7 @@ public class SyslogStreamConstants {
 	public static final String PROP_CHAR_SET = "CharSet"; // NON-NLS
 
 	/**
-	 * Log facilities enum in syslog order.
+	 * Log facilities enum in Syslog order.
 	 */
 	public enum Facility {
 		/**
@@ -177,7 +177,7 @@ public class SyslogStreamConstants {
 	}
 
 	/**
-	 * Log levels list in syslog matching order.
+	 * Log levels list in Syslog matching order.
 	 */
 	public static final OpLevel[] LEVELS = { OpLevel.HALT, // emergency
 			OpLevel.FATAL, // alert
@@ -190,45 +190,45 @@ public class SyslogStreamConstants {
 			OpLevel.NONE };
 
 	/**
-	 * Constant for default syslog facility 'USER'.
+	 * Constant for default Syslog facility 'USER'.
 	 */
 	public static final int DEFAULT_FACILITY = Facility.USER.ordinal();
 	/**
-	 * Constant for default syslog entry level 'INFO'.
+	 * Constant for default Syslog entry level 'INFO'.
 	 */
 	public static final int DEFAULT_LEVEL = 6;
 
 	/**
-	 * Constant for name of built-in syslog property field map {@value} for structured syslog data.
+	 * Constant for name of built-in Syslog property field map {@value} for structured Syslog data.
 	 */
 	public static final String FIELD_SYSLOG_MAP = "SyslogMap"; // NON-NLS
 	/**
-	 * Constant for name of built-in syslog property field map {@value} for syslog message contained variables.
+	 * Constant for name of built-in Syslog property field map {@value} for Syslog message contained variables.
 	 */
 	public static final String FIELD_SYSLOG_VARS = "SyslogVars"; // NON-NLS
 
 	/**
-	 * Constant for name of built-in syslog property field {@value}.
+	 * Constant for name of built-in Syslog property field {@value}.
 	 */
 	public static final String FIELD_FACILITY = "facility"; // NON-NLS
 	/**
-	 * Constant for name of built-in syslog property field {@value}.
+	 * Constant for name of built-in Syslog property field {@value}.
 	 */
 	public static final String FIELD_LEVEL = "level"; // NON-NLS
 	/**
-	 * Constant for name of built-in syslog property field {@value}.
+	 * Constant for name of built-in Syslog property field {@value}.
 	 */
 	public static final String FIELD_HOSTNAME = "hostname"; // NON-NLS
 	/**
-	 * Constant for name of built-in syslog property field {@value}.
+	 * Constant for name of built-in Syslog property field {@value}.
 	 */
 	public static final String FIELD_HOSTADDR = "hostaddr"; // NON-NLS
 	/**
-	 * Constant for name of built-in syslog property field {@value}.
+	 * Constant for name of built-in Syslog property field {@value}.
 	 */
 	public static final String FIELD_VERSION = "version"; // NON-NLS
 	/**
-	 * Constant for name of built-in syslog property field {@value}.
+	 * Constant for name of built-in Syslog property field {@value}.
 	 */
 	public static final String FIELD_PRIORITY = "priority"; // NON-NLS
 

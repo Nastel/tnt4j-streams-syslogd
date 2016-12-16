@@ -55,14 +55,234 @@ To run desired sample:
 For more detailed explanation of streams and parsers configuration and usage see chapter ['Configuring TNT4J-Streams-Syslogd'](#configuring-tnt4j-streams-syslogd)
 and JavaDocs.
 
-
 #### Syslog daemon (Syslogd)
 
-TODO
+This sample shows how to stream activity events from Syslogd received log events data. `SyslogdStream` starts Syslogd server depending on 
+defined configuration. 
+
+Sample files can be found in `samples/syslog-daemon` directory.
+
+Sample stream configuration:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<tnt-data-source
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="tnt-data-source.xsd">
+
+    <parser name="SyslogEventParser" class="com.jkoolcloud.tnt4j.streams.parsers.ActivitySyslogEventParser">
+        <!--<property name="LocPathDelim" value="."/>-->
+
+        <field name="EventType" locator="EventType" locator-type="Label"/>
+        <field name="EventName" locator="EventName" locator-type="Label"/>
+        <field name="Exception" locator="Exception" locator-type="Label"/>
+        <field name="UserName" locator="UserName" locator-type="Label"/>
+        <field name="ResourceName" locator="ResourceName" locator-type="Label"/>
+        <field name="Location" locator="Location" locator-type="Label"/>
+        <field name="Tag" locator="Tag" locator-type="Label"/>
+        <field name="Correlator" locator="Correlator" locator-type="Label"/>
+        <field name="ProcessId" locator="ProcessId" locator-type="Label"/>
+        <field name="ThreadId" locator="ThreadId" locator-type="Label"/>
+        <field name="Message" locator="Message" locator-type="Label"/>
+        <field name="Severity" locator="Severity" locator-type="Label"/>
+        <field name="ApplName" locator="ApplName" locator-type="Label"/>
+        <field name="ServerName" locator="ServerName" locator-type="Label"/>
+        <field name="EndTime" locator="EndTime" locator-type="Label" datatype="Timestamp" units="Microseconds"/>
+        <field name="ElapsedTime" locator="ElapsedTime" locator-type="Label"/>
+        <field name="MsgCharSet" locator="MsgCharSet" locator-type="Label"/>
+
+        <!-- custom Syslog properties -->
+        <field name="facility" locator="facility" locator-type="Label"/>
+        <field name="level" locator="level" locator-type="Label" value-type="id"/>
+        <field name="hostname" locator="hostname" locator-type="Label"/>
+        <field name="hostaddr" locator="hostaddr" locator-type="Label"/>
+
+        <!-- properties from Syslog message/structured data -->
+        <!-- automatically puts all resolved map entries as custom activity properties -->
+        <field name="SyslogMap" locator="SyslogMap" locator-type="Label"/>
+        <field name="SyslogVars" locator="SyslogVars" locator-type="Label"/>
+
+        <!-- if particular entries needed then use manual mapping like this-->
+        <!--<field name="propName1" locator="SyslogVars.propName1" locator-type="Label"/>-->
+        <!--<field name="propName2" locator="SyslogVars.propName2" locator-type="Label" datatype="Number" format="####0.00"/>-->
+        <!--<field name="propName3" locator="SyslogVars.propName3" locator-type="Label"/>-->
+    </parser>
+
+    <stream name="SampleSyslogdStream" class="com.jkoolcloud.tnt4j.streams.inputs.SyslogdStream">
+        <property name="HaltIfNoParser" value="false"/>
+        <property name="Protocol" value="tcp"/>
+        <property name="Host" value="0.0.0.0"/>
+        <property name="Port" value="514"/>
+        <property name="Timeout" value="0"/>
+
+        <parser-ref name="SyslogEventParser"/>
+    </stream>   
+</tnt-data-source>
+```
+
+Stream configuration states that `SyslogdStream` referencing parser `SyslogEventParser` shall be used.
+
+`SyslogdStream` starts Syslogd server, to receive Syslog clients sent log events, on machine host and port defined by `Host` and `Port` 
+properties. `Protocol` property defines protocol used for communication: may be `tcp` or `udp`. `Timeout` property defines communication 
+timeout value ans is applicable if property `Protocol` has value `tcp`. `HaltIfNoParser` property states that stream should skip unparseable 
+entries and don't stop if such situation occurs.
+
+`SyslogEventParser` parser collects data from RFC 3164 or 5424 compliant Syslogd events and fills activity event fields from resolved log 
+entry attributes map data.
+
+Parser resolved data map may contain such entries:
+ * for activity fields:
+    * `EventType`
+    * `EventName`
+    * `Exception`
+    * `UserName`
+    * `ResourceName`
+    * `Location`
+    * `Tag`
+    * `Correlator`
+    * `ProcessId`
+    * `ThreadId`
+    * `Message`
+    * `Severity`
+    * `ApplName`
+    * `ServerName`
+    * `EndTime` - resolved log event timestamp value in microseconds
+    * `ElapsedTime` - calculated time difference between same host and app events in microseconds
+    * `MsgCharSet`
+ * for activity properties:
+    * `facility`
+    * `level`
+    * `hostname`
+    * `hostaddr`    
+ * maps of resolved additional custom activity properties:
+    * `SyslogMap` - map of resolved RFC 5424 structured data
+    * `SyslogVars` - map of resolved application message contained (varName=varValue) variables
+
+By default stream will put all resolved values form `SyslogMap` and `SyslogVars` as activity event properties. It is useful when all 
+resolved data is "interesting" and particular set of those additional attributes is unknown.   
+
+But if You know possible content of those maps, may select just some particular set of "interesting" entries of those maps to stream. In 
+this case comment out field mappings for `SyslogMap` and `SyslogVars`, and put activity event mappings like this:  
+```xml
+    <field name="propName1" locator="SyslogVars.propName1" locator-type="Label"/>
+    <field name="propName2" locator="SyslogVars.propName2" locator-type="Label" datatype="Number" format="####0.00"/>
+    <field name="propName3" locator="SyslogMap.propName3" locator-type="Label"/>
+```  
 
 #### Syslog log file
 
-TODO
+This sample shows how to stream activity events from Syslog log file(s) entries.
+
+Sample files can be found in `samples/syslog-file` directory.
+
+`syslog.log` and `syslog2.log` files are sample Syslog log file depicting some Unix running machine activity.
+
+Sample stream configuration:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<tnt-data-source
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="tnt-data-source.xsd">
+
+    <parser name="SyslogMessageParser" class="com.jkoolcloud.tnt4j.streams.parsers.ActivitySyslogLineParser">
+        <property name="CharSet" value="UTF-8"/>
+
+        <field name="EventType" locator="EventType" locator-type="Label"/>
+        <field name="EventName" locator="EventName" locator-type="Label"/>
+        <field name="Exception" locator="Exception" locator-type="Label"/>
+        <field name="UserName" locator="UserName" locator-type="Label"/>
+        <field name="ResourceName" locator="ResourceName" locator-type="Label"/>
+        <field name="Location" locator="Location" locator-type="Label"/>
+        <field name="Tag" locator="Tag" locator-type="Label"/>
+        <field name="Correlator" locator="Correlator" locator-type="Label"/>
+        <field name="ProcessId" locator="ProcessId" locator-type="Label"/>
+        <field name="ThreadId" locator="ThreadId" locator-type="Label"/>
+        <field name="Message" locator="Message" locator-type="Label"/>
+        <field name="Severity" locator="Severity" locator-type="Label"/>
+        <field name="ApplName" locator="ApplName" locator-type="Label"/>
+        <field name="ServerName" locator="ServerName" locator-type="Label"/>
+        <field name="EndTime" locator="EndTime" locator-type="Label" datatype="Timestamp" units="Microseconds"/>
+        <field name="ElapsedTime" locator="ElapsedTime" locator-type="Label"/>
+        <field name="MsgCharSet" locator="MsgCharSet" locator-type="Label"/>
+
+        <!-- custom Syslog properties -->
+        <field name="facility" locator="facility" locator-type="Label"/>
+        <field name="level" locator="level" locator-type="Label" value-type="id"/>
+        <field name="hostname" locator="hostname" locator-type="Label"/>
+        <field name="hostaddr" locator="hostaddr" locator-type="Label"/>
+        <field name="version" locator="version" locator-type="Label"/>
+        <field name="priority" locator="priority" locator-type="Label"/>
+
+        <!-- properties from Syslog message/structured data -->
+        <!-- automatically puts all resolved map entries as custom activity properties -->
+        <field name="SyslogMap" locator="SyslogMap" locator-type="Label"/>
+        <field name="SyslogVars" locator="SyslogVars" locator-type="Label"/>
+
+        <!-- if particular entries needed then use manual mapping like this-->
+        <!--<field name="propName1" locator="SyslogVars.propName1" locator-type="Label"/>-->
+        <!--<field name="propName2" locator="SyslogVars.propName2" locator-type="Label" datatype="Number" format="####0.00"/>-->
+        <!--<field name="propName3" locator="SyslogVars.propName3" locator-type="Label"/>-->
+    </parser>
+
+    <stream name="FileStream" class="com.jkoolcloud.tnt4j.streams.inputs.FileLineStream">
+        <property name="HaltIfNoParser" value="false"/>
+        <property name="FileName" value="./samples/syslog-file/syslog.log"/>
+        <property name="RestoreState" value="false"/>
+
+        <parser-ref name="SyslogMessageParser"/>
+    </stream>
+</tnt-data-source>
+```
+
+Stream configuration states that `FileLineStream` referencing `SyslogMessageParser` shall be used.
+
+`FileStream` reads data from `syslog.log` file. `HaltIfNoParser` property states that stream should skip unparseable
+entries and don't stop if such situation occurs.
+
+`SyslogMessageParser` parser reads RFC 3164 or 5424 compliant log lines and fills activity event fields from resolved log entry attributes 
+map data.
+
+`CharSet` property defines parser used char set.
+
+Parser resolved data map may contain such entries:
+ * for activity fields:
+    * `EventType`
+    * `EventName`
+    * `Exception`
+    * `UserName`
+    * `ResourceName`
+    * `Location`
+    * `Tag`
+    * `Correlator`
+    * `ProcessId`
+    * `ThreadId`
+    * `Message`
+    * `Severity`
+    * `ApplName`
+    * `ServerName`
+    * `EndTime` - resolved log event timestamp value in microseconds
+    * `ElapsedTime` - calculated time difference between same host and app events in microseconds
+    * `MsgCharSet`
+ * for activity properties:
+    * `facility`
+    * `level`
+    * `hostname`
+    * `hostaddr`
+    * `version`
+    * `priority`
+ * maps of resolved additional custom activity properties:
+    * `SyslogMap` - map of resolved RFC 5424 structured data
+    * `SyslogVars` - map of resolved application message contained (varName=varValue) variables
+
+By default stream will put all resolved values form `SyslogMap` and `SyslogVars` as activity event properties. It is useful when all 
+resolved data is "interesting" and particular set of those additional attributes is unknown.   
+
+But if You know possible content of those maps, may select just some particular set of "interesting" entries of those maps to stream. In 
+this case comment out field mappings for `SyslogMap` and `SyslogVars`, and put activity event mappings like this:  
+```xml
+    <field name="propName1" locator="SyslogVars.propName1" locator-type="Label"/>
+    <field name="propName2" locator="SyslogVars.propName2" locator-type="Label" datatype="Number" format="####0.00"/>
+    <field name="propName3" locator="SyslogMap.propName3" locator-type="Label"/>
+```  
 
 Configuring TNT4J-Streams-Syslogd
 ======================================
@@ -99,7 +319,7 @@ Also see ['Activity map parser'](https://github.com/Nastel/tnt4j-streams/blob/ma
 
 #### Activity Syslog line parser
 
- * CharSet - name of char set used by syslog lines parser. Default value - `UTF-8`. (Optional)
+ * CharSet - name of char set used by Syslog lines parser. Default value - `UTF-8`. (Optional)
 
     sample:
 ```xml

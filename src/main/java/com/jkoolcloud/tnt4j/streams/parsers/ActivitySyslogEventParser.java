@@ -215,12 +215,12 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	}
 
 	/**
-	 * Process syslog message based on RFC 5424.
+	 * Process Syslog message based on RFC 5424.
 	 *
 	 * @param facility
-	 *            syslog facility name
+	 *            Syslog facility name
 	 * @param event
-	 *            syslog message
+	 *            Syslog message
 	 * @param dataMap
 	 *            log entry fields map to update
 	 */
@@ -242,12 +242,12 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	}
 
 	/**
-	 * Process syslog message based on RFC 5424.
+	 * Process Syslog message based on RFC 5424.
 	 *
 	 * @param facility
-	 *            syslog facility name
+	 *            Syslog facility name
 	 * @param sEvent
-	 *            syslog structured message
+	 *            Syslog structured message
 	 * @param dataMap
 	 *            log entry fields map to update
 	 */
@@ -273,13 +273,13 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	}
 
 	/**
-	 * Extract syslog structured data if available (part of RFC 5424).
+	 * Extract Syslog structured data if available (part of RFC 5424).
 	 *
 	 * @param sEvent
-	 *            syslog structured message
+	 *            Syslog structured message
 	 * @param dataMap
 	 *            log entry fields map to update
-	 * @return map of structured syslog message data
+	 * @return map of structured Syslog message data
 	 */
 	protected static Map<String, Map<String, String>> extractStructuredData(StructuredSyslogServerEvent sEvent,
 			Map<String, Object> dataMap) {
@@ -296,11 +296,11 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	}
 
 	/**
-	 * Parse syslog header attributes into a map. Message structure: <server> <appl-part>:<message>
+	 * Parse Syslog header attributes into a map. Message structure: <server> <appl-part>:<message>
 	 *
 	 * @param event
-	 *            syslog event
-	 * @return syslog attributes such as host, application, pid
+	 *            Syslog event
+	 * @return Syslog attributes such as host, application, pid
 	 */
 	private static Map<String, Object> parseAttributes(SyslogServerEventIF event) {
 		HashMap<String, Object> map = new HashMap<String, Object>();

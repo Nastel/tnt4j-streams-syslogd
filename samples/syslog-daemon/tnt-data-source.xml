@@ -24,13 +24,13 @@
         <field name="ElapsedTime" locator="ElapsedTime" locator-type="Label"/>
         <field name="MsgCharSet" locator="MsgCharSet" locator-type="Label"/>
 
-        <!-- custom syslog properties -->
+        <!-- custom Syslog properties -->
         <field name="facility" locator="facility" locator-type="Label"/>
         <field name="level" locator="level" locator-type="Label" value-type="id"/>
         <field name="hostname" locator="hostname" locator-type="Label"/>
         <field name="hostaddr" locator="hostaddr" locator-type="Label"/>
 
-        <!-- properties from syslog message/structured data -->
+        <!-- properties from Syslog message/structured data -->
         <!-- automatically puts all resolved map entries as custom activity properties -->
         <field name="SyslogMap" locator="SyslogMap" locator-type="Label"/>
         <field name="SyslogVars" locator="SyslogVars" locator-type="Label"/>
@@ -50,19 +50,4 @@
 
         <parser-ref name="SyslogEventParser"/>
     </stream>
-
-    <!--<stream name="SampleSyslogdStream" class="com.jkoolcloud.tnt4j.streams.inputs.SyslogdFileStream">-->
-    <!--<property name="HaltIfNoParser" value="false"/>-->
-    <!--<property name="Protocol" value="tcp"/>-->
-    <!--<property name="Host" value="0.0.0.0"/>-->
-    <!--<property name="Port" value="514"/>-->
-    <!--<property name="Timeout" value="0"/>-->
-
-    <!--<property name="FileName" value="./samples/syslog-file/syslog.log"/>-->
-    <!--<property name="Facility" value="USER"/>-->
-    <!--<property name="Level" value="INFO"/>-->
-
-    <!--<parser-ref name="SyslogEventParser"/>-->
-    <!--</stream>-->
-
 </tnt-data-source>

@@ -52,10 +52,10 @@ public final class SyslogUtils {
 	}
 
 	/**
-	 * Extract syslog name/value pairs if available in within the message.
+	 * Extract Syslog name/value pairs if available in within the message.
 	 *
 	 * @param message
-	 *            syslog event message
+	 *            Syslog event message
 	 * @param dataMap
 	 *            log entry fields map to update
 	 * @return map of parsed out event attributes (name=value pairs)
@@ -76,11 +76,11 @@ public final class SyslogUtils {
 	}
 
 	/**
-	 * Parse syslog name=value variables.
+	 * Parse Syslog name=value variables.
 	 *
 	 * @param message
-	 *            syslog message
-	 * @return syslog name=value variables
+	 *            Syslog message
+	 * @return Syslog name=value variables
 	 */
 	public static Map<String, Object> parseVariables(String message) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -177,21 +177,21 @@ public final class SyslogUtils {
 	}
 
 	/**
-	 * Obtain string representation of syslog facility.
+	 * Obtain string representation of Syslog facility.
 	 *
 	 * @param facility
-	 *            syslog facility
-	 * @return string representation of syslog facility
+	 *            Syslog facility
+	 * @return string representation of Syslog facility
 	 */
 	public static String getFacilityString(int facility) {
 		return SyslogStreamConstants.Facility.valueOf(facility).name();
 	}
 
 	/**
-	 * Obtain syslog level to {@link OpLevel} mapping.
+	 * Obtain Syslog level to {@link OpLevel} mapping.
 	 *
 	 * @param level
-	 *            syslog level
+	 *            Syslog level
 	 * @return {@link OpLevel} mapping
 	 */
 	public static OpLevel getOpLevel(int level) {

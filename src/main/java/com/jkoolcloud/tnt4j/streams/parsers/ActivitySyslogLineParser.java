@@ -86,7 +86,7 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * <p>
  * This parser supports the following properties (in addition to those supported by {@link AbstractActivityMapParser}):
  * <ul>
- * <li>CharSet - name of char set used by syslog lines parser. Default value - 'UTF-8'. (Optional)</li>
+ * <li>CharSet - name of char set used by Syslog lines parser. Default value - 'UTF-8'. (Optional)</li>
  * </ul>
  *
  * @version $Revision: 1 $
@@ -224,7 +224,7 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		 * Parse Syslog log line string making map of parsed fields.
 		 *
 		 * @param logLine
-		 *            syslog log line
+		 *            Syslog log line
 		 * @return a map, or null if line is empty.
 		 *
 		 * @throws IOException
@@ -403,9 +403,9 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		 * Create a map from the parsed fields data.
 		 *
 		 * @param version
-		 *            the resolved syslog version: 0 for RFC 3164
+		 *            the resolved Syslog version: 0 for RFC 3164
 		 * @param priority
-		 *            the resolved syslog priority according to RFC 5424
+		 *            the resolved Syslog priority according to RFC 5424
 		 * @param date
 		 *            the resolved timestamp with timezone
 		 * @param hostName
