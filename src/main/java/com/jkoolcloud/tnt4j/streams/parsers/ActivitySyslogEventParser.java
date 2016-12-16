@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.collections4.MapUtils;
 import org.graylog2.syslog4j.impl.message.structured.StructuredSyslogMessage;
@@ -39,6 +40,7 @@ import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.streams.utils.SyslogUtils;
+import com.jkoolcloud.tnt4j.tracker.TimeTracker;
 
 /**
  * Implements an activity data parser that assumes each activity data item is an Syslog server event
@@ -67,8 +69,8 @@ import com.jkoolcloud.tnt4j.streams.utils.SyslogUtils;
  * <li>Severity</li>
  * <li>ApplName</li>
  * <li>ServerName</li>
- * <li>EndTime</li>
- * <li>ElapsedTime</li>
+ * <li>EndTime - resolved log event timestamp value in microseconds</li>
+ * <li>ElapsedTime - calculated time difference between same host and app events in microseconds</li>
  * <li>MsgCharSet</li>
  * </ul>
  * <li>for activity properties:</li>
@@ -96,6 +98,11 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	private static final String ATTR_APPL_PART = "appl.part"; // NON-NLS
 	private static final String ATTR_APPL_NAME = "appl.name"; // NON-NLS
 	private static final String ATTR_APPL_PID = "appl.pid"; // NON-NLS
+
+	/*
+	 * Timing map maintains the number of nanoseconds since last event for a specific server/application combo.
+	 */
+	private static final TimeTracker TIME_TRACKER = TimeTracker.newTracker(10000, TimeUnit.DAYS.toMillis(30));
 
 	/**
 	 * Constructs a new ActivitySyslogEventParser.
@@ -189,10 +196,10 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 
 		// extract name=value pairs if available
 		SyslogUtils.extractVariables(event.getMessage(), dataMap);
-		String locationKey = String.format("%s/%s", dataMap.get(Location.name()), // NON-NLS
+		String eventKey = String.format("%s/%s", dataMap.get(Location.name()), // NON-NLS
 				(String) dataMap.get(ResourceName.name()));
 		dataMap.put(EndTime.name(), date.getTime() * 1000);
-		dataMap.put(ElapsedTime.name(), SyslogUtils.getUsecSinceLastEvent(locationKey));
+		dataMap.put(ElapsedTime.name(), getUsecSinceLastEvent(eventKey));
 
 		return dataMap;
 	}
@@ -208,7 +215,7 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	}
 
 	/**
-	 * Process syslog message based on RFC5424
+	 * Process syslog message based on RFC 5424.
 	 *
 	 * @param facility
 	 *            syslog facility name
@@ -235,7 +242,7 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	}
 
 	/**
-	 * Process syslog message based on RFC5424
+	 * Process syslog message based on RFC 5424.
 	 *
 	 * @param facility
 	 *            syslog facility name
@@ -266,7 +273,7 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	}
 
 	/**
-	 * Extract syslog structured data if available (part of RFC 5424)
+	 * Extract syslog structured data if available (part of RFC 5424).
 	 *
 	 * @param sEvent
 	 *            syslog structured message
@@ -321,5 +328,16 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 			map.put(ATTR_APPL_PID, 0L);
 		}
 		return map;
+	}
+
+	/**
+	 * Obtain elapsed microseconds since last event.
+	 *
+	 * @param key
+	 *            timer key
+	 * @return elapsed microseconds since last event
+	 */
+	public static long getUsecSinceLastEvent(String key) {
+		return TimeUnit.NANOSECONDS.toMicros(TIME_TRACKER.hitAndGet(key));
 	}
 }

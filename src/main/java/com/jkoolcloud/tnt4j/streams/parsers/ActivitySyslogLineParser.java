@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.Exception;
 import java.nio.CharBuffer;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -63,8 +64,8 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * <li>Severity</li>
  * <li>ApplName</li>
  * <li>ServerName</li>
- * <li>EndTime</li>
- * <li>ElapsedTime</li>
+ * <li>EndTime - resolved log event timestamp value in microseconds</li>
+ * <li>ElapsedTime - calculated time difference between same host and app events in microseconds</li>
  * <li>MsgCharSet</li>
  * </ul>
  * <li>for activity properties:</li>
@@ -203,6 +204,8 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 
 		// As defined in RFC 5424.
 		private static final int MAX_SUPPORTED_VERSION = 1;
+
+		private final Map<String, Long> EVENT_TIMESTAMP_MAP = new HashMap<String, Long>(8);
 
 		/**
 		 * Construct a new Syslog log lines parser.
@@ -458,12 +461,34 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 			map.put(ServerName.name(), hostName);
 
 			SyslogUtils.extractVariables(appMsg, map);
-			String locationKey = String.format("%s/%s", (String) map.get(Location.name()), // NON-NLS
+			String eventKey = String.format("%s/%s", (String) map.get(Location.name()), // NON-NLS
 					(String) map.get(ResourceName.name()));
-			map.put(EndTime.name(), date.getTimeInMillis() * 1000);
-			map.put(ElapsedTime.name(), SyslogUtils.getUsecSinceLastEvent(locationKey)); // TODO: calculate from real
-																							// timestamp differences
+			long eventTime = date.getTimeInMillis();
+			map.put(EndTime.name(), eventTime * 1000);
+			map.put(ElapsedTime.name(), getUsecSinceLastEvent(eventKey, eventTime));
+
 			return map;
+		}
+
+		/**
+		 * Obtain elapsed microseconds since last event.
+		 *
+		 * @param eventKey
+		 *            event key
+		 * @param eventTime
+		 *            current event timestamp value
+		 * @return elapsed microseconds since last event
+		 */
+		private long getUsecSinceLastEvent(String eventKey, long eventTime) {
+			synchronized (EVENT_TIMESTAMP_MAP) {
+				Long prev_ts = EVENT_TIMESTAMP_MAP.put(eventKey, eventTime);
+
+				if (prev_ts == null) {
+					prev_ts = eventTime;
+				}
+
+				return TimeUnit.MILLISECONDS.toMicros(eventTime - prev_ts);
+			}
 		}
 
 		/**

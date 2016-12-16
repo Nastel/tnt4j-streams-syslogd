@@ -26,7 +26,6 @@ import java.lang.Exception;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +35,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.core.OpType;
 import com.jkoolcloud.tnt4j.logger.AppenderConstants;
-import com.jkoolcloud.tnt4j.tracker.TimeTracker;
 
 /**
  * Utility methods used by Syslog module.
@@ -50,17 +48,11 @@ public final class SyslogUtils {
 	 */
 	private static final Pattern VARIABLES_PATTERN = Pattern.compile("(\\S+)=\"*((?<=\")[^\"]+(?=\")|([^\\s]+))\"*");
 
-	/*
-	 * Timing map maintains the number of nanoseconds since last event for a specific server/application combo.
-	 */
-	private static final TimeTracker TIME_TRACKER = TimeTracker.newTracker(10000, TimeUnit.DAYS.toMillis(30));
-
 	private SyslogUtils() {
-
 	}
 
 	/**
-	 * Extract syslog name/value pairs if available in within the message
+	 * Extract syslog name/value pairs if available in within the message.
 	 *
 	 * @param message
 	 *            syslog event message
@@ -84,7 +76,7 @@ public final class SyslogUtils {
 	}
 
 	/**
-	 * Parse syslog name=value variables
+	 * Parse syslog name=value variables.
 	 *
 	 * @param message
 	 *            syslog message
@@ -105,7 +97,7 @@ public final class SyslogUtils {
 	}
 
 	/**
-	 * Test key value pair for numeric, convert and store in map
+	 * Test key value pair for numeric, convert and store in map.
 	 *
 	 * @param map
 	 *            collection of name, value pairs
@@ -166,7 +158,7 @@ public final class SyslogUtils {
 	}
 
 	/**
-	 * Extract and assign process id
+	 * Extract and assign process id.
 	 *
 	 * @param pid
 	 *            process identifier
@@ -185,7 +177,7 @@ public final class SyslogUtils {
 	}
 
 	/**
-	 * Obtain string representation of syslog facility
+	 * Obtain string representation of syslog facility.
 	 *
 	 * @param facility
 	 *            syslog facility
@@ -196,7 +188,7 @@ public final class SyslogUtils {
 	}
 
 	/**
-	 * Obtain syslog level to {@link OpLevel} mapping
+	 * Obtain syslog level to {@link OpLevel} mapping.
 	 *
 	 * @param level
 	 *            syslog level
@@ -204,16 +196,5 @@ public final class SyslogUtils {
 	 */
 	public static OpLevel getOpLevel(int level) {
 		return ((level >= 0) && (level < LEVELS.length)) ? LEVELS[level] : LEVELS[LEVELS.length - 1];
-	}
-
-	/**
-	 * Obtain elapsed microseconds since last event
-	 *
-	 * @param key
-	 *            timer key
-	 * @return elapsed microseconds since last event
-	 */
-	public static long getUsecSinceLastEvent(String key) {
-		return TimeUnit.NANOSECONDS.toMicros(TIME_TRACKER.hitAndGet(key));
 	}
 }
