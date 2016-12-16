@@ -44,11 +44,11 @@ import com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants;
  * {@link AbstractBufferedStream}):
  * <ul>
  * <li>Host - host name to run Syslog server. (Required)</li>
- * <li>Port - port number to run Syslog server. Default value - `514`. (Optional)</li>
- * <li>Protocol - protocol of Syslog server communication: one of 'tcp' or 'udp' . Default value - 'tcp',
+ * <li>Port - port number to run Syslog server. Default value - '514'. (Optional)</li>
+ * <li>Protocol - protocol of Syslog server communication: one of 'tcp' or 'udp' . Default value - 'tcp'.
  * (Optional)</li>
  * <li>Timeout - server communication timeout, where '0' means - server implementation dependent timeout handling.
- * Default value - '0'. (Optional)</li>
+ * Actual if 'Protocol' property value is set to 'tcp'. Default value - '0'. (Optional)</li>
  * </ul>
  *
  * @version $Revision: 1 $
