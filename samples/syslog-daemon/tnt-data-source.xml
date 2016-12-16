@@ -50,4 +50,19 @@
 
         <parser-ref name="SyslogEventParser"/>
     </stream>
+
+    <!--<stream name="SampleSyslogdStream" class="com.jkoolcloud.tnt4j.streams.inputs.SyslogdFileStream">-->
+    <!--<property name="HaltIfNoParser" value="false"/>-->
+    <!--<property name="Protocol" value="tcp"/>-->
+    <!--<property name="Host" value="0.0.0.0"/>-->
+    <!--<property name="Port" value="514"/>-->
+    <!--<property name="Timeout" value="0"/>-->
+
+    <!--<property name="FileName" value="./samples/syslog-file/syslog.log"/>-->
+    <!--<property name="Facility" value="USER"/>-->
+    <!--<property name="Level" value="INFO"/>-->
+
+    <!--<parser-ref name="SyslogEventParser"/>-->
+    <!--</stream>-->
+
 </tnt-data-source>

@@ -28,9 +28,9 @@ import com.jkoolcloud.tnt4j.core.OpLevel;
 public class SyslogStreamConstants {
 
 	/**
-	 * Resource bundle name constant for TNT4J-Streams "syslog" module.
+	 * Resource bundle name constant for TNT4J-Streams "syslogd" module.
 	 */
-	public static final String RESOURCE_BUNDLE_NAME = "tnt4j-streams-syslog"; // NON-NLS
+	public static final String RESOURCE_BUNDLE_NAME = "tnt4j-streams-syslogd"; // NON-NLS
 
 	/**
 	 * Constant for name of built-in stream {@value} property.

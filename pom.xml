@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jkoolcloud.tnt4j.streams</groupId>
-    <artifactId>tnt4j-streams-syslog</artifactId>
+    <artifactId>tnt4j-streams-syslogd</artifactId>
     <version>0.1-beta</version>
     <packaging>jar</packaging>
 
-    <name>TNT4J-Streams-Syslog</name>
+    <name>TNT4J-Streams-Syslogd</name>
     <description>TNT4J Syslog streams for Java</description>
 
     <prerequisites>
@@ -18,8 +18,8 @@
 
     <licenses>
         <license>
-            <name>GNU Lesser General Public License, version 3.0</name>
-            <url>http://www.gnu.org/licenses/lgpl-3.0</url>
+            <name>GNU Lesser General Public License, version 2.1</name>
+            <url>http://www.gnu.org/licenses/lgpl-2.1</url>
         </license>
     </licenses>
 
@@ -27,7 +27,7 @@
         <repository>
             <id>bintray-amavashev2-jkoolcloud</id>
             <name>amavashev2-jkoolcloud</name>
-            <url>https://api.bintray.com/maven/amavashev2/jkoolcloud/streams-syslog/;publish=1;override=1</url>
+            <url>https://api.bintray.com/maven/amavashev2/jkoolcloud/streams-syslogd/;publish=1;override=1</url>
         </repository>
     </distributionManagement>
 
@@ -44,9 +44,9 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:git://github.com/Nastel/tnt4j-streams-syslog</connection>
-        <developerConnection>scm:git:git//github.com/Nastel/tnt4j-streams-syslog</developerConnection>
-        <url>https://github.com/Nastel/tnt4j-streams-syslog</url>
+        <connection>scm:git:git://github.com/Nastel/tnt4j-streams-syslogd</connection>
+        <developerConnection>scm:git:git//github.com/Nastel/tnt4j-streams-syslogd</developerConnection>
+        <url>https://github.com/Nastel/tnt4j-streams-syslogd</url>
     </scm>
 
     <properties>

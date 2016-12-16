@@ -1,4 +1,4 @@
-<project name="tnt4j-streams-syslog" default="all" basedir=".">
+<project name="tnt4j-streams-syslogd" default="all" basedir=".">
 
     <echo message="Processing ${ant.project.name}${line.separator}" level="info"/>
 
