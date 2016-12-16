@@ -104,7 +104,7 @@ Sample stream configuration:
         <!-- if particular entries needed then use manual mapping like this-->
         <!--<field name="propName1" locator="SyslogVars.propName1" locator-type="Label"/>-->
         <!--<field name="propName2" locator="SyslogVars.propName2" locator-type="Label" datatype="Number" format="####0.00"/>-->
-        <!--<field name="propName3" locator="SyslogVars.propName3" locator-type="Label"/>-->
+        <!--<field name="propName3" locator="SyslogMap.propName3" locator-type="Label"/>-->
     </parser>
 
     <stream name="SampleSyslogdStream" class="com.jkoolcloud.tnt4j.streams.inputs.SyslogdStream">
@@ -220,7 +220,7 @@ Sample stream configuration:
         <!-- if particular entries needed then use manual mapping like this-->
         <!--<field name="propName1" locator="SyslogVars.propName1" locator-type="Label"/>-->
         <!--<field name="propName2" locator="SyslogVars.propName2" locator-type="Label" datatype="Number" format="####0.00"/>-->
-        <!--<field name="propName3" locator="SyslogVars.propName3" locator-type="Label"/>-->
+        <!--<field name="propName3" locator="SyslogMap.propName3" locator-type="Label"/>-->
     </parser>
 
     <stream name="FileStream" class="com.jkoolcloud.tnt4j.streams.inputs.FileLineStream">
