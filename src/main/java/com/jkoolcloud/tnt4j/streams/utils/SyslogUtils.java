@@ -23,6 +23,7 @@ import static com.jkoolcloud.tnt4j.streams.fields.StreamFieldType.Exception;
 import static com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants.LEVELS;
 
 import java.lang.Exception;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -197,4 +198,38 @@ public final class SyslogUtils {
 	public static OpLevel getOpLevel(int level) {
 		return ((level >= 0) && (level < LEVELS.length)) ? LEVELS[level] : LEVELS[LEVELS.length - 1];
 	}
+
+	private static final Map<String, Integer> MONTH_MAP = new HashMap<String, Integer>(12);
+	static {
+		MONTH_MAP.put("jan", Calendar.JANUARY);
+		MONTH_MAP.put("feb", Calendar.FEBRUARY);
+		MONTH_MAP.put("may", Calendar.MAY);
+		MONTH_MAP.put("apr", Calendar.APRIL);
+		MONTH_MAP.put("may", Calendar.MAY);
+		MONTH_MAP.put("jun", Calendar.JUNE);
+		MONTH_MAP.put("jul", Calendar.JULY);
+		MONTH_MAP.put("aug", Calendar.AUGUST);
+		MONTH_MAP.put("sep", Calendar.SEPTEMBER);
+		MONTH_MAP.put("oct", Calendar.OCTOBER);
+		MONTH_MAP.put("nov", Calendar.NOVEMBER);
+		MONTH_MAP.put("dec", Calendar.DECEMBER);
+	}
+
+	/**
+	 * Resolves month name 3 letter abbreviation to {@link Calendar} month index.
+	 *
+	 * @param mName
+	 *            month name 3 letter abbreviation
+	 * @return month index, or {@code -1} if unknown or empty
+	 */
+	public static Integer getMonthIndex(String mName) {
+		Integer mIdx = null;
+
+		if (StringUtils.isNotEmpty(mName)) {
+			mIdx = MONTH_MAP.get(mName.toLowerCase());
+		}
+
+		return mIdx == null ? -1 : mIdx;
+	}
+
 }

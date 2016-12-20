@@ -509,66 +509,9 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		 * @return resolved month index, or {@code -1} if unknown
 		 */
 		private int readMonthAbbreviation(CharBuffer cb) {
-			int c = read(cb);
+			String mStr = readChars(cb, 3);
 
-			switch (c) {
-			case 'A':
-				switch (read(cb)) {
-				case 'p':
-					skipWord(cb);
-					return Calendar.APRIL;
-				case 'u':
-					skipWord(cb);
-					return Calendar.AUGUST;
-				default:
-					return -1;
-				}
-			case 'D':
-				skipWord(cb);
-				return Calendar.DECEMBER;
-			case 'F':
-				skipWord(cb);
-				return Calendar.FEBRUARY;
-			case 'J':
-				read(cb); // Second letter is ambiguous.
-				read(cb); // Third letter is also ambiguous.
-				switch (read(cb)) {
-				case 'e':
-					skipWord(cb);
-					return Calendar.JUNE;
-				case 'u':
-					skipWord(cb);
-					return Calendar.JANUARY;
-				case 'y':
-					skipWord(cb);
-					return Calendar.JULY;
-				default:
-					return -1;
-				}
-			case 'M':
-				read(cb); // Second letter is ambiguous.
-				switch (read(cb)) {
-				case 'r':
-					skipWord(cb);
-					return Calendar.MARCH;
-				case 'y':
-					skipWord(cb);
-					return Calendar.MAY;
-				default:
-					return -1;
-				}
-			case 'N':
-				skipWord(cb);
-				return Calendar.NOVEMBER;
-			case 'O':
-				skipWord(cb);
-				return Calendar.OCTOBER;
-			case 'S':
-				skipWord(cb);
-				return Calendar.SEPTEMBER;
-			default:
-				return -1;
-			}
+			return SyslogUtils.getMonthIndex(mStr);
 		}
 
 		/**
