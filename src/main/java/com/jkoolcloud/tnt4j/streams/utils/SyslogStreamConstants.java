@@ -192,7 +192,7 @@ public class SyslogStreamConstants {
 	/**
 	 * Constant for default Syslog facility 'USER'.
 	 */
-	public static final int DEFAULT_FACILITY = Facility.USER.ordinal();
+	public static final Facility DEFAULT_FACILITY = Facility.USER;
 	/**
 	 * Constant for default Syslog entry level 'INFO'.
 	 */

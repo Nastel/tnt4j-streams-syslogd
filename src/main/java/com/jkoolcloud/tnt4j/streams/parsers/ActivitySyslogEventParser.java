@@ -55,30 +55,39 @@ import com.jkoolcloud.tnt4j.tracker.TimeTracker;
  * <ul>
  * <li>for activity fields:</li>
  * <ul>
- * <li>EventType</li>
- * <li>EventName</li>
- * <li>Exception</li>
- * <li>UserName</li>
- * <li>ResourceName</li>
- * <li>Location</li>
- * <li>Tag</li>
- * <li>Correlator</li>
- * <li>ProcessId</li>
- * <li>ThreadId</li>
- * <li>Message</li>
- * <li>Severity</li>
- * <li>ApplName</li>
- * <li>ServerName</li>
+ * <li>EventType - resolved from log event application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_TYPE_LABEL}'</li>
+ * <li>EventName - resolved log event facility name, or application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_NAME_LABEL}'</li>
+ * <li>Exception - resolved from log event application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_EXCEPTION_LABEL}'</li>
+ * <li>UserName - resolved from log event application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_USER_LABEL}'</li>
+ * <li>ResourceName - resolved log event application name, or application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_RESOURCE_LABEL}'</li>
+ * <li>Location - resolved log event host name/address, or application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_LOCATION_LABEL}'</li>
+ * <li>Tag - resolved set of values {host name, application name} for RFC 3164 and set of values {facility name, host
+ * name, application name, message id} for RFC 5424, or application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_TAG_LABEL}'</li>
+ * <li>Correlator - resolved from log event application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_CORRELATOR_LABEL}'</li>
+ * <li>ProcessId - resolved log event process id</li>
+ * <li>ThreadId - same as 'ProcessId'</li>
+ * <li>Message - resolved log event application message</li>
+ * <li>Severity - resolved log event level mapped to {@link OpLevel}</li>
+ * <li>ApplName - resolved log event application name</li>
+ * <li>ServerName - resolved log event host name</li>
  * <li>EndTime - resolved log event timestamp value in microseconds</li>
  * <li>ElapsedTime - calculated time difference between same host and app events in microseconds</li>
- * <li>MsgCharSet</li>
+ * <li>MsgCharSet - resolved log event char set name</li>
  * </ul>
  * <li>for activity properties:</li>
  * <ul>
- * <li>facility</li>
- * <li>level</li>
- * <li>hostname</li>
- * <li>hostaddr</li>
+ * <li>facility - resolved log event facility name</li>
+ * <li>level - resolved log event level</li>
+ * <li>hostname - resolved log event host name</li>
+ * <li>hostaddr - resolved log event host address</li>
  * </ul>
  * <li>maps of resolved additional custom activity properties:</li>
  * <ul>

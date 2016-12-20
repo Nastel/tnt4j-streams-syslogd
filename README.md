@@ -131,28 +131,29 @@ entry attributes map data.
 
 Parser resolved data map may contain such entries:
  * for activity fields:
-    * `EventType`
-    * `EventName`
-    * `Exception`
-    * `UserName`
-    * `ResourceName`
-    * `Location`
-    * `Tag`
-    * `Correlator`
-    * `ProcessId`
-    * `ThreadId`
-    * `Message`
-    * `Severity`
-    * `ApplName`
-    * `ServerName`
+    * `EventType` - resolved from log event application message contained variable named `opt`
+    * `EventName` - resolved log event facility name, or application message contained variable named `opn`
+    * `Exception` - resolved from log event application message contained variable named `exc`
+    * `UserName` - resolved from log event application message contained variable named `usr`
+    * `ResourceName` - resolved log event application name, or application message contained variable named `rsn`
+    * `Location` - resolved log event host name/address, or application message contained variable named `loc`
+    * `Tag` - resolved set of values {`host name`, `application name`} for RFC 3164 and set of values {`facility name`, `host name`, 
+    `application name`, `message id`} for RFC 5424, or application message contained variable named `tag`
+    * `Correlator` - resolved from log event application message contained variable named `cid`
+    * `ProcessId` - resolved log event process id
+    * `ThreadId` - same as `ProcessId`
+    * `Message` - resolved log event application message
+    * `Severity` - resolved log event level mapped to `OpLevel`
+    * `ApplName` - resolved log event application name
+    * `ServerName` - resolved log event host name
     * `EndTime` - resolved log event timestamp value in microseconds
     * `ElapsedTime` - calculated time difference between same host and app events in microseconds
-    * `MsgCharSet`
+    * `MsgCharSet` - resolved log event char set name
  * for activity properties:
-    * `facility`
-    * `level`
-    * `hostname`
-    * `hostaddr`    
+    * `facility` - resolved log event facility name
+    * `level` - resolved log event level
+    * `hostname` - resolved log event host name
+    * `hostaddr` - resolved log event host address    
  * maps of resolved additional custom activity properties:
     * `SyslogMap` - map of resolved RFC 5424 structured data
     * `SyslogVars` - map of resolved application message contained (varName=varValue) variables
@@ -208,7 +209,6 @@ Sample stream configuration:
         <field name="facility" locator="facility" locator-type="Label"/>
         <field name="level" locator="level" locator-type="Label" value-type="id"/>
         <field name="hostname" locator="hostname" locator-type="Label"/>
-        <field name="hostaddr" locator="hostaddr" locator-type="Label"/>
         <field name="version" locator="version" locator-type="Label"/>
         <field name="priority" locator="priority" locator-type="Label"/>
 
@@ -245,30 +245,30 @@ map data.
 
 Parser resolved data map may contain such entries:
  * for activity fields:
-    * `EventType`
-    * `EventName`
-    * `Exception`
-    * `UserName`
-    * `ResourceName`
-    * `Location`
-    * `Tag`
-    * `Correlator`
-    * `ProcessId`
-    * `ThreadId`
-    * `Message`
-    * `Severity`
-    * `ApplName`
-    * `ServerName`
-    * `EndTime` - resolved log event timestamp value in microseconds
+    * `EventType` - resolved from log line application message contained variable named `opt`
+    * `EventName` - resolved log line facility name, or application message contained variable named `opn`
+    * `Exception` - resolved from log line application message contained variable named `exc`
+    * `UserName` - resolved from log line application message contained variable named `usr`
+    * `ResourceName` - resolved log line application name, or application message contained variable named `rsn`
+    * `Location` - resolved log line host name, or application message contained variable named `loc`
+    * `Tag` - resolved set of values {`host name`, `application name`} for RFC 3164 and set of values {`facility name`, `host name`, 
+    `application name`, `message id`} for RFC 5424, or application message contained variable named `tag`
+    * `Correlator` - resolved from log line application message contained variable named `cid`
+    * `ProcessId` - resolved log line process id
+    * `ThreadId` - same as `ProcessId`
+    * `Message` - resolved log line application message
+    * `Severity` - resolved log line level mapped to `OpLevel`
+    * `ApplName` - resolved log line application name
+    * `ServerName` - resolved log line host name
+    * `EndTime` - resolved log line timestamp value in microseconds
     * `ElapsedTime` - calculated time difference between same host and app events in microseconds
-    * `MsgCharSet`
+    * `MsgCharSet` - char set name used by parser
  * for activity properties:
-    * `facility`
-    * `level`
-    * `hostname`
-    * `hostaddr`
-    * `version`
-    * `priority`
+    * `facility` - resolved log line facility name. If resolved `priority` is `null` - then value is `USER`
+    * `level` - resolved log line level. If resolved `priority` is `null` - then value is `6` (`INFO`)
+    * `hostname` - resolved log line host name
+    * `version` - resolved log line Syslog version (`0` for RFC 3164, `1` for RFC 5424)
+    * `priority` - resolved log line priority
  * maps of resolved additional custom activity properties:
     * `SyslogMap` - map of resolved RFC 5424 structured data
     * `SyslogVars` - map of resolved application message contained (varName=varValue) variables

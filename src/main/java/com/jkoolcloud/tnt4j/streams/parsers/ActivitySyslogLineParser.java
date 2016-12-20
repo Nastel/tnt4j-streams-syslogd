@@ -50,32 +50,42 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * <ul>
  * <li>for activity fields:</li>
  * <ul>
- * <li>EventType</li>
- * <li>EventName</li>
- * <li>Exception</li>
- * <li>UserName</li>
- * <li>ResourceName</li>
- * <li>Location</li>
- * <li>Tag</li>
- * <li>Correlator</li>
- * <li>ProcessId</li>
- * <li>ThreadId</li>
- * <li>Message</li>
- * <li>Severity</li>
- * <li>ApplName</li>
- * <li>ServerName</li>
- * <li>EndTime - resolved log event timestamp value in microseconds</li>
+ * <li>EventType - resolved from log line application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_TYPE_LABEL}'</li>
+ * <li>EventName - resolved log line facility name, or application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_NAME_LABEL}'</li>
+ * <li>Exception - resolved from log line application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_EXCEPTION_LABEL}'</li>
+ * <li>UserName - resolved from log line application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_USER_LABEL}'</li>
+ * <li>ResourceName - resolved log line application name, or application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_RESOURCE_LABEL}'</li>
+ * <li>Location - resolved log line host name, or application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_LOCATION_LABEL}'</li>
+ * <li>Tag - resolved set of values {host name, application name} for RFC 3164 and set of values {facility name, host
+ * name, application name, message id} for RFC 5424, or application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_TAG_LABEL}'</li>
+ * <li>Correlator - resolved from log line application message contained variable named
+ * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_CORRELATOR_LABEL}'</li>
+ * <li>ProcessId - resolved log line process id</li>
+ * <li>ThreadId - same as 'ProcessId'</li>
+ * <li>Message - resolved log line application message</li>
+ * <li>Severity - resolved log line level mapped to {@link OpLevel}</li>
+ * <li>ApplName - resolved log line application name</li>
+ * <li>ServerName - resolved log line host name</li>
+ * <li>EndTime - resolved log line timestamp value in microseconds</li>
  * <li>ElapsedTime - calculated time difference between same host and app events in microseconds</li>
- * <li>MsgCharSet</li>
+ * <li>MsgCharSet - char set name used by parser</li>
  * </ul>
  * <li>for activity properties:</li>
  * <ul>
- * <li>facility</li>
- * <li>level</li>
- * <li>hostname</li>
- * <li>hostaddr</li>
- * <li>version</li>
- * <li>priority</li>
+ * <li>facility - resolved log line facility name. If resolved 'priority' is {@code null} - then value is
+ * '{@link com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants.Facility#USER}'</li>
+ * <li>level - resolved log line level. If resolved 'priority' is {@code null} - then value is
+ * '{@value com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants#DEFAULT_LEVEL}'</li>
+ * <li>hostname - resolved log line host name</li>
+ * <li>version - resolved log line Syslog version ('0' for RFC 3164, '1' for RFC 5424)</li>
+ * <li>priority - resolved log line priority</li>
  * </ul>
  * <li>maps of resolved additional custom activity properties:</li>
  * <ul>
@@ -424,7 +434,7 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		private Map<String, Object> createFieldMap(int version, Integer priority, Calendar date, String hostName,
 				String appName, String procId, String msgId, Map<String, Object> structuredData, String appMsg) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			int facility = priority == null ? DEFAULT_FACILITY : priority / 8;
+			int facility = priority == null ? DEFAULT_FACILITY.ordinal() : priority / 8;
 			int level = priority == null ? DEFAULT_LEVEL : priority % 8;
 			String facilityStr = SyslogUtils.getFacilityString(facility);
 
@@ -471,7 +481,7 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		}
 
 		/**
-		 * Obtain elapsed microseconds since last event.
+		 * Obtain elapsed microseconds since last log event.
 		 *
 		 * @param eventKey
 		 *            event key
