@@ -23,10 +23,7 @@ import static com.jkoolcloud.tnt4j.streams.fields.StreamFieldType.Exception;
 import static com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants.LEVELS;
 
 import java.lang.Exception;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -199,20 +196,22 @@ public final class SyslogUtils {
 		return ((level >= 0) && (level < LEVELS.length)) ? LEVELS[level] : LEVELS[LEVELS.length - 1];
 	}
 
-	private static final Map<String, Integer> MONTH_MAP = new HashMap<String, Integer>(12);
+	private static final Map<String, Integer> MONTH_MAP;
 	static {
-		MONTH_MAP.put("jan", Calendar.JANUARY);
-		MONTH_MAP.put("feb", Calendar.FEBRUARY);
-		MONTH_MAP.put("may", Calendar.MAY);
-		MONTH_MAP.put("apr", Calendar.APRIL);
-		MONTH_MAP.put("may", Calendar.MAY);
-		MONTH_MAP.put("jun", Calendar.JUNE);
-		MONTH_MAP.put("jul", Calendar.JULY);
-		MONTH_MAP.put("aug", Calendar.AUGUST);
-		MONTH_MAP.put("sep", Calendar.SEPTEMBER);
-		MONTH_MAP.put("oct", Calendar.OCTOBER);
-		MONTH_MAP.put("nov", Calendar.NOVEMBER);
-		MONTH_MAP.put("dec", Calendar.DECEMBER);
+		Map<String, Integer> mMap = new HashMap<String, Integer>(12);
+		mMap.put("jan", Calendar.JANUARY); // NON-NLS
+		mMap.put("feb", Calendar.FEBRUARY); // NON-NLS
+		mMap.put("may", Calendar.MAY); // NON-NLS
+		mMap.put("apr", Calendar.APRIL); // NON-NLS
+		mMap.put("may", Calendar.MAY); // NON-NLS
+		mMap.put("jun", Calendar.JUNE); // NON-NLS
+		mMap.put("jul", Calendar.JULY); // NON-NLS
+		mMap.put("aug", Calendar.AUGUST); // NON-NLS
+		mMap.put("sep", Calendar.SEPTEMBER); // NON-NLS
+		mMap.put("oct", Calendar.OCTOBER); // NON-NLS
+		mMap.put("nov", Calendar.NOVEMBER); // NON-NLS
+		mMap.put("dec", Calendar.DECEMBER); // NON-NLS
+		MONTH_MAP = Collections.unmodifiableMap(mMap);
 	}
 
 	/**
