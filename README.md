@@ -15,7 +15,7 @@ Why TNT4J-Streams-Syslogd
  * Allows to stream activities parsed from Syslog daemon (Syslogd) events data.   
  * Allows to stream activities parsed from Syslog log files.
  
-NOTE: Currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
+**NOTE:** Currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
 
 Importing TNT4J-Streams-Syslogd project into IDE
 ======================================
@@ -341,7 +341,7 @@ online mode it should download these defined dependencies automatically.
 
 ### Manually installed dependencies
 
-NOTE: If you have build and installed TNT4J-Streams into Your local maven repository, you don't need to install
+**NOTE:** If you have build and installed TNT4J-Streams into Your local maven repository, you don't need to install
 it manually.
 
 Some of required and optional dependencies may be not available in public [Maven Repository](http://repo.maven.apache.org/maven2/). In this 
@@ -350,7 +350,7 @@ maven script `lib/pom.xml` with `package` goal.
 
 `TNT4J-Streams-Syslogd` project does not require any manually downloaded dependencies at the moment.
 
-NOTE: also see TNT4J-Streams README document chapter ['Manually installed dependencies'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#manually-installed-dependencies).
+**NOTE:** also see TNT4J-Streams README document chapter ['Manually installed dependencies'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#manually-installed-dependencies).
 
 ## Building
    * to build project and make release assemblies run maven goals `clean package`
@@ -358,7 +358,7 @@ NOTE: also see TNT4J-Streams README document chapter ['Manually installed depend
 
 Release assemblies are built to `../build/tnt4j-streams-syslogd` directory.
 
-NOTE: sometimes maven fails to correctly handle dependencies. If dependency configuration looks
+**NOTE:** sometimes maven fails to correctly handle dependencies. If dependency configuration looks
 fine, but maven still complains about missing dependencies try to delete local maven repository
 by hand: i.e. delete contents of `c:\Users\[username]\.m2\repository` directory.
 
