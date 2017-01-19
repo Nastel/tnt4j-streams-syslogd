@@ -167,7 +167,7 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 
 		String msg = (String) data;
 
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new HashMap<>();
 
 		try {
 			dataMap = syslogParser.parseSyslogMessage(msg);
@@ -215,7 +215,7 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		// As defined in RFC 5424.
 		private static final int MAX_SUPPORTED_VERSION = 1;
 
-		private final Map<String, Long> EVENT_TIMESTAMP_MAP = new HashMap<String, Long>(8);
+		private final Map<String, Long> EVENT_TIMESTAMP_MAP = new HashMap<>(8);
 
 		/**
 		 * Construct a new Syslog log lines parser.
@@ -433,7 +433,7 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 		 */
 		private Map<String, Object> createFieldMap(int version, Integer priority, Calendar date, String hostName,
 				String appName, String procId, String msgId, Map<String, Object> structuredData, String appMsg) {
-			Map<String, Object> map = new HashMap<String, Object>();
+			Map<String, Object> map = new HashMap<>();
 			int facility = priority == null ? DEFAULT_FACILITY.ordinal() : priority / 8;
 			int level = priority == null ? DEFAULT_LEVEL : priority % 8;
 			String facilityStr = SyslogUtils.getFacilityString(facility);
@@ -869,7 +869,7 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 						"ActivitySyslogLineParser.unexpected.char", OB, (char) c));
 			}
 
-			Map<String, Object> sdm = new HashMap<String, Object>();
+			Map<String, Object> sdm = new HashMap<>();
 
 			StringBuilder sb = new StringBuilder();
 			while (c == OB) {

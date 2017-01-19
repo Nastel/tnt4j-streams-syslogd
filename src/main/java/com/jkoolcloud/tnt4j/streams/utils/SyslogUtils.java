@@ -81,7 +81,7 @@ public final class SyslogUtils {
 	 * @return Syslog name=value variables
 	 */
 	public static Map<String, Object> parseVariables(String message) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		StringTokenizer tokens = new StringTokenizer(message, "[](){}"); // NON-NLS
 
 		while (tokens.hasMoreTokens()) {
@@ -198,7 +198,7 @@ public final class SyslogUtils {
 
 	private static final Map<String, Integer> MONTH_MAP;
 	static {
-		Map<String, Integer> mMap = new HashMap<String, Integer>(12);
+		Map<String, Integer> mMap = new HashMap<>(12);
 		mMap.put("jan", Calendar.JANUARY); // NON-NLS
 		mMap.put("feb", Calendar.FEBRUARY); // NON-NLS
 		mMap.put("may", Calendar.MAY); // NON-NLS

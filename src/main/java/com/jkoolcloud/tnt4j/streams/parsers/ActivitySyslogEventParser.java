@@ -167,7 +167,7 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 
 		SyslogServerEventIF event = (SyslogServerEventIF) data;
 
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new HashMap<>();
 
 		Date date = (event.getDate() == null ? new Date() : event.getDate());
 		String facility = SyslogUtils.getFacilityString(event.getFacility());
@@ -312,7 +312,7 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	 * @return Syslog attributes such as host, application, pid
 	 */
 	private static Map<String, Object> parseAttributes(SyslogServerEventIF event) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		HashMap<String, Object> map = new HashMap<>();
 		String message = event.getMessage();
 
 		if (message != null && message.indexOf(COLON) > 0) {
