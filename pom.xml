@@ -53,9 +53,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.resources.encoding>UTF-8</project.resources.encoding>
-        <java.source.version>1.6</java.source.version>
-        <java.target.version>1.6</java.target.version>
-        <java.compiler.version>1.6</java.compiler.version>
+        <java.source.version>1.7</java.source.version>
+        <java.target.version>1.7</java.target.version>
+        <java.compiler.version>1.7</java.compiler.version>
         <java.compiler.debuglevel>source,lines,vars</java.compiler.debuglevel>
         <java.compiler.verbose>false</java.compiler.verbose>
         <product.vendor>${project.organization.name}</product.vendor>
@@ -68,8 +68,8 @@
         <release.deploy.finalName>${release.deploy.name}-${project.version}</release.deploy.finalName>
         <skipTests>true</skipTests>
 
-        <joda.time.version>2.9.6</joda.time.version>
-        <syslog4j.version>0.9.57</syslog4j.version>
+        <joda.time.version>2.9.7</joda.time.version>
+        <syslog4j.version>0.9.58</syslog4j.version>
     </properties>
 
     <profiles>
@@ -317,7 +317,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>1.10.19</version>
+            <version>2.6.3</version>
             <scope>test</scope>
         </dependency>
         <!-- may be used instead of mockito -->
