@@ -126,15 +126,20 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns whether this parser supports the given format of the activity data. This is used by activity streams to
+	 * determine if the parser can parse the data in the format that the stream has it.
 	 * <p>
 	 * This parser supports the following class types (and all classes extending/implementing any of these):
 	 * <ul>
 	 * <li>{@link org.graylog2.syslog4j.server.SyslogServerEventIF}</li>
 	 * </ul>
+	 *
+	 * @param data
+	 *            data object whose class is to be verified
+	 * @return {@code true} if this parser can process data in the specified format, {@code false} - otherwise
 	 */
 	@Override
-	public boolean isDataClassSupported(Object data) {
+	protected boolean isDataClassSupportedByParser(Object data) {
 		return SyslogServerEventIF.class.isInstance(data);
 	}
 
@@ -205,8 +210,7 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 
 		// extract name=value pairs if available
 		SyslogUtils.extractVariables(event.getMessage(), dataMap);
-		String eventKey = String.format("%s/%s", dataMap.get(Location.name()), // NON-NLS
-				(String) dataMap.get(ResourceName.name()));
+		String eventKey = String.format("%s/%s", dataMap.get(Location.name()), dataMap.get(ResourceName.name())); // NON-NLS
 		dataMap.put(EndTime.name(), date.getTime() * 1000);
 		dataMap.put(ElapsedTime.name(), getUsecSinceLastEvent(eventKey));
 

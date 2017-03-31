@@ -167,7 +167,7 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 
 	@Override
 	protected long getActivityItemByteSize(SyslogServerEventIF item) {
-		byte[] payload = (byte[]) item.getRaw();
+		byte[] payload = item.getRaw();
 
 		return payload == null ? 0 : payload.length;
 	}
