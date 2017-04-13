@@ -11,8 +11,8 @@ Stream configuration states that `FileLineStream` referencing `SyslogMessagePars
 `FileStream` reads data from `syslog.log` file. `HaltIfNoParser` property states that stream should skip unparseable
 entries and don't stop if such situation occurs.
 
-`SyslogMessageParser` parser reads RFC 3164 or 5424 compliant log lines and fills activity event fields from resolved log entry attributes 
-map data.
+`SyslogMessageParser` parser reads [`RFC 3164`](https://tools.ietf.org/html/rfc3164) or [`RFC 5424`](https://tools.ietf.org/html/rfc5424) 
+compliant log lines and fills activity event fields from resolved log entry attributes map data.
 
 `CharSet` property defines parser used char set.
 
@@ -24,8 +24,9 @@ Parser resolved data map may contain such entries:
     * `UserName` - resolved from log line application message contained variable named `usr`
     * `ResourceName` - resolved log line application name, or application message contained variable named `rsn`
     * `Location` - resolved log line host name, or application message contained variable named `loc`
-    * `Tag` - resolved set of values {`host name`, `application name`} for RFC 3164 and set of values {`facility name`, `host name`, 
-    `application name`, `message id`} for RFC 5424, or application message contained variable named `tag`
+    * `Tag` - resolved set of values {`host name`, `application name`} for [`RFC 3164`](https://tools.ietf.org/html/rfc3164) and set of 
+    values {`facility name`, `host name`, `application name`, `message id`} for [`RFC 5424`](https://tools.ietf.org/html/rfc5424), or 
+    application message contained variable named `tag`
     * `Correlator` - resolved from log line application message contained variable named `cid`
     * `ProcessId` - resolved log line process id
     * `ThreadId` - same as `ProcessId`
@@ -40,10 +41,10 @@ Parser resolved data map may contain such entries:
     * `facility` - resolved log line facility name. If resolved `priority` is `null` - then value is `USER`
     * `level` - resolved log line level. If resolved `priority` is `null` - then value is `6` (`INFO`)
     * `hostname` - resolved log line host name
-    * `version` - resolved log line Syslog version (`0` for RFC 3164, `1` for RFC 5424)
+    * `version` - resolved log line Syslog version (`0` for [`RFC 3164`](https://tools.ietf.org/html/rfc3164), `1` for [`RFC 5424`](https://tools.ietf.org/html/rfc5424))
     * `priority` - resolved log line priority
  * maps of resolved additional custom activity properties:
-    * `SyslogMap` - map of resolved RFC 5424 structured data
+    * `SyslogMap` - map of resolved [`RFC 5424`](https://tools.ietf.org/html/rfc5424) structured data
     * `SyslogVars` - map of resolved application message contained (varName=varValue) variables
 
 By default stream will put all resolved values form `SyslogMap` and `SyslogVars` as activity event properties. It is useful when all 

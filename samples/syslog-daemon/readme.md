@@ -12,8 +12,8 @@ properties. `Protocol` property defines protocol used for communication: may be 
 timeout value ans is applicable if property `Protocol` has value `tcp`. `HaltIfNoParser` property states that stream should skip unparseable 
 entries and don't stop if such situation occurs.
 
-`SyslogEventParser` parser collects data from RFC 3164 or 5424 compliant Syslogd events and fills activity event fields from resolved log 
-entry attributes map data.
+`SyslogEventParser` parser collects data from [`RFC 3164`](https://tools.ietf.org/html/rfc3164) or [`RFC 5424`](https://tools.ietf.org/html/rfc5424) 
+compliant Syslogd events and fills activity event fields from resolved log entry attributes map data.
 
 Parser resolved data map may contain such entries:
  * for activity fields:
@@ -23,8 +23,9 @@ Parser resolved data map may contain such entries:
     * `UserName` - resolved from log event application message contained variable named `usr`
     * `ResourceName` - resolved log event application name, or application message contained variable named `rsn`
     * `Location` - resolved log event host name/address, or application message contained variable named `loc`
-    * `Tag` - resolved set of values {`host name`, `application name`} for RFC 3164 and set of values {`facility name`, `host name`, 
-    `application name`, `message id`} for RFC 5424, or application message contained variable named `tag`
+    * `Tag` - resolved set of values {`host name`, `application name`} for [`RFC 3164`](https://tools.ietf.org/html/rfc3164) and set of 
+    values {`facility name`, `host name`, `application name`, `message id`} for [`RFC 5424`](https://tools.ietf.org/html/rfc5424), or 
+    application message contained variable named `tag`
     * `Correlator` - resolved from log event application message contained variable named `cid`
     * `ProcessId` - resolved log event process id
     * `ThreadId` - same as `ProcessId`
@@ -41,7 +42,7 @@ Parser resolved data map may contain such entries:
     * `hostname` - resolved log event host name
     * `hostaddr` - resolved log event host address    
  * maps of resolved additional custom activity properties:
-    * `SyslogMap` - map of resolved RFC 5424 structured data
+    * `SyslogMap` - map of resolved [`RFC 5424`](https://tools.ietf.org/html/rfc5424) structured data
     * `SyslogVars` - map of resolved application message contained (varName=varValue) variables
 
 By default stream will put all resolved values form `SyslogMap` and `SyslogVars` as activity event properties. It is useful when all 

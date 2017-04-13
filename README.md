@@ -15,7 +15,7 @@ Why TNT4J-Streams-Syslogd
  * Allows to stream activities parsed from Syslog daemon (Syslogd) events data.   
  * Allows to stream activities parsed from Syslog log files.
  
-**NOTE:** Currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
+**NOTE:** Currently supports [`RFC 3164`](https://tools.ietf.org/html/rfc3164) and the Structured Syslog protocol [`RFC 5424`](https://tools.ietf.org/html/rfc5424).
 
 Importing TNT4J-Streams-Syslogd project into IDE
 ======================================
