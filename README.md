@@ -142,9 +142,9 @@ it manually.
 
 Release assemblies are built to `../build/tnt4j-streams-syslogd` directory.
 
-**NOTE:** sometimes maven fails to correctly handle dependencies. If dependency configuration looks
-fine, but maven still complains about missing dependencies try to delete local maven repository
-by hand: i.e. delete contents of `c:\Users\[username]\.m2\repository` directory.
+**NOTE:** sometimes maven fails to correctly handle dependencies. If dependency configuration looks fine, but maven still complains about 
+missing dependencies try to delete local maven repository by hand: i.e. on MS Windows delete contents of `c:\Users\[username]\.m2\repository` 
+directory.
 
 So resuming build process quick "how to build" steps would be like this:
 1. if `tnt4j-streams` not built yet build it: run `mvn clean install` for a [`pom.xml`](https://github.com/Nastel/tnt4j-streams/blob/master/pom.xml) 
