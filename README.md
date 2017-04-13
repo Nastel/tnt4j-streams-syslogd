@@ -46,7 +46,7 @@ Also see TNT4J-Streams README document chapter ['Running TNT4J-Streams'](https:/
 ## Samples
 
 ### Running samples
-When release assemblies are built, samples are located in `samples` directory i.e.
+When release assemblies are built, samples are located in [`samples`](./samples/) directory i.e.
 `../build/tnt4j-streams-syslogd/tnt4j-streams-syslogd-1.0.0/samples`.
 To run desired sample:
 * go to sample directory
@@ -147,8 +147,8 @@ fine, but maven still complains about missing dependencies try to delete local m
 by hand: i.e. delete contents of `c:\Users\[username]\.m2\repository` directory.
 
 So resuming build process quick "how to build" steps would be like this:
-1. if `tnt4j-streams` not built yet build it: run `mvn clean install` for a [`pom.xml`](https://github.com/Nastel/tnt4j-streams/blob/master/pom.xml) file located in 
-`tnt4j-streams` directory. 
+1. if `tnt4j-streams` not built yet build it: run `mvn clean install` for a [`pom.xml`](https://github.com/Nastel/tnt4j-streams/blob/master/pom.xml) 
+file located in `tnt4j-streams` directory. 
 2. now you can build `tnt4j-streams-syslogd`: run `mvn clean install` for a [`pom.xml`](./pom.xml) file located in `tnt4j-streams-syslogd` 
 directory. 
 
