@@ -147,7 +147,7 @@ fine, but maven still complains about missing dependencies try to delete local m
 by hand: i.e. delete contents of `c:\Users\[username]\.m2\repository` directory.
 
 So resuming build process quick "how to build" steps would be like this:
-1. if `tnt4j-streams` not built yet build it: run `mvn clean install` for a [`pom.xml`](./../tnt4j-streams/pom.xml) file located in 
+1. if `tnt4j-streams` not built yet build it: run `mvn clean install` for a [`pom.xml`](https://github.com/Nastel/tnt4j-streams/blob/master/pom.xml) file located in 
 `tnt4j-streams` directory. 
 2. now you can build `tnt4j-streams-syslogd`: run `mvn clean install` for a [`pom.xml`](./pom.xml) file located in `tnt4j-streams-syslogd` 
 directory. 
