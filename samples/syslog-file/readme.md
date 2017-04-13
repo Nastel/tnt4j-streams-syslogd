@@ -2,9 +2,9 @@
 
 This sample shows how to stream activity events from Syslog log file(s) entries.
 
-[syslog.log](./syslog.log) and [syslog2.log](./syslog2.log) files are sample Syslog log file depicting some Unix running machine activity.
+[`syslog.log`](./syslog.log) and [`syslog2.log`](./syslog2.log) files are sample Syslog log file depicting some Unix running machine activity.
 
-Sample stream configuration: [tnt-data-source.xml](./tnt-data-source.xml)
+Sample stream configuration: [`tnt-data-source.xml`](./tnt-data-source.xml)
 
 Stream configuration states that `FileLineStream` referencing `SyslogMessageParser` shall be used.
 

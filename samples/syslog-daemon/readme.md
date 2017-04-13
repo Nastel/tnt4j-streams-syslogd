@@ -3,7 +3,7 @@
 This sample shows how to stream activity events from Syslogd received log events data. `SyslogdStream` starts Syslogd server depending on 
 defined configuration. 
 
-Sample stream configuration: [tnt-data-source.xml](./tnt-data-source.xml)
+Sample stream configuration: [`tnt-data-source.xml`](./tnt-data-source.xml)
 
 Stream configuration states that `SyslogdStream` referencing parser `SyslogEventParser` shall be used.
 
