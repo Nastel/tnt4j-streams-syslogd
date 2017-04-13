@@ -68,13 +68,13 @@
         <release.deploy.name>${project.artifactId}</release.deploy.name>
         <release.deploy.dir>../build/${release.deploy.name}</release.deploy.dir>
         <release.deploy.finalName>${release.deploy.name}-${project.version}</release.deploy.finalName>
+        <release.deploy.assembly>src/assemblies/deployAssembly.xml</release.deploy.assembly>
 
         <skipTests>true</skipTests>
         <gpg.skip.sign>true</gpg.skip.sign>
         <build.assemblies.phase>package</build.assemblies.phase>
 
-        <joda.time.version>2.9.7</joda.time.version>
-        <syslog4j.version>0.9.58</syslog4j.version>
+        <syslog4j.version>0.9.59</syslog4j.version>
     </properties>
 
     <profiles>
@@ -230,7 +230,7 @@
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
-                                <descriptor>src/assemblies/deployAssembly.xml</descriptor>
+                                <descriptor>${release.deploy.assembly}</descriptor>
                             </descriptors>
                             <outputDirectory>${release.deploy.dir}</outputDirectory>
                             <attach>true</attach>
@@ -289,11 +289,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda.time.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.graylog2</groupId>
             <artifactId>syslog4j</artifactId>
