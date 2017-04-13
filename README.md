@@ -60,11 +60,15 @@ and JavaDocs.
 This sample shows how to stream activity events from Syslogd received log events data. `SyslogdStream` starts Syslogd server depending on 
 defined configuration. 
 
+Sample files can be found in [samples/syslog-daemon](./samples/syslog-daemon/) directory.
+
 See sample [readme.md](/samples/syslog-daemon/readme.md) file for more details.
 
 #### Syslog log file
 
 This sample shows how to stream activity events from Syslog log file(s) entries.
+
+Sample files can be found in [samples/syslog-file](./samples/syslog-file/) directory.
 
 See sample [readme.md](/samples/syslog-file/readme.md) file for more details.
 
