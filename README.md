@@ -38,7 +38,7 @@ Also see TNT4J-Streams README document chapter ['Running TNT4J-Streams'](https:/
 * As standalone application
     * write streams configuration file. See ['Streams configuration'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#streams-configuration) chapter for more details
     * configure Your loggers
-    * use `bin/tnt4j-streams.bat` or `bin/tnt4j-streams.sh` to run standalone application
+    * use [`bin/tnt4j-streams.bat`](./bin/tnt4j-streams.bat) or [`bin/tnt4j-streams.sh`](./bin/tnt4j-streams.sh) to run standalone application
 * As API integrated into Your product
     * Write streams configuration file. See ['Streams configuration'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#streams-configuration) chapter for more details
     * use `StreamsAgent.runFromAPI(configFileName)` in your code
@@ -124,17 +124,13 @@ How to Build TNT4J-Streams-Syslogd
 * [Apache Maven 3](https://maven.apache.org/)
 * [TNT4J-Streams](https://github.com/Nastel/tnt4j-streams) `core` module in particular
 
-All other required dependencies are defined in project modules `pom.xml` files. If maven is running
-online mode it should download these defined dependencies automatically.
+All other required dependencies are defined in project [`pom.xml`](./pom.xml) file. If maven is running online mode it should download these 
+defined dependencies automatically.
 
 ### Manually installed dependencies
 
 **NOTE:** If you have build and installed TNT4J-Streams into Your local maven repository, you don't need to install
 it manually.
-
-Some of required and optional dependencies may be not available in public [Maven Repository](http://repo.maven.apache.org/maven2/). In this 
-case we would recommend to download those dependencies manually into `lib` directory and install into local maven repository by running 
-maven script `lib/pom.xml` with `package` goal.
 
 `TNT4J-Streams-Syslogd` project does not require any manually downloaded dependencies at the moment.
 
@@ -151,8 +147,10 @@ fine, but maven still complains about missing dependencies try to delete local m
 by hand: i.e. delete contents of `c:\Users\[username]\.m2\repository` directory.
 
 So resuming build process quick "how to build" steps would be like this:
-1. if `tnt4j-streams` not built yet build it: run `mvn clean install` for a `pom.xml` file located in `tnt4j-streams` directory. 
-2. now you can build `tnt4j-streams-syslogd`: run `mvn clean install` for a `pom.xml` file located in `tnt4j-streams-syslogd` directory. 
+1. if `tnt4j-streams` not built yet build it: run `mvn clean install` for a [`pom.xml`](./../tnt4j-streams/pom.xml) file located in 
+`tnt4j-streams` directory. 
+2. now you can build `tnt4j-streams-syslogd`: run `mvn clean install` for a [`pom.xml`](./pom.xml) file located in `tnt4j-streams-syslogd` 
+directory. 
 
 ## Running samples
 
