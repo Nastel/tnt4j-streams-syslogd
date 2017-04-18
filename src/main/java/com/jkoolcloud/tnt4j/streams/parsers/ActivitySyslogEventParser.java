@@ -96,11 +96,11 @@ import com.jkoolcloud.tnt4j.tracker.TimeTracker;
  * </ul>
  * </ul>
  * <p>
- * This activity parser supports properties from {@link AbstractActivityMapParser} (and higher hierarchy parsers).
+ * This activity parser supports properties from {@link AbstractSyslogParser} (and higher hierarchy parsers).
  *
  * @version $Revision: 1 $
  */
-public class ActivitySyslogEventParser extends AbstractActivityMapParser {
+public class ActivitySyslogEventParser extends AbstractSyslogParser {
 	private static final EventSink LOGGER = DefaultEventSinkFactory.defaultEventSink(ActivitySyslogEventParser.class);
 
 	private static final String ATTR_SERVER_NAME = "server.name"; // NON-NLS
@@ -214,7 +214,7 @@ public class ActivitySyslogEventParser extends AbstractActivityMapParser {
 		dataMap.put(EndTime.name(), date.getTime() * 1000);
 		dataMap.put(ElapsedTime.name(), getUsecSinceLastEvent(eventKey));
 
-		return dataMap;
+		return suppress(dataMap);
 	}
 
 	/**

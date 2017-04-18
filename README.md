@@ -99,11 +99,35 @@ Also see ['Generic streams parameters'](https://github.com/Nastel/tnt4j-streams/
 
 ### Parsers configuration
 
+#### Abstract Syslog parser
+
+ * SuppressMessagesLevel - Syslog messages suppression level:
+    * `0` - output all Syslog messages
+    * `-1` - output only the first occurrence of Syslog message
+    * `any other positive number` - suppresses all Syslog messages except those that are multiples of that number
+    
+   Default value - `0`. (Optional)
+ * SuppressIgnoredFields - Syslog message ignored fields list used to compare if message contents are same. Default value - [`EndTime`, 
+ `ElapsedTime`, `Tag`]. (Optional)
+ * SuppressCacheSize - maximal Syslog messages suppression cache entries count. Default value - `100`. (Optional)
+ * SuppressCacheExpireDurationMinutes - Syslog messages suppression cache entries expiration duration value in minutes. 
+ Default value - `10`. (Optional)
+ 
+    sample:
+```xml
+    <property name="SuppressMessagesLevel" value="10"/>
+    <property name="SuppressIgnoredFields" value="EndTime|ElapsedTime|Tag"/>
+    <property name="SuppressCacheSize" value="1000"/>
+    <property name="SuppressCacheExpireDurationMinutes" value="30"/>
+```  
+
+Also see ['Activity map parser'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#activity-map-parser).
+
 #### Activity Syslog event parser
 
 This parser has no additional configuration parameters. 
 
-Also see ['Activity map parser'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#activity-map-parser).
+Also see ['Abstract Syslog parser'](#abstract-syslog-parser).
 
 #### Activity Syslog line parser
 
@@ -114,7 +138,7 @@ Also see ['Activity map parser'](https://github.com/Nastel/tnt4j-streams/blob/ma
     <property name="CharSet" value="ISO-8859-1"/>
 ``` 
 
-Also see ['Activity map parser'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#activity-map-parser).
+Also see ['Abstract Syslog parser'](#abstract-syslog-parser).
 
 How to Build TNT4J-Streams-Syslogd
 =========================================

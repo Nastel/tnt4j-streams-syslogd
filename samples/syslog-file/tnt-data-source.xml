@@ -7,6 +7,11 @@
         <!--<property name="LocPathDelim" value="."/>-->
         <property name="CharSet" value="UTF-8"/>
 
+        <property name="SuppressMessagesLevel" value="0"/>
+        <property name="SuppressIgnoredFields" value="EndTime|ElapsedTime|Tag"/>
+        <property name="SuppressCacheSize" value="100"/>
+        <property name="SuppressCacheExpireDurationMinutes" value="10"/>
+
         <field name="EventType" locator="EventType" locator-type="Label"/>
         <field name="EventName" locator="EventName" locator-type="Label"/>
         <field name="Exception" locator="Exception" locator-type="Label"/>

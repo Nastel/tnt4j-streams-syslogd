@@ -16,6 +16,12 @@ compliant log lines and fills activity event fields from resolved log entry attr
 
 `CharSet` property defines parser used char set.
 
+`SuppressMessagesLevel` property defines Syslog messages suppression level.
+`SuppressIgnoredFields` property defines Syslog message ignored fields list used to compare if message contents are same. **NOTE:** field 
+names are delimited using `|` symbol. 
+`SuppressCacheSize` property defines maximal Syslog messages suppression cache entries count.
+`SuppressCacheExpireDurationMinutes` property defines Syslog messages suppression cache entries expiration duration value in minutes.
+
 Parser resolved data map may contain such entries:
  * for activity fields:
     * `EventType` - resolved from log line application message contained variable named `opt`

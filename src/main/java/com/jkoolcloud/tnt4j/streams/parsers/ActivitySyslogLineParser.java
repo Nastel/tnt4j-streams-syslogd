@@ -94,14 +94,14 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * </ul>
  * </ul>
  * <p>
- * This parser supports the following properties (in addition to those supported by {@link AbstractActivityMapParser}):
+ * This parser supports the following properties (in addition to those supported by {@link AbstractSyslogParser}):
  * <ul>
  * <li>CharSet - name of char set used by Syslog lines parser. Default value - 'UTF-8'. (Optional)</li>
  * </ul>
  *
  * @version $Revision: 1 $
  */
-public class ActivitySyslogLineParser extends AbstractActivityMapParser {
+public class ActivitySyslogLineParser extends AbstractSyslogParser {
 	private static final EventSink LOGGER = DefaultEventSinkFactory.defaultEventSink(ActivitySyslogLineParser.class);
 
 	private static final String DEFAULT_CHAR_SET = Utils.UTF8;
@@ -181,7 +181,7 @@ public class ActivitySyslogLineParser extends AbstractActivityMapParser {
 					"ActivitySyslogLineParser.line.parse.failed"), exc);
 		}
 
-		return dataMap;
+		return suppress(dataMap);
 	}
 
 	// @Override

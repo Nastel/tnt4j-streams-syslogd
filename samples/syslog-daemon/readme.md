@@ -15,6 +15,12 @@ entries and don't stop if such situation occurs.
 `SyslogEventParser` parser collects data from [`RFC 3164`](https://tools.ietf.org/html/rfc3164) or [`RFC 5424`](https://tools.ietf.org/html/rfc5424) 
 compliant Syslogd events and fills activity event fields from resolved log entry attributes map data.
 
+`SuppressMessagesLevel` property defines Syslog messages suppression level.
+`SuppressIgnoredFields` property defines Syslog message ignored fields list used to compare if message contents are same. **NOTE:** field 
+names are delimited using `|` symbol. 
+`SuppressCacheSize` property defines maximal Syslog messages suppression cache entries count.
+`SuppressCacheExpireDurationMinutes` property defines Syslog messages suppression cache entries expiration duration value in minutes.
+
 Parser resolved data map may contain such entries:
  * for activity fields:
     * `EventType` - resolved from log event application message contained variable named `opt`

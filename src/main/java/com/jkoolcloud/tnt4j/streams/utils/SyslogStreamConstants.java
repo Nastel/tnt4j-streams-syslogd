@@ -58,6 +58,23 @@ public class SyslogStreamConstants {
 	public static final String PROP_CHAR_SET = "CharSet"; // NON-NLS
 
 	/**
+	 * Constant for name of built-in parser {@value} property.
+	 */
+	public static final String PROP_SUPPRESS_LEVEL = "SuppressMessagesLevel"; // NON-NLS
+	/**
+	 * Constant for name of built-in parser {@value} property.
+	 */
+	public static final String PROP_SUPPRESS_CACHE_SIZE = "SuppressCacheSize"; // NON-NLS
+	/**
+	 * Constant for name of built-in parser {@value} property.
+	 */
+	public static final String PROP_SUPPRESS_CACHE_EXPIRE = "SuppressCacheExpireDurationMinutes"; // NON-NLS
+	/**
+	 * Constant for name of built-in parser {@value} property.
+	 */
+	public static final String PROP_SUPPRESS_IGNORED_FIELDS = "SuppressIgnoredFields"; // NON-NLS
+
+	/**
 	 * Log facilities enum in Syslog order.
 	 */
 	public enum Facility {
