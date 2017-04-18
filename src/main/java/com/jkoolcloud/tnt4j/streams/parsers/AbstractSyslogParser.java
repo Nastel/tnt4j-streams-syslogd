@@ -20,8 +20,9 @@ import static com.jkoolcloud.tnt4j.streams.fields.StreamFieldType.*;
 
 import java.lang.Exception;
 import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -83,7 +84,7 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	private int suppressionLevel = DEFAULT_SUPPRESSION_LEVEL;
 	private long cacheSize = DEFAULT_MAX_CACHE_SIZE;
 	private long cacheExpireDuration = DEFAULT_CACHE_EXPIRE_DURATION;
-	private String[] ignoredFields = DEFAULT_IGNORED_FIELDS;
+	private List<String> ignoredFields = Arrays.asList(DEFAULT_IGNORED_FIELDS);
 
 	private static final MessageDigest MSG_DIGEST = Utils.getMD5Digester();
 	private Cache<String, Integer> msc;
@@ -117,7 +118,7 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 						name, value);
 			} else if (SyslogStreamConstants.PROP_SUPPRESS_IGNORED_FIELDS.equalsIgnoreCase(name)) {
 				if (StringUtils.isNotEmpty(value)) {
-					ignoredFields = Utils.splitValue(value);
+					ignoredFields = Arrays.asList(Utils.splitValue(value));
 					logger().log(OpLevel.DEBUG,
 							StreamsResources.getString(StreamsResources.RESOURCE_BUNDLE_NAME, "ActivityParser.setting"),
 							name, value);
@@ -148,16 +149,11 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 			return dataMap;
 		}
 
-		Map<String, Object> mapForEvaluatingMD5 = new HashMap<>(dataMap);
-		for (String field : ignoredFields) {
-			mapForEvaluatingMD5.remove(field);
-		}
-
 		if (msc == null) {
 			msc = buildCache(cacheSize, cacheExpireDuration);
 		}
 
-		String byteData = new String(getMD5(mapForEvaluatingMD5));
+		String byteData = new String(getMD5(dataMap, ignoredFields));
 
 		Integer invocations = msc.getIfPresent(byteData);
 		if (invocations == null) {
@@ -188,11 +184,31 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 		return CacheBuilder.newBuilder().maximumSize(cSize).expireAfterAccess(duration, TimeUnit.MINUTES).build();
 	}
 
-	private static byte[] getMD5(Map<String, Object> mapForEvaluatingMD5) {
+	private byte[] getMD5(Map<String, Object> logDataMap, Collection<String> ignoredFields) {
 		synchronized (MSG_DIGEST) {
 			MSG_DIGEST.reset();
-			MSG_DIGEST.update(mapForEvaluatingMD5.toString().getBytes());
+
+			updateDigest(MSG_DIGEST, logDataMap, ignoredFields, "");
+
 			return MSG_DIGEST.digest();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void updateDigest(MessageDigest digest, Map<String, Object> logDataMap, Collection<String> ignoredFields,
+			String keyPrefix) {
+		for (Map.Entry<String, Object> ldme : logDataMap.entrySet()) {
+			String fKey = keyPrefix + ldme.getKey();
+
+			if (ignoredFields != null && ignoredFields.contains(fKey)) {
+				continue;
+			}
+
+			if (ldme.getValue() instanceof Map) {
+				updateDigest(digest, (Map<String, Object>) ldme.getValue(), ignoredFields, fKey + nodePathDelim);
+			} else {
+				digest.update(Utils.toString(ldme.getValue()).getBytes());
+			}
 		}
 	}
 }
