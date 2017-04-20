@@ -66,15 +66,15 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	/**
 	 * Constant for default messages suppression cache maximum entries count.
 	 */
-	static final long DEFAULT_MAX_CACHE_SIZE = 100;
+	public static final long DEFAULT_MAX_CACHE_SIZE = 100;
 	/**
 	 * Constant for default messages suppression cache entries expiration duration in minutes.
 	 */
-	static final long DEFAULT_CACHE_EXPIRE_DURATION = 10;
+	public static final long DEFAULT_CACHE_EXPIRE_DURATION = 10;
 	/**
 	 * Constant for default messages suppression level.
 	 */
-	static final int DEFAULT_SUPPRESSION_LEVEL = 0;
+	public static final int DEFAULT_SUPPRESSION_LEVEL = 0;
 
 	/**
 	 * Constant for default array of log entry suppression ignored fields.
@@ -134,7 +134,7 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	 * <p>
 	 * Log entry gets suppressed if:
 	 * <ul>
-	 * <li>{@link #suppressionLevel) value is {@code -1} and log entry occurs more than 1 time</li>
+	 * <li>{@link #suppressionLevel} value is {@code -1} and log entry occurs more than 1 time</li>
 	 * <li>{@link #suppressionLevel} value is positive integer and log entry occurs non multiple time of that
 	 * number</li>
 	 * </ul>
