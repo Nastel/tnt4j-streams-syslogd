@@ -31,6 +31,7 @@ import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.streams.configure.StreamProperties;
+import com.jkoolcloud.tnt4j.streams.configure.SyslogStreamProperties;
 import com.jkoolcloud.tnt4j.streams.utils.StreamsResources;
 import com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants;
 
@@ -88,10 +89,10 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 		if (StreamProperties.PROP_PORT.equalsIgnoreCase(name)) {
 			return port;
 		}
-		if (SyslogStreamConstants.PROP_PROTOCOL.equalsIgnoreCase(name)) {
+		if (SyslogStreamProperties.PROP_PROTOCOL.equalsIgnoreCase(name)) {
 			return protocol;
 		}
-		if (SyslogStreamConstants.PROP_TIMEOUT.equalsIgnoreCase(name)) {
+		if (SyslogStreamProperties.PROP_TIMEOUT.equalsIgnoreCase(name)) {
 			return timeout;
 		}
 
@@ -113,9 +114,9 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 				host = value;
 			} else if (StreamProperties.PROP_PORT.equalsIgnoreCase(name)) {
 				port = Integer.parseInt(value);
-			} else if (SyslogStreamConstants.PROP_PROTOCOL.equalsIgnoreCase(name)) {
+			} else if (SyslogStreamProperties.PROP_PROTOCOL.equalsIgnoreCase(name)) {
 				protocol = value;
-			} else if (SyslogStreamConstants.PROP_TIMEOUT.equalsIgnoreCase(name)) {
+			} else if (SyslogStreamProperties.PROP_TIMEOUT.equalsIgnoreCase(name)) {
 				timeout = Integer.parseInt(value);
 			}
 		}
@@ -127,13 +128,13 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 
 		if (StringUtils.isEmpty(protocol)) {
 			throw new IllegalStateException(StreamsResources.getStringFormatted(StreamsResources.RESOURCE_BUNDLE_NAME,
-					"TNTInputStream.property.undefined", SyslogStreamConstants.PROP_PROTOCOL));
+					"TNTInputStream.property.undefined", SyslogStreamProperties.PROP_PROTOCOL));
 		}
 
 		if (!SyslogServer.exists(protocol)) {
 			throw new IllegalArgumentException(
 					StreamsResources.getStringFormatted(StreamsResources.RESOURCE_BUNDLE_NAME,
-							"TNTInputStream.property.illegal", SyslogStreamConstants.PROP_PROTOCOL, protocol));
+							"TNTInputStream.property.illegal", SyslogStreamProperties.PROP_PROTOCOL, protocol));
 		}
 
 		syslogDataReceiver = new SyslogDataReceiver();

@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
+import com.jkoolcloud.tnt4j.streams.configure.SyslogParserProperties;
 import com.jkoolcloud.tnt4j.streams.utils.StreamsResources;
 import com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants;
 import com.jkoolcloud.tnt4j.streams.utils.SyslogUtils;
@@ -154,7 +155,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 			String name = prop.getKey();
 			String value = prop.getValue();
 
-			if (SyslogStreamConstants.PROP_CHAR_SET.equalsIgnoreCase(name)) {
+			if (SyslogParserProperties.PROP_CHAR_SET.equalsIgnoreCase(name)) {
 				streamCharSet = value;
 
 				logger().log(OpLevel.DEBUG,
