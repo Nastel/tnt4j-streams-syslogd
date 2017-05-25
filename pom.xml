@@ -72,7 +72,7 @@
 
         <skipTests>true</skipTests>
         <gpg.skip.sign>true</gpg.skip.sign>
-        <build.assemblies.phase>package</build.assemblies.phase>
+        <build.assemblies.attach>false</build.assemblies.attach>
 
         <syslog4j.version>0.9.58</syslog4j.version>
     </properties>
@@ -88,8 +88,7 @@
                 <javadoc.failOnError>false</javadoc.failOnError>
             </properties>
         </profile>
-
-</profiles>
+    </profiles>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -224,7 +223,7 @@
                 <executions>
                     <execution>
                         <id>make-deploy-assembly</id>
-                        <phase>${build.assemblies.phase}</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
@@ -234,7 +233,7 @@
                                 <descriptor>${release.deploy.assembly}</descriptor>
                             </descriptors>
                             <outputDirectory>${release.deploy.dir}</outputDirectory>
-                            <attach>true</attach>
+                            <attach>${build.assemblies.attach}</attach>
                             <finalName>${release.deploy.finalName}</finalName>
                         </configuration>
                     </execution>
