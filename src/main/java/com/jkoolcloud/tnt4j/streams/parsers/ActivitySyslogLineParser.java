@@ -109,7 +109,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 
 	private String streamCharSet = DEFAULT_CHAR_SET;
 
-	private SyslogParser syslogParser;
+	private final SyslogParser syslogParser;
 
 	/**
 	 * Constructs a new ActivitySyslogLineParser.
@@ -176,7 +176,9 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 		Map<String, Object> dataMap = new HashMap<>();
 
 		try {
-			dataMap = syslogParser.parseSyslogMessage(msg);
+			synchronized (syslogParser) {
+				dataMap = syslogParser.parseSyslogMessage(msg);
+			}
 		} catch (Exception exc) {
 			logger().log(OpLevel.ERROR, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
 					"ActivitySyslogLineParser.line.parse.failed"), exc);

@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -88,7 +89,10 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	private List<String> ignoredFields = Arrays.asList(DEFAULT_IGNORED_FIELDS);
 
 	private static final MessageDigest MSG_DIGEST = Utils.getMD5Digester();
-	private Cache<String, Integer> msc;
+	private Cache<String, AtomicInteger> msc;
+
+	protected final Object DIGEST_LOCK = new Object();
+	protected final Object CACHE_LOCK = new Object();
 
 	@Override
 	public void setProperties(Collection<Map.Entry<String, String>> props) throws Exception {
@@ -150,18 +154,22 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 			return dataMap;
 		}
 
-		if (msc == null) {
-			msc = buildCache(cacheSize, cacheExpireDuration);
+		AtomicInteger invocations;
+		synchronized (CACHE_LOCK) {
+			if (msc == null) {
+				msc = buildCache(cacheSize, cacheExpireDuration);
+			}
+
+			String byteData = new String(getMD5(dataMap, ignoredFields));
+
+			invocations = msc.getIfPresent(byteData);
+			if (invocations == null) {
+				invocations = new AtomicInteger();
+				msc.put(byteData, invocations);
+			}
 		}
 
-		String byteData = new String(getMD5(dataMap, ignoredFields));
-
-		Integer invocations = msc.getIfPresent(byteData);
-		if (invocations == null) {
-			msc.put(byteData, 1);
-		} else {
-			invocations++;
-
+		if (invocations.incrementAndGet() > 1) {
 			if (suppressionLevel == -1) {
 				logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
 						"AbstractSyslogParser.suppressing.event1"), invocations);
@@ -169,7 +177,7 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 			}
 
 			if (suppressionLevel > 0) {
-				int evtSeqNumber = invocations % suppressionLevel;
+				int evtSeqNumber = invocations.get() % suppressionLevel;
 				if (evtSeqNumber != 0) {
 					logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
 							"AbstractSyslogParser.suppressing.event2"), evtSeqNumber, suppressionLevel);
@@ -181,12 +189,12 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 		return dataMap;
 	}
 
-	private static Cache<String, Integer> buildCache(long cSize, long duration) {
+	private static Cache<String, AtomicInteger> buildCache(long cSize, long duration) {
 		return CacheBuilder.newBuilder().maximumSize(cSize).expireAfterAccess(duration, TimeUnit.MINUTES).build();
 	}
 
 	private byte[] getMD5(Map<String, Object> logDataMap, Collection<String> ignoredFields) {
-		synchronized (MSG_DIGEST) {
+		synchronized (DIGEST_LOCK) {
 			MSG_DIGEST.reset();
 
 			updateDigest(MSG_DIGEST, logDataMap, ignoredFields, "");
