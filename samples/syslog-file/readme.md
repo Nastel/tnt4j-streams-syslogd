@@ -54,10 +54,10 @@ Parser resolved data map may contain such entries:
     * `SyslogVars` - map of resolved application message contained (varName=varValue) variables
 
 By default stream will put all resolved values form `SyslogMap` and `SyslogVars` as activity event properties. It is useful when all 
-resolved data is "interesting" and particular set of those additional attributes is unknown.   
+resolved data is "interesting" and particular set of those additional attributes is unknown.
 
 But if You know possible content of those maps, may select just some particular set of "interesting" entries of those maps to stream. In 
-this case comment out field mappings for `SyslogMap` and `SyslogVars`, and put activity event mappings like this:  
+this case comment out field mappings for `SyslogMap` and `SyslogVars`, and put activity event mappings like this:
 ```xml
     <field name="propName1" locator="SyslogVars.propName1" locator-type="Label"/>
     <field name="propName2" locator="SyslogVars.propName2" locator-type="Label" datatype="Number" format="####0.00"/>

@@ -12,7 +12,7 @@ Detailed information on TNT4J-Streams can be found in [README document](https://
 Why TNT4J-Streams-Syslogd
 ======================================
 
- * Allows to stream activities parsed from Syslog daemon (Syslogd) events data.   
+ * Allows to stream activities parsed from Syslog daemon (Syslogd) events data.
  * Allows to stream activities parsed from Syslog log files.
  
 **NOTE:** Currently supports [`RFC 3164`](https://tools.ietf.org/html/rfc3164) and the Structured Syslog protocol [`RFC 5424`](https://tools.ietf.org/html/rfc5424).
@@ -105,7 +105,7 @@ Also see ['Generic streams parameters'](https://github.com/Nastel/tnt4j-streams/
     * `0` - output all Syslog messages
     * `-1` - output only the first occurrence of Syslog message
     * `any other positive number` - suppresses all Syslog messages except those that are multiples of that number
-    
+
    Default value - `0`. (Optional)
  * SuppressIgnoredFields - Syslog message ignored fields list used to compare if message contents are same. Default value - [`EndTime`, 
  `ElapsedTime`, `Tag`]. (Optional)
@@ -119,7 +119,7 @@ Also see ['Generic streams parameters'](https://github.com/Nastel/tnt4j-streams/
     <property name="SuppressIgnoredFields" value="EndTime|ElapsedTime|Tag"/>
     <property name="SuppressCacheSize" value="1000"/>
     <property name="SuppressCacheExpireDurationMinutes" value="30"/>
-```  
+```
 
 Also see ['Activity map parser'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#activity-map-parser).
 
