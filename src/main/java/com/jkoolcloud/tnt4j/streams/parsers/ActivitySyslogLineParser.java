@@ -33,15 +33,12 @@ import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.streams.configure.SyslogParserProperties;
-import com.jkoolcloud.tnt4j.streams.utils.StreamsResources;
-import com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants;
-import com.jkoolcloud.tnt4j.streams.utils.SyslogUtils;
-import com.jkoolcloud.tnt4j.streams.utils.Utils;
+import com.jkoolcloud.tnt4j.streams.utils.*;
 
 /**
  * Implements an activity data parser that assumes each activity data item is an Syslog log line {@link String}. Parser
- * resolved log line fields are put into {@link Map} and afterwards mapped into activity fields and properties according
- * to defined parser configuration.
+ * resolved log line fields are put into {@link Map} afterwards mapped into activity fields and properties according to
+ * defined parser configuration.
  * <p>
  * Map entries containing values as internal {@link Map}s are automatically mapped into activity properties. If only
  * particular inner map entries are needed, then in parser fields mapping configuration define those properties as
@@ -177,7 +174,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 
 		try {
 			synchronized (syslogParser) {
-				dataMap = syslogParser.parseSyslogMessage(msg);
+				dataMap.putAll(syslogParser.parse(msg));
 			}
 		} catch (Exception exc) {
 			logger().log(OpLevel.ERROR, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
@@ -217,7 +214,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 	/**
 	 * Syslog log lines parser for RFC 3164 and 5424.
 	 */
-	private class SyslogParser {
+	private class SyslogParser extends CharBufferParser<String, Map<String, ?>> {
 		private static final String SYSLOG_STRUCT_ID = "struct.id"; // NON-NLS
 
 		// As defined in RFC 5424.
@@ -229,13 +226,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 		 * Construct a new Syslog log lines parser.
 		 */
 		public SyslogParser() {
-		}
-
-		private CharBuffer stringToBuffer(String msg) {
-			CharBuffer cb = CharBuffer.wrap(msg);
-			cb.rewind();
-
-			return cb;
+			super();
 		}
 
 		/**
@@ -243,12 +234,13 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 		 *
 		 * @param logLine
 		 *            Syslog log line
-		 * @return a map, or null if line is empty.
+		 * @return a map, or {@code null} if line is empty.
 		 *
 		 * @throws IOException
 		 *             if the underlying stream fails, or unexpected chars occurs.
 		 */
-		public Map<String, Object> parseSyslogMessage(String logLine) throws IOException {
+		@Override
+		public Map<String, Object> parse(String logLine) throws IOException {
 			CharBuffer cb = stringToBuffer(logLine);
 
 			Integer priority = null;
@@ -441,7 +433,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 		 */
 		private Map<String, Object> createFieldMap(int version, Integer priority, Calendar date, String hostName,
 				String appName, String procId, String msgId, Map<String, Object> structuredData, String appMsg) {
-			Map<String, Object> map = new HashMap<>();
+			Map<String, Object> map = new HashMap<>(16);
 			int facility = priority == null ? DEFAULT_FACILITY.ordinal() : priority / 8;
 			int level = priority == null ? DEFAULT_LEVEL : priority % 8;
 			String facilityStr = SyslogUtils.getFacilityString(facility);
@@ -523,213 +515,6 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 		}
 
 		/**
-		 * Read a char and assert the value.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 * @param c
-		 *            expected character
-		 *
-		 * @throws IOException
-		 *             if expected and found characters differs
-		 *
-		 * @see #read(CharBuffer)
-		 */
-		private void expect(CharBuffer cb, int c) throws IOException {
-			int d = read(cb);
-
-			if (d != c) {
-				throw new IOException(StreamsResources.getStringFormatted(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-						"ActivitySyslogLineParser.unexpected.char", (char) c, (char) d));
-			}
-		}
-
-		/**
-		 * Read until a non-whitespace char is found.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 *
-		 * @see #read(CharBuffer)
-		 * @see #unread(CharBuffer)
-		 */
-		private void skipSpaces(CharBuffer cb) {
-			int c;
-
-			while ((c = read(cb)) == SPACE) {
-				continue;
-			}
-
-			unread(cb);
-		}
-
-		/**
-		 * Read the next char, but then unread it.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 *
-		 * @see #read(CharBuffer)
-		 * @see #unread(CharBuffer)
-		 */
-		private int peek(CharBuffer cb) {
-			int c = read(cb);
-
-			unread(cb);
-
-			return c;
-		}
-
-		/**
-		 * Read the next char from buffer.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 * @return next char, or {@code -1} if no more chars
-		 *
-		 * @see CharBuffer#mark()
-		 * @see CharBuffer#get()
-		 */
-		private int read(CharBuffer cb) {
-			cb.mark();
-			try {
-				return cb.get();
-			} catch (RuntimeException exc) {
-				return -1;
-			}
-		}
-
-		/**
-		 * Push back character position to previous.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 *
-		 * @see CharBuffer#reset()
-		 */
-		private void unread(CharBuffer cb) {
-			cb.reset();
-		}
-
-		/**
-		 * Read a positive integer from buffer.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 *
-		 * @see #read(CharBuffer)
-		 * @see #unread(CharBuffer)
-		 * @see Character#isDigit(char)
-		 */
-		private int readInt(CharBuffer cb) {
-			int c;
-			int ret = 0;
-
-			while (Character.isDigit(c = read(cb))) {
-				ret = ret * 10 + (c - ZERO);
-			}
-
-			if (c != -1) {
-				unread(cb);
-			}
-
-			return ret;
-		}
-
-		/**
-		 * Read fractional part of number - digits after a decimal point.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 * @return a value in the range [0, 1)
-		 *
-		 * @see #read(CharBuffer)
-		 * @see #unread(CharBuffer)
-		 * @see Character#isDigit(char)
-		 */
-		private double readFractions(CharBuffer cb) {
-			int c;
-			int ret = 0;
-			int order = 1;
-
-			while (Character.isDigit(c = read(cb))) {
-				ret = ret * 10 + (c - ZERO);
-				order *= 10;
-			}
-
-			if (c != -1) {
-				unread(cb);
-			}
-
-			return (double) ret / order;
-		}
-
-		/**
-		 * Read until a end of the word and discard read chars. Word is terminated by whitespace char (' ') or end of
-		 * buffer.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 *
-		 * @see #read(CharBuffer)
-		 * @see #unread(CharBuffer)
-		 */
-		private void skipWord(CharBuffer cb) {
-			int c;
-
-			do {
-				c = read(cb);
-			} while (c != SPACE && c != -1);
-
-			if (c != -1) {
-				unread(cb);
-			}
-		}
-
-		/**
-		 * Read a word into the given {@link StringBuilder}. Word is terminated by whitespace char (' ') or end of
-		 * buffer.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 * @param sb
-		 *            string builder to fill
-		 *
-		 * @see #read(CharBuffer)
-		 * @see #unread(CharBuffer)
-		 * @see StringBuilder#append(char)
-		 */
-		private void readWord(CharBuffer cb, StringBuilder sb) {
-			int c;
-
-			while ((c = read(cb)) != SPACE && c != -1) {
-				sb.append((char) c);
-			}
-
-			if (c != -1) {
-				unread(cb);
-			}
-		}
-
-		/**
-		 * Read a word from buffer as a string. Word is terminated by whitespace char (' ') or end of buffer.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 * @param sizeHint
-		 *            an guess on how large string will be, in chars
-		 * @return a valid, but perhaps empty, word.
-		 *
-		 * @see #readWord(CharBuffer, StringBuilder)
-		 */
-		private String readWord(CharBuffer cb, int sizeHint) {
-			StringBuilder sb = new StringBuilder(sizeHint);
-			readWord(cb, sb);
-
-			return sb.toString();
-		}
-
-		/**
 		 * Read a word from buffer as a string. Word is terminated by whitespace char (' ') or end of buffer. If the
 		 * complete word is "-", returns {@code null}.
 		 *
@@ -749,59 +534,6 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 			}
 
 			return ret;
-		}
-
-		/**
-		 * Read a defined number of chars or until end of buffer.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 * @param count
-		 *            number of chars to read
-		 * @return string containing read characters
-		 *
-		 * @see #read(CharBuffer)
-		 * @see #unread(CharBuffer)
-		 * @see StringBuilder#append(char)
-		 */
-		private String readChars(CharBuffer cb, int count) {
-			StringBuilder sb = new StringBuilder(count);
-			int c;
-			int i = 0;
-
-			while ((c = read(cb)) != -1 && i < count) {
-				sb.append((char) c);
-				i++;
-			}
-
-			unread(cb);
-
-			return sb.toString();
-		}
-
-		/**
-		 * Read a line from buffer as a string. Line is terminated by new line char ('\n') or end of buffer.
-		 *
-		 * @param cb
-		 *            char buffer containing log line to read
-		 * @param sizeHint
-		 *            an guess on how large the line will be, in chars.
-		 * @return read line string
-		 *
-		 * @see #read(CharBuffer)
-		 * @see StringBuilder#append(char)
-		 */
-		private String readLine(CharBuffer cb, int sizeHint) {
-			StringBuilder sb = new StringBuilder(sizeHint);
-			int c;
-
-			while ((c = read(cb)) != NL && c != -1) {
-				if (c != RC) {
-					sb.append((char) c);
-				}
-			}
-
-			return sb.toString();
 		}
 
 		/**
@@ -878,8 +610,8 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 			}
 
 			Map<String, Object> sdm = new HashMap<>();
-
 			StringBuilder sb = new StringBuilder();
+
 			while (c == OB) {
 				// Read structured data id
 				while ((c = read(cb)) != SPACE && c != CB) {

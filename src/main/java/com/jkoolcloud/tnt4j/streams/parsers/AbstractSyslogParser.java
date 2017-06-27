@@ -41,8 +41,8 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
 /**
  * Base class for abstract syslog entries data parser that assumes each activity data item is an Syslog server event
  * {@link org.graylog2.syslog4j.server.SyslogServerEventIF} or Syslog log line {@link String}. Parser resolved Syslog
- * entry data fields are put into {@link Map} and afterwards mapped into activity fields and properties according to
- * defined parser configuration.
+ * entry data fields are put into {@link Map} afterwards mapped into activity fields and properties according to defined
+ * parser configuration.
  * <p>
  * This parser supports the following properties (in addition to those supported by {@link AbstractActivityMapParser}):
  * <ul>
