@@ -18,7 +18,6 @@ package com.jkoolcloud.tnt4j.streams.parsers;
 
 import static com.jkoolcloud.tnt4j.streams.fields.StreamFieldType.*;
 
-import java.lang.Exception;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -91,11 +91,11 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	private static final MessageDigest MSG_DIGEST = Utils.getMD5Digester();
 	private Cache<String, AtomicInteger> msc;
 
-	protected final Object DIGEST_LOCK = new Object();
-	protected final Object CACHE_LOCK = new Object();
+	protected final ReentrantLock digestLock = new ReentrantLock();
+	protected final ReentrantLock cacheLock = new ReentrantLock();
 
 	@Override
-	public void setProperties(Collection<Map.Entry<String, String>> props) throws Exception {
+	public void setProperties(Collection<Map.Entry<String, String>> props) {
 		if (props == null) {
 			return;
 		}
@@ -155,7 +155,8 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 		}
 
 		AtomicInteger invocations;
-		synchronized (CACHE_LOCK) {
+		cacheLock.lock();
+		try {
 			if (msc == null) {
 				msc = buildCache(cacheSize, cacheExpireDuration);
 			}
@@ -167,6 +168,8 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 				invocations = new AtomicInteger();
 				msc.put(byteData, invocations);
 			}
+		} finally {
+			cacheLock.unlock();
 		}
 
 		if (invocations.incrementAndGet() > 1) {
@@ -194,12 +197,15 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	}
 
 	private byte[] getMD5(Map<String, Object> logDataMap, Collection<String> ignoredFields) {
-		synchronized (DIGEST_LOCK) {
+		digestLock.lock();
+		try {
 			MSG_DIGEST.reset();
 
 			updateDigest(MSG_DIGEST, logDataMap, ignoredFields, "");
 
 			return MSG_DIGEST.digest();
+		} finally {
+			digestLock.unlock();
 		}
 	}
 
