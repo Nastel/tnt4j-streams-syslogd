@@ -22,6 +22,7 @@ import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.graylog2.syslog4j.SyslogConstants;
 import org.graylog2.syslog4j.server.*;
@@ -101,23 +102,21 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 
 	@Override
 	public void setProperties(Collection<Map.Entry<String, String>> props) {
-		if (props == null) {
-			return;
-		}
-
 		super.setProperties(props);
 
-		for (Map.Entry<String, String> prop : props) {
-			String name = prop.getKey();
-			String value = prop.getValue();
-			if (StreamProperties.PROP_HOST.equalsIgnoreCase(name)) {
-				host = value;
-			} else if (StreamProperties.PROP_PORT.equalsIgnoreCase(name)) {
-				port = Integer.parseInt(value);
-			} else if (SyslogStreamProperties.PROP_PROTOCOL.equalsIgnoreCase(name)) {
-				protocol = value;
-			} else if (SyslogStreamProperties.PROP_TIMEOUT.equalsIgnoreCase(name)) {
-				timeout = Integer.parseInt(value);
+		if (CollectionUtils.isNotEmpty(props)) {
+			for (Map.Entry<String, String> prop : props) {
+				String name = prop.getKey();
+				String value = prop.getValue();
+				if (StreamProperties.PROP_HOST.equalsIgnoreCase(name)) {
+					host = value;
+				} else if (StreamProperties.PROP_PORT.equalsIgnoreCase(name)) {
+					port = Integer.parseInt(value);
+				} else if (SyslogStreamProperties.PROP_PROTOCOL.equalsIgnoreCase(name)) {
+					protocol = value;
+				} else if (SyslogStreamProperties.PROP_TIMEOUT.equalsIgnoreCase(name)) {
+					timeout = Integer.parseInt(value);
+				}
 			}
 		}
 	}
