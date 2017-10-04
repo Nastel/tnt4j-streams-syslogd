@@ -106,24 +106,21 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 
 				if (SyslogParserProperties.PROP_SUPPRESS_LEVEL.equalsIgnoreCase(name)) {
 					suppressionLevel = NumberUtils.toInt(value, DEFAULT_SUPPRESSION_LEVEL);
-					logger().log(OpLevel.DEBUG,
-							StreamsResources.getString(StreamsResources.RESOURCE_BUNDLE_NAME, "ActivityParser.setting"),
-							name, value);
+					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+							"ActivityParser.setting", name, value);
 				} else if (SyslogParserProperties.PROP_SUPPRESS_CACHE_SIZE.equalsIgnoreCase(name)) {
 					cacheSize = NumberUtils.toLong(value, DEFAULT_MAX_CACHE_SIZE);
-					logger().log(OpLevel.DEBUG,
-							StreamsResources.getString(StreamsResources.RESOURCE_BUNDLE_NAME, "ActivityParser.setting"),
-							name, value);
+					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+							"ActivityParser.setting", name, value);
 				} else if (SyslogParserProperties.PROP_SUPPRESS_CACHE_EXPIRE.equalsIgnoreCase(name)) {
 					cacheExpireDuration = NumberUtils.toLong(value, DEFAULT_CACHE_EXPIRE_DURATION);
-					logger().log(OpLevel.DEBUG,
-							StreamsResources.getString(StreamsResources.RESOURCE_BUNDLE_NAME, "ActivityParser.setting"),
-							name, value);
+					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+							"ActivityParser.setting", name, value);
 				} else if (SyslogParserProperties.PROP_SUPPRESS_IGNORED_FIELDS.equalsIgnoreCase(name)) {
 					if (StringUtils.isNotEmpty(value)) {
 						ignoredFields = Arrays.asList(Utils.splitValue(value));
-						logger().log(OpLevel.DEBUG, StreamsResources.getString(StreamsResources.RESOURCE_BUNDLE_NAME,
-								"ActivityParser.setting"), name, value);
+						logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+								"ActivityParser.setting", name, value);
 					}
 				}
 			}
@@ -172,16 +169,16 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 
 		if (invocations.incrementAndGet() > 1) {
 			if (suppressionLevel == -1) {
-				logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-						"AbstractSyslogParser.suppressing.event1"), invocations);
+				logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+						"AbstractSyslogParser.suppressing.event1", invocations);
 				return null;
 			}
 
 			if (suppressionLevel > 0) {
 				int evtSeqNumber = invocations.get() % suppressionLevel;
 				if (evtSeqNumber != 0) {
-					logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-							"AbstractSyslogParser.suppressing.event2"), evtSeqNumber, suppressionLevel);
+					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+							"AbstractSyslogParser.suppressing.event2", evtSeqNumber, suppressionLevel);
 					return null;
 				}
 			}

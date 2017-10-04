@@ -153,9 +153,8 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 				if (SyslogParserProperties.PROP_CHAR_SET.equalsIgnoreCase(name)) {
 					streamCharSet = value;
 
-					logger().log(OpLevel.DEBUG,
-							StreamsResources.getString(StreamsResources.RESOURCE_BUNDLE_NAME, "ActivityParser.setting"),
-							name, value);
+					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+							"ActivityParser.setting", name, value);
 				}
 			}
 		}
@@ -176,8 +175,8 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 				dataMap.putAll(syslogParser.parse(msg));
 			}
 		} catch (Exception exc) {
-			logger().log(OpLevel.ERROR, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-					"ActivitySyslogLineParser.line.parse.failed"), exc);
+			logger().log(OpLevel.ERROR, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+					"ActivitySyslogLineParser.line.parse.failed", exc);
 		}
 
 		return suppress(dataMap);

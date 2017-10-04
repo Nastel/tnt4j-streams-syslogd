@@ -146,9 +146,8 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 
 		syslogDataReceiver.start();
 
-		logger().log(OpLevel.DEBUG,
-				StreamsResources.getString(StreamsResources.RESOURCE_BUNDLE_NAME, "TNTInputStream.stream.start"),
-				getClass().getSimpleName(), getName());
+		logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+				"TNTInputStream.stream.start", getClass().getSimpleName(), getName());
 	}
 
 	@Override
@@ -191,8 +190,8 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 		 */
 		@Override
 		protected void initialize(Object... params) throws Exception {
-			logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-					"SyslogdStream.starting.server"), SyslogServer.getVersion());
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+					"SyslogdStream.starting.server", SyslogServer.getVersion());
 
 			SyslogServerIF syslogServer = SyslogServer.getInstance(protocol);
 
@@ -204,17 +203,18 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 			}
 			syslogServerConfig.setPort(port);
 
-			logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-					"SyslogdStream.server.params"), protocol, host, port);
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+					"SyslogdStream.server.params", protocol, host, port);
 
 			if (timeout > 0) {
 				if (syslogServerConfig instanceof TCPNetSyslogServerConfigIF) {
 					((TCPNetSyslogServerConfigIF) syslogServerConfig).setTimeout(timeout);
-					logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-							"SyslogdStream.server.timeout"), timeout);
+					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+							"SyslogdStream.server.timeout", timeout);
 				} else {
-					logger().log(OpLevel.WARNING, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-							"SyslogdStream.server.timeout.unsupported"), protocol);
+					logger().log(OpLevel.WARNING,
+							StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+							"SyslogdStream.server.timeout.unsupported", protocol);
 				}
 			}
 
@@ -231,8 +231,8 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 			// }
 
 			server = SyslogServer.getInstance(protocol);
-			logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-					"SyslogdStream.server.initialized"), SyslogServer.getVersion());
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+					"SyslogdStream.server.initialized", SyslogServer.getVersion());
 		}
 
 		/**
@@ -242,8 +242,8 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 		public void run() {
 			if (server != null) {
 				server.setThread(this);
-				logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-						"SyslogdStream.server.ready"), SyslogServer.getVersion());
+				logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+						"SyslogdStream.server.ready", SyslogServer.getVersion());
 				server.run();
 			}
 		}
@@ -263,29 +263,29 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 
 		@Override
 		public Object sessionOpened(SyslogServerIF server, SocketAddress address) {
-			logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-					"SyslogdStream.session.opened"), server, address);
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+					"SyslogdStream.session.opened", server, address);
 			return null;
 		}
 
 		@Override
 		public void event(Object session, SyslogServerIF server, SocketAddress address,
 				SyslogServerEventIF syslogEvent) {
-			logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-					"SyslogdStream.event.received"), syslogEvent.getMessage());
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+					"SyslogdStream.event.received", syslogEvent.getMessage());
 			addInputToBuffer(syslogEvent);
 		}
 
 		@Override
 		public void exception(Object session, SyslogServerIF server, SocketAddress address, Exception e) {
-			logger().log(OpLevel.ERROR, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-					"SyslogdStream.session.exception"), session, server, address, e);
+			logger().log(OpLevel.ERROR, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+					"SyslogdStream.session.exception", session, server, address, e);
 		}
 
 		@Override
 		public void sessionClosed(Object session, SyslogServerIF server, SocketAddress address, boolean timeout) {
-			logger().log(OpLevel.DEBUG, StreamsResources.getString(SyslogStreamConstants.RESOURCE_BUNDLE_NAME,
-					"SyslogdStream.session.closed"), session, server, address, timeout);
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+					"SyslogdStream.session.closed", session, server, address, timeout);
 		}
 
 		@Override
