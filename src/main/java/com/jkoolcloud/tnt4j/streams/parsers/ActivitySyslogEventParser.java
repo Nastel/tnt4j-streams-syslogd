@@ -96,7 +96,8 @@ import com.jkoolcloud.tnt4j.tracker.TimeTracker;
  * </ul>
  * </ul>
  * <p>
- * This activity parser supports properties from {@link AbstractSyslogParser} (and higher hierarchy parsers).
+ * This activity parser supports configuration properties from {@link AbstractSyslogParser} (and higher hierarchy
+ * parsers).
  *
  * @version $Revision: 1 $
  */
