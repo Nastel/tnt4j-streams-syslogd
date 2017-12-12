@@ -50,22 +50,22 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * <li>for activity fields:</li>
  * <ul>
  * <li>EventType - resolved from log line application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_TYPE_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_TYPE_LABEL}</li>
  * <li>EventName - resolved log line facility name, or application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_NAME_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_NAME_LABEL}</li>
  * <li>Exception - resolved from log line application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_EXCEPTION_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_EXCEPTION_LABEL}</li>
  * <li>UserName - resolved from log line application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_USER_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_USER_LABEL}</li>
  * <li>ResourceName - resolved log line application name, or application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_RESOURCE_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_RESOURCE_LABEL}</li>
  * <li>Location - resolved log line host name, or application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_LOCATION_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_LOCATION_LABEL}</li>
  * <li>Tag - resolved set of values {host name, application name} for RFC 3164 and set of values {facility name, host
  * name, application name, message id} for RFC 5424, or application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_TAG_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_TAG_LABEL}</li>
  * <li>Correlator - resolved from log line application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_CORRELATOR_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_CORRELATOR_LABEL}</li>
  * <li>ProcessId - resolved log line process id</li>
  * <li>ThreadId - same as 'ProcessId'</li>
  * <li>Message - resolved log line application message</li>
@@ -81,7 +81,7 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * <li>facility - resolved log line facility name. If resolved 'priority' is {@code null} - then value is
  * '{@link com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants.Facility#USER}'</li>
  * <li>level - resolved log line level. If resolved 'priority' is {@code null} - then value is
- * '{@value com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants#DEFAULT_LEVEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants#DEFAULT_LEVEL}</li>
  * <li>hostname - resolved log line host name</li>
  * <li>version - resolved log line Syslog version ('0' for RFC 3164, '1' for RFC 5424)</li>
  * <li>priority - resolved log line priority</li>
@@ -161,7 +161,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 	}
 
 	@Override
-	protected Map<String, ?> getDataMap(Object data) {
+	protected Map<String, Object> getDataMap(Object data) {
 		if (data == null) {
 			return null;
 		}
@@ -169,6 +169,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 		String msg = (String) data;
 
 		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(RAW_ACTIVITY_STRING_KEY, msg);
 
 		try {
 			synchronized (syslogParser) {

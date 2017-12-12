@@ -53,13 +53,13 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * <li>{@code -1} - output only the first occurrence of Syslog message</li>
  * <li>any other positive number - suppresses all Syslog messages except those that are multiples of that number</li>
  * </ul>
- * Default value - '{@value #DEFAULT_SUPPRESSION_LEVEL}'. (Optional)</li>
+ * Default value - {@value #DEFAULT_SUPPRESSION_LEVEL}. (Optional)</li>
  * <li>SuppressIgnoredFields - Syslog message ignored fields list used to compare if message contents are same. Default
  * value - ['EndTime', 'ElapsedTime', 'Tag']. (Optional)</li>
  * <li>SuppressCacheSize - maximal Syslog messages suppression cache entries count. Default value -
- * '{@value #DEFAULT_MAX_CACHE_SIZE}'. (Optional)</li>
+ * {@value #DEFAULT_MAX_CACHE_SIZE}. (Optional)</li>
  * <li>SuppressCacheExpireDurationMinutes - Syslog messages suppression cache entries expiration duration value in
- * minutes. Default value - '{@value #DEFAULT_CACHE_EXPIRE_DURATION}'. (Optional)</li>
+ * minutes. Default value - {@value #DEFAULT_CACHE_EXPIRE_DURATION}. (Optional)</li>
  * </ul>
  *
  * @version $Revision: 1 $

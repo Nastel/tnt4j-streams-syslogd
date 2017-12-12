@@ -208,76 +208,76 @@ public class SyslogStreamConstants {
 	public static final String FIELD_PRIORITY = "priority"; // NON-NLS
 
 	/**
-	 * Constant for string value '{@value}'.
+	 * Constant for string value {@value}.
 	 */
 	public static final String UNKNOWN = "unknown"; // NON-NLS
 
 	/**
-	 * Constant for SPACE character '{@value}'.
+	 * Constant for SPACE character {@value}.
 	 */
 	public static final char SPACE = ' ';
 	/**
-	 * Constant for MINUS character '{@value}'.
+	 * Constant for MINUS character {@value}.
 	 */
 	public static final char MINUS = '-';
 	/**
-	 * Constant for PLUS character '{@value}'.
+	 * Constant for PLUS character {@value}.
 	 */
 	public static final char PLUS = '+';
 	/**
-	 * Constant for COLON character '{@value}'.
+	 * Constant for COLON character {@value}.
 	 */
 	public static final char COLON = ':';
 	/**
-	 * Constant for QUOTE character '{@value}'.
+	 * Constant for QUOTE character {@value}.
 	 */
 	public static final char QUOTE = '"';
 	/**
-	 * Constant for NL character '{@value}'.
+	 * Constant for NL character {@value}.
 	 */
 	public static final char NL = '\n';
 	/**
-	 * Constant for RC character '{@value}'.
+	 * Constant for RC character {@value}.
 	 */
 	public static final char RC = '\r';
 	/**
-	 * Constant for ZERO character '{@value}'.
+	 * Constant for ZERO character {@value}.
 	 */
 	public static final char ZERO = '0';
 	/**
-	 * Constant for OB character '{@value}'.
+	 * Constant for OB character {@value}.
 	 */
 	public static final char OB = '[';
 	/**
-	 * Constant for CB character '{@value}'.
+	 * Constant for CB character {@value}.
 	 */
 	public static final char CB = ']';
 	/**
-	 * Constant for EQ character '{@value}'.
+	 * Constant for EQ character {@value}.
 	 */
 	public static final char EQ = '=';
 	/**
-	 * Constant for SLASH character '{@value}'.
+	 * Constant for SLASH character {@value}.
 	 */
 	public static final char SLASH = '\\';
 	/**
-	 * Constant for LT character '{@value}'.
+	 * Constant for LT character {@value}.
 	 */
 	public static final char LT = '<';
 	/**
-	 * Constant for GT character '{@value}'.
+	 * Constant for GT character {@value}.
 	 */
 	public static final char GT = '>';
 	/**
-	 * Constant for TZ character '{@value}'.
+	 * Constant for TZ character {@value}.
 	 */
 	public static final char TZ = 'T';
 	/**
-	 * Constant for DOT character '{@value}'.
+	 * Constant for DOT character {@value}.
 	 */
 	public static final char DOT = '.';
 	/**
-	 * Constant for UTC character '{@value}'.
+	 * Constant for UTC character {@value}.
 	 */
 	public static final char UTC = 'Z';
 }

@@ -56,22 +56,22 @@ import com.jkoolcloud.tnt4j.tracker.TimeTracker;
  * <li>for activity fields:</li>
  * <ul>
  * <li>EventType - resolved from log event application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_TYPE_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_TYPE_LABEL}</li>
  * <li>EventName - resolved log event facility name, or application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_NAME_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_NAME_LABEL}</li>
  * <li>Exception - resolved from log event application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_EXCEPTION_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_EXCEPTION_LABEL}</li>
  * <li>UserName - resolved from log event application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_USER_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_USER_LABEL}</li>
  * <li>ResourceName - resolved log event application name, or application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_RESOURCE_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_RESOURCE_LABEL}</li>
  * <li>Location - resolved log event host name/address, or application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_LOCATION_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_LOCATION_LABEL}</li>
  * <li>Tag - resolved set of values {host name, application name} for RFC 3164 and set of values {facility name, host
  * name, application name, message id} for RFC 5424, or application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_TAG_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_TAG_LABEL}</li>
  * <li>Correlator - resolved from log event application message contained variable named
- * '{@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_CORRELATOR_LABEL}'</li>
+ * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_CORRELATOR_LABEL}</li>
  * <li>ProcessId - resolved log event process id</li>
  * <li>ThreadId - same as 'ProcessId'</li>
  * <li>Message - resolved log event application message</li>
@@ -164,7 +164,7 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 	}
 
 	@Override
-	protected Map<String, ?> getDataMap(Object data) {
+	protected Map<String, Object> getDataMap(Object data) {
 		if (data == null) {
 			return null;
 		}
