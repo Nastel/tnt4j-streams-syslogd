@@ -122,8 +122,8 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 	}
 
 	@Override
-	protected void initialize() throws Exception {
-		super.initialize();
+	protected void applyProperties() throws Exception {
+		super.applyProperties();
 
 		if (StringUtils.isEmpty(protocol)) {
 			throw new IllegalStateException(StreamsResources.getStringFormatted(StreamsResources.RESOURCE_BUNDLE_NAME,
@@ -135,6 +135,11 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 					StreamsResources.getStringFormatted(StreamsResources.RESOURCE_BUNDLE_NAME,
 							"TNTInputStream.property.illegal", SyslogStreamProperties.PROP_PROTOCOL, protocol));
 		}
+	}
+
+	@Override
+	protected void initialize() throws Exception {
+		super.initialize();
 
 		syslogDataReceiver = new SyslogDataReceiver();
 		syslogDataReceiver.initialize();
