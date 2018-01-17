@@ -23,7 +23,7 @@ Importing TNT4J-Streams-Syslogd project into IDE
 ## Eclipse
 * Select File->Import...->Maven->Existing Maven Projects
 * Click 'Next'
-* In 'Root directory' field select path of directory where You have downloaded (checked out from git)
+* In 'Root directory' field select path of directory where you have downloaded (checked out from git)
 TNT4J-Streams project
 * Click 'OK'
 * Dialog fills in with project modules details
@@ -37,9 +37,9 @@ Also see TNT4J-Streams README document chapter ['Running TNT4J-Streams'](https:/
 ## TNT4J-Streams-Syslogd can be run
 * As standalone application
     * write streams configuration file. See ['Streams configuration'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#streams-configuration) chapter for more details
-    * configure Your loggers
+    * configure your loggers
     * use [`bin/tnt4j-streams.bat`](./bin/tnt4j-streams.bat) or [`bin/tnt4j-streams.sh`](./bin/tnt4j-streams.sh) to run standalone application
-* As API integrated into Your product
+* As API integrated into your product
     * Write streams configuration file. See ['Streams configuration'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#streams-configuration) chapter for more details
     * use `StreamsAgent.runFromAPI(configFileName)` in your code
 
@@ -50,7 +50,7 @@ When release assemblies are built, samples are located in [`samples`](./samples/
 `../build/tnt4j-streams-syslogd/tnt4j-streams-syslogd-1.0.0/samples`.
 To run desired sample:
 * go to sample directory
-* run `run.bat` or `run.sh` depending on Your OS
+* run `run.bat` or `run.sh` depending on your OS
 
 For more detailed explanation of streams and parsers configuration and usage see chapter ['Configuring TNT4J-Streams-Syslogd'](#configuring-tnt4j-streams-syslogd)
 and JavaDocs.
@@ -153,7 +153,7 @@ defined dependencies automatically.
 
 ### Manually installed dependencies
 
-**NOTE:** If you have build and installed TNT4J-Streams into Your local maven repository, you don't need to install
+**NOTE:** If you have build and installed TNT4J-Streams into your local maven repository, you don't need to install
 it manually.
 
 `TNT4J-Streams-Syslogd` project does not require any manually downloaded dependencies at the moment.
