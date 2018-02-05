@@ -284,7 +284,7 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 		@Override
 		public void exception(Object session, SyslogServerIF server, SocketAddress address, Exception e) {
 			logger().log(OpLevel.ERROR, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
-					"SyslogdStream.session.exception", session, server, address, e);
+					"SyslogdStream.session.exception", session, server, address, e); // NOTE: exception logging
 		}
 
 		@Override

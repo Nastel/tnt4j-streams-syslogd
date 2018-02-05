@@ -178,7 +178,8 @@ public class SyslogdFileStream extends SyslogdStream {
 		try {
 			sendFromTextFile(syslog);
 		} catch (Exception exc) {
-			logger().log(OpLevel.WARNING, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+			Utils.logThrowable(logger(), OpLevel.WARNING,
+					StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
 					"SyslogdStream.file.send.failed", exc);
 		} finally {
 			Syslog.shutdown();

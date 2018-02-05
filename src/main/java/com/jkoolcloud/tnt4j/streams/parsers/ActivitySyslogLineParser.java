@@ -176,7 +176,8 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 				dataMap.putAll(syslogParser.parse(msg));
 			}
 		} catch (Exception exc) {
-			logger().log(OpLevel.ERROR, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+			Utils.logThrowable(logger(), OpLevel.ERROR,
+					StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
 					"ActivitySyslogLineParser.line.parse.failed", exc);
 		}
 
