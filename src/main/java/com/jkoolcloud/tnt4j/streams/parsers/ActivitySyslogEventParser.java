@@ -178,7 +178,6 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		OpLevel level = SyslogUtils.getOpLevel(event.getLevel());
 
 		dataMap.put(EventName.name(), facility);
-		dataMap.put(Message.name(), event.getMessage());
 		dataMap.put(Severity.name(), level);
 		dataMap.put(FIELD_FACILITY, facility);
 		dataMap.put(FIELD_HOSTNAME, event.getHost());
@@ -207,8 +206,6 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 			processRFC3164(facility, event, dataMap);
 		}
 
-		// extract name=value pairs if available
-		SyslogUtils.extractVariables(event.getMessage(), dataMap);
 		String eventKey = String.format("%s/%s", dataMap.get(Location.name()), dataMap.get(ResourceName.name())); // NON-NLS
 		dataMap.put(EndTime.name(), date.getTime() * 1000);
 		dataMap.put(ElapsedTime.name(), getUsecSinceLastEvent(eventKey));
@@ -251,6 +248,8 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		// set the appropriate source
 		dataMap.put(ApplName.name(), appName);
 		dataMap.put(ServerName.name(), serverName);
+
+		dataMap.put(Message.name(), event.getMessage());
 	}
 
 	/**
@@ -259,7 +258,7 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 	 * @param facility
 	 *            Syslog facility name
 	 * @param sEvent
-	 *            Syslog structured message
+	 *            Syslog structured message event
 	 * @param dataMap
 	 *            log entry fields map to update
 	 */
@@ -279,24 +278,28 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		// set the appropriate source
 		dataMap.put(ApplName.name(), sEvent.getApplicationName());
 		dataMap.put(ServerName.name(), sEvent.getHost());
+		dataMap.put(Message.name(), sMessage.getMessage());
+		dataMap.put(ProcessId.name(), sMessage.getProcId());
 
 		// process structured event attributes into snapshot
-		extractStructuredData(sEvent, dataMap);
+		extractStructuredData(sMessage, dataMap);
+
+		// extract name=value pairs if available
+		SyslogUtils.extractVariables(sMessage.getMessage(), dataMap);
 	}
 
 	/**
 	 * Extract Syslog structured data if available (part of RFC 5424).
 	 *
-	 * @param sEvent
+	 * @param sMessage
 	 *            Syslog structured message
 	 * @param dataMap
 	 *            log entry fields map to update
 	 * @return map of structured Syslog message data
 	 */
-	protected static Map<String, Map<String, String>> extractStructuredData(StructuredSyslogServerEvent sEvent,
+	protected static Map<String, Map<String, String>> extractStructuredData(StructuredSyslogMessage sMessage,
 			Map<String, Object> dataMap) {
-		StructuredSyslogMessage sm = sEvent.getStructuredMessage();
-		Map<String, Map<String, String>> map = sm.getStructuredData();
+		Map<String, Map<String, String>> map = sMessage.getStructuredData();
 		if (MapUtils.isNotEmpty(map)) {
 			// PropertySnapshot snap = new PropertySnapshot(FIELD_SYSLOG_MAP,
 			// sEvent.getApplicationName(),

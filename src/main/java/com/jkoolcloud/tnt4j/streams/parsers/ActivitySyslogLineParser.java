@@ -38,8 +38,8 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
 
 /**
  * Implements an activity data parser that assumes each activity data item is an Syslog log line {@link String}. Parser
- * resolved log line fields are put into {@link Map} afterwards mapped into activity fields and properties according to
- * defined parser configuration.
+ * resolved log line fields are put into {@link Map} and afterwards mapped into activity fields and properties according
+ * to defined parser configuration.
  * <p>
  * Map entries containing values as internal {@link Map}s are automatically mapped into activity properties. If only
  * particular inner map entries are needed, then in parser fields mapping configuration define those properties as
@@ -59,7 +59,7 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_USER_LABEL}</li>
  * <li>ResourceName - resolved log line application name, or application message contained variable named
  * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_RESOURCE_LABEL}</li>
- * <li>Location - resolved log line host name, or application message contained variable named
+ * <li>Location - resolved log line host name/address, or application message contained variable named
  * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_LOCATION_LABEL}</li>
  * <li>Tag - resolved set of values {host name, application name} for RFC 3164 and set of values {facility name, host
  * name, application name, message id} for RFC 5424, or application message contained variable named
@@ -470,6 +470,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 			map.put(ApplName.name(), appName);
 			map.put(ServerName.name(), hostName);
 
+			// extract name=value pairs if available
 			SyslogUtils.extractVariables(appMsg, map);
 			String eventKey = String.format("%s/%s", (String) map.get(Location.name()), // NON-NLS
 					(String) map.get(ResourceName.name()));
