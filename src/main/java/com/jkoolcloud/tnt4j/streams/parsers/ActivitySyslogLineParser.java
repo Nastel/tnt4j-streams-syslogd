@@ -246,7 +246,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 			Integer priority = null;
 			int c = read(cb);
 
-			if (c == -1) {
+			if (c == EOF) {
 				return null;
 			}
 
@@ -390,7 +390,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 				msgId = readWordOrNil(cb, 20);
 				expect(cb, SPACE);
 				structuredData = readStructuredData(cb);
-				expect(cb, SPACE);
+				expectOrEnd(cb, SPACE);
 			} else if (version == 0) {
 				// Try to find a colon terminated tag.
 				appName = readTag(cb);

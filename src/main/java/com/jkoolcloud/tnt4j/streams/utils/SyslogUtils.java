@@ -23,7 +23,10 @@ import static com.jkoolcloud.tnt4j.streams.fields.StreamFieldType.Exception;
 import static com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants.LEVELS;
 
 import java.lang.Exception;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,9 +45,14 @@ import com.jkoolcloud.tnt4j.logger.AppenderConstants;
 public final class SyslogUtils {
 
 	/*
-	 * Regular expression pattern to detect name=value pairs.
+	 * Regular expression pattern to detect {@code name=value} or {@code name="value"} pairs.
 	 */
-	private static final Pattern VARIABLES_PATTERN = Pattern.compile("(\\S+)=\"*((?<=\")[^\"]+(?=\")|([^\\s]+))\"*");
+	private static final Pattern VARIABLES_PATTERN = Pattern
+			.compile("([^=,\\s]+)\\s*=\\s*(?:\"((?:[^\"]|\"\")*)\"|([^,\\s\"]*)),?");
+	/*
+	 * Regular expression pattern to detect {@code name(value)} pairs.
+	 */
+	private static final Pattern VARIABLES_PATTERN2 = Pattern.compile("(\\S+)\\s*[(\\[{](\\S+)[)\\]}]");
 
 	private SyslogUtils() {
 	}
@@ -74,24 +82,31 @@ public final class SyslogUtils {
 	}
 
 	/**
-	 * Parse Syslog name=value variables.
+	 * Parse Syslog variable key/value pairs having format {@code name=value} or {@code name(value)}.
 	 *
 	 * @param message
 	 *            Syslog message
-	 * @return Syslog name=value variables
+	 * @return resolved Syslog variables key/value pairs map
 	 */
 	public static Map<String, Object> parseVariables(String message) {
 		Map<String, Object> map = new HashMap<>();
-		StringTokenizer tokens = new StringTokenizer(message, "[](){}"); // NON-NLS
 
-		while (tokens.hasMoreTokens()) {
-			String pair = tokens.nextToken();
-			Matcher matcher = VARIABLES_PATTERN.matcher(pair);
-			while (matcher.find()) {
-				mapToTyped(map, matcher.group(1), matcher.group(2));
-			}
-		}
+		parserVariablePairs(message, VARIABLES_PATTERN, map);
+		parserVariablePairs(message, VARIABLES_PATTERN2, map);
+
 		return map;
+	}
+
+	private static void parserVariablePairs(String str, Pattern pattern, Map<String, Object> map) {
+		Matcher matcher = pattern.matcher(str);
+		while (matcher.find()) {
+			String key = matcher.group(1);
+			String val = matcher.group(2);
+			if (val == null) {
+				val = matcher.group(3);
+			}
+			mapToTyped(map, key, val);
+		}
 	}
 
 	/**
@@ -201,7 +216,7 @@ public final class SyslogUtils {
 		Map<String, Integer> mMap = new HashMap<>(12);
 		mMap.put("jan", Calendar.JANUARY); // NON-NLS
 		mMap.put("feb", Calendar.FEBRUARY); // NON-NLS
-		mMap.put("may", Calendar.MAY); // NON-NLS
+		mMap.put("mar", Calendar.MARCH); // NON-NLS
 		mMap.put("apr", Calendar.APRIL); // NON-NLS
 		mMap.put("may", Calendar.MAY); // NON-NLS
 		mMap.put("jun", Calendar.JUNE); // NON-NLS
