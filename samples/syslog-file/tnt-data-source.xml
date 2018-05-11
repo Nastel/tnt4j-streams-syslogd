@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/Nastel/tnt4j-streams/master/config/tnt-data-source.xsd">
 
-    <parser name="SyslogMessageParser" class="com.jkoolcloud.tnt4j.streams.parsers.ActivitySyslogLineParser">
+    <parser name="SyslogMessageParser" class="com.jkoolcloud.tnt4j.streams.parsers.ActivitySyslogLineParser" default-data-type="Generic">
         <!--<property name="LocPathDelim" value="."/>-->
         <property name="CharSet" value="UTF-8"/>
 

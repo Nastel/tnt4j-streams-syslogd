@@ -322,7 +322,7 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		String message = event.getMessage();
 
 		if (message != null && message.indexOf(COLON) > 0) {
-			String[] tokens = message.split(":| "); // NON-NLS
+			String[] tokens = message.split("[: ]"); // NON-NLS
 			map.put(ATTR_SERVER_NAME, tokens[0]);
 			map.put(ATTR_APPL_PART, tokens[1]);
 
