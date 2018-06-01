@@ -47,4 +47,9 @@ public interface SyslogParserProperties extends ParserProperties {
 	 * Constant for name of built-in parser {@value} property.
 	 */
 	String PROP_SUPPRESS_IGNORED_FIELDS = "SuppressIgnoredFields"; // NON-NLS
+
+	/**
+	 * Constant for name of built-in parser {@value} property.
+	 */
+	String PROP_FLATTEN_STRUCTURED_DATA = "FlattenStructuredData"; // NON-NLS
 }

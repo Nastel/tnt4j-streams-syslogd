@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.graylog2.syslog4j.util.SyslogUtility;
 
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.core.OpType;
@@ -197,7 +198,7 @@ public final class SyslogUtils {
 	 * @return string representation of Syslog facility
 	 */
 	public static String getFacilityString(int facility) {
-		return SyslogStreamConstants.Facility.valueOf(facility).name();
+		return SyslogUtility.getFacilityString(facility);
 	}
 
 	/**

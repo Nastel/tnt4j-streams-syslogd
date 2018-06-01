@@ -81,11 +81,11 @@ Details on TNT4J-Streams related configuration can be found in TNT4J-Streams REA
 
 #### Syslogd stream parameters
 
- * Host - host name to run Syslog server. (Required)
- * Port - port number to run Syslog server. Default value - `514`. (Optional)
- * Protocol - protocol of Syslog server communication: one of `tcp` or `udp` . Default value - `tcp`. (Optional)
- * Timeout - server communication timeout, where `0` means - server implementation dependent timeout handling. Actual if `Protocol` property 
- value is set to `tcp`. Default value - `0`. (Optional)
+ * `Host` - host name to run Syslog server. (Required)
+ * `Port` - port number to run Syslog server. Default value - `514`. (Optional)
+ * `Protocol` - protocol of Syslog server communication: one of `tcp` or `udp` . Default value - `tcp`. (Optional)
+ * `Timeout` - server communication timeout, where `0` means - server implementation dependent timeout handling. Actual if `Protocol` 
+ property value is set to `tcp`. Default value - `0`. (Optional)
 
     sample:
 ```xml
@@ -101,17 +101,19 @@ Also see ['Generic streams parameters'](https://github.com/Nastel/tnt4j-streams/
 
 #### Abstract Syslog parser
 
- * SuppressMessagesLevel - Syslog messages suppression level:
+ * `SuppressMessagesLevel` - Syslog messages suppression level:
     * `0` - output all Syslog messages
     * `-1` - output only the first occurrence of Syslog message
     * `any other positive number` - suppresses all Syslog messages except those that are multiples of that number
 
    Default value - `0`. (Optional)
- * SuppressIgnoredFields - Syslog message ignored fields list used to compare if message contents are same. Default value - [`EndTime`, 
+ * `SuppressIgnoredFields` - Syslog message ignored fields list used to compare if message contents are same. Default value - [`EndTime`, 
  `ElapsedTime`, `Tag`]. (Optional)
- * SuppressCacheSize - maximal Syslog messages suppression cache entries count. Default value - `100`. (Optional)
- * SuppressCacheExpireDurationMinutes - Syslog messages suppression cache entries expiration duration value in minutes. 
+ * `SuppressCacheSize` - maximal Syslog messages suppression cache entries count. Default value - `100`. (Optional)
+ * `SuppressCacheExpireDurationMinutes` - Syslog messages suppression cache entries expiration duration value in minutes. 
  Default value - `10`. (Optional)
+ * `FlattenStructuredData` - flag indicating to flatten structured data map if there is only one structure available. Default value - 
+ `false`. (Optional)
  
     sample:
 ```xml
@@ -119,6 +121,7 @@ Also see ['Generic streams parameters'](https://github.com/Nastel/tnt4j-streams/
     <property name="SuppressIgnoredFields" value="EndTime|ElapsedTime|Tag"/>
     <property name="SuppressCacheSize" value="1000"/>
     <property name="SuppressCacheExpireDurationMinutes" value="30"/>
+    <property name="FlattenStructuredData" value="true"/>
 ```
 
 Also see ['Activity map parser'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#activity-map-parser).

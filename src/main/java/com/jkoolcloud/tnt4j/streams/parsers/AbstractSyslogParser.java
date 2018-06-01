@@ -19,10 +19,7 @@ package com.jkoolcloud.tnt4j.streams.parsers;
 import static com.jkoolcloud.tnt4j.streams.fields.StreamFieldType.*;
 
 import java.security.MessageDigest;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
@@ -60,6 +57,8 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * {@value #DEFAULT_MAX_CACHE_SIZE}. (Optional)</li>
  * <li>SuppressCacheExpireDurationMinutes - Syslog messages suppression cache entries expiration duration value in
  * minutes. Default value - {@value #DEFAULT_CACHE_EXPIRE_DURATION}. (Optional)</li>
+ * <li>FlattenStructuredData - flag indicating to flatten structured data map if there is only one structure available.
+ * Default value - {@code false}. (Optional)</li>
  * </ul>
  *
  * @version $Revision: 1 $
@@ -88,8 +87,11 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	private long cacheSize = DEFAULT_MAX_CACHE_SIZE;
 	private long cacheExpireDuration = DEFAULT_CACHE_EXPIRE_DURATION;
 	private List<String> ignoredFields = Arrays.asList(DEFAULT_IGNORED_FIELDS);
+	private boolean flattenStructuredData = false;
 
 	private static final MessageDigest MSG_DIGEST = Utils.getMD5Digester();
+	private final Map<String, Long> EVENT_TIMESTAMP_MAP = new HashMap<>(8);
+
 	private Cache<String, AtomicInteger> msc;
 
 	protected final ReentrantLock digestLock = new ReentrantLock();
@@ -122,6 +124,10 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 						logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
 								"ActivityParser.setting", name, value);
 					}
+				} else if (SyslogParserProperties.PROP_FLATTEN_STRUCTURED_DATA.equalsIgnoreCase(name)) {
+					flattenStructuredData = Utils.toBoolean(value);
+					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+							"ActivityParser.setting", name, value);
 				}
 			}
 		}
@@ -144,42 +150,56 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	 * @return {@code null} if log entry gets suppressed, or same parameters defined {@code dataMap} if log entry is not
 	 *         suppressed
 	 */
+	@SuppressWarnings("unchecked")
 	protected Map<String, Object> suppress(Map<String, Object> dataMap) {
-		if (suppressionLevel == 0) {
-			return dataMap;
-		}
+		if (suppressionLevel != 0) {
+			AtomicInteger invocations;
+			cacheLock.lock();
+			try {
+				if (msc == null) {
+					msc = buildCache(cacheSize, cacheExpireDuration);
+				}
 
-		AtomicInteger invocations;
-		cacheLock.lock();
-		try {
-			if (msc == null) {
-				msc = buildCache(cacheSize, cacheExpireDuration);
+				String byteData = new String(getMD5(dataMap, ignoredFields));
+
+				invocations = msc.getIfPresent(byteData);
+				if (invocations == null) {
+					invocations = new AtomicInteger();
+					msc.put(byteData, invocations);
+				}
+			} finally {
+				cacheLock.unlock();
 			}
 
-			String byteData = new String(getMD5(dataMap, ignoredFields));
-
-			invocations = msc.getIfPresent(byteData);
-			if (invocations == null) {
-				invocations = new AtomicInteger();
-				msc.put(byteData, invocations);
-			}
-		} finally {
-			cacheLock.unlock();
-		}
-
-		if (invocations.incrementAndGet() > 1) {
-			if (suppressionLevel == -1) {
-				logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
-						"AbstractSyslogParser.suppressing.event1", invocations);
-				return null;
-			}
-
-			if (suppressionLevel > 0) {
-				int evtSeqNumber = invocations.get() % suppressionLevel;
-				if (evtSeqNumber != 0) {
+			if (invocations.incrementAndGet() > 1) {
+				if (suppressionLevel == -1) {
 					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
-							"AbstractSyslogParser.suppressing.event2", evtSeqNumber, suppressionLevel);
+							"AbstractSyslogParser.suppressing.event1", invocations);
 					return null;
+				}
+
+				if (suppressionLevel > 0) {
+					int evtSeqNumber = invocations.get() % suppressionLevel;
+					if (evtSeqNumber != 0) {
+						logger().log(OpLevel.DEBUG,
+								StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+								"AbstractSyslogParser.suppressing.event2", evtSeqNumber, suppressionLevel);
+						return null;
+					}
+				}
+			}
+		}
+
+		if (flattenStructuredData) {
+			Object structData = dataMap.get(SyslogStreamConstants.FIELD_SYSLOG_MAP);
+			if (structData instanceof Map) {
+				Map<String, Map<String, Object>> structDataMap = (Map<String, Map<String, Object>>) structData;
+
+				if (structDataMap.size() == 1) {
+					Map.Entry<String, Map<String, Object>> sdme = structDataMap.entrySet().iterator().next();
+					Map<String, Object> sdMap = sdme.getValue();
+					sdMap.put(SyslogStreamConstants.SYSLOG_STRUCT_ID, sdme.getKey());
+					dataMap.put(SyslogStreamConstants.FIELD_SYSLOG_MAP, sdMap);
 				}
 			}
 		}
@@ -219,6 +239,27 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 			} else {
 				digest.update(Utils.toString(ldme.getValue()).getBytes());
 			}
+		}
+	}
+
+	/**
+	 * Obtain elapsed microseconds since last log event.
+	 *
+	 * @param eventKey
+	 *            event key
+	 * @param eventTime
+	 *            current event timestamp value
+	 * @return elapsed microseconds since last event
+	 */
+	protected long getUsecSinceLastEvent(String eventKey, long eventTime) {
+		synchronized (EVENT_TIMESTAMP_MAP) {
+			Long prev_ts = EVENT_TIMESTAMP_MAP.put(eventKey, eventTime);
+
+			if (prev_ts == null) {
+				prev_ts = eventTime;
+			}
+
+			return TimeUnit.MILLISECONDS.toMicros(eventTime - prev_ts);
 		}
 	}
 }

@@ -18,6 +18,8 @@
 
 package com.jkoolcloud.tnt4j.streams.utils;
 
+import org.graylog2.syslog4j.util.SyslogUtility;
+
 import com.jkoolcloud.tnt4j.core.OpLevel;
 
 /**
@@ -31,125 +33,6 @@ public class SyslogStreamConstants {
 	 * Resource bundle name constant for TNT4J-Streams "syslogd" module.
 	 */
 	public static final String RESOURCE_BUNDLE_NAME = "tnt4j-streams-syslogd"; // NON-NLS
-
-	/**
-	 * Log facilities enum in Syslog order.
-	 */
-	public enum Facility {
-		/**
-		 * Kern facility.
-		 */
-		KERN,
-		/**
-		 * User facility.
-		 */
-		USER,
-		/**
-		 * Mail facility.
-		 */
-		MAIL,
-		/**
-		 * Daemon facility.
-		 */
-		DAEMON,
-		/**
-		 * Auth facility.
-		 */
-		AUTH,
-		/**
-		 * Syslog facility.
-		 */
-		SYSLOG,
-		/**
-		 * Lpr facility.
-		 */
-		LPR,
-		/**
-		 * News facility.
-		 */
-		NEWS,
-		/**
-		 * Uucp facility.
-		 */
-		UUCP,
-		/**
-		 * Cron facility.
-		 */
-		CRON,
-		/**
-		 * Authpriv facility.
-		 */
-		AUTHPRIV,
-		/**
-		 * Ftp facility.
-		 */
-		FTP,
-		/**
-		 * Ntp facility.
-		 */
-		NTP,
-		/**
-		 * Audit facility.
-		 */
-		AUDIT,
-		/**
-		 * Alert facility.
-		 */
-		ALERT,
-		/**
-		 * Clock facility.
-		 */
-		CLOCK,
-		/**
-		 * Local 0 facility.
-		 */
-		LOCAL0,
-		/**
-		 * Local 1 facility.
-		 */
-		LOCAL1,
-		/**
-		 * Local 2 facility.
-		 */
-		LOCAL2,
-		/**
-		 * Local 3 facility.
-		 */
-		LOCAL3,
-		/**
-		 * Local 4 facility.
-		 */
-		LOCAL4,
-		/**
-		 * Local 5 facility.
-		 */
-		LOCAL5,
-		/**
-		 * Local 6 facility.
-		 */
-		LOCAL6,
-		/**
-		 * Local 7 facility.
-		 */
-		LOCAL7,
-		/**
-		 * Unknown facility.
-		 */
-		UNKNOWN;
-
-		/**
-		 * Returns enumeration member matching defined ordinal.
-		 *
-		 * @param ordinal
-		 *            enumeration member ordinal
-		 * @return enumeration member or {@code UNKNOWN} if defined ordinal is out of enumeration values range
-		 */
-		public static Facility valueOf(int ordinal) {
-			Facility[] facilities = values();
-			return ((ordinal >= 0) && (ordinal < facilities.length)) ? facilities[ordinal]
-					: facilities[facilities.length - 1];
-		}
-	}
 
 	/**
 	 * Log levels list in Syslog matching order.
@@ -167,7 +50,7 @@ public class SyslogStreamConstants {
 	/**
 	 * Constant for default Syslog facility 'USER'.
 	 */
-	public static final Facility DEFAULT_FACILITY = Facility.USER;
+	public static final int DEFAULT_FACILITY = SyslogUtility.getFacility("user");
 	/**
 	 * Constant for default Syslog entry level 'INFO'.
 	 */
@@ -280,4 +163,9 @@ public class SyslogStreamConstants {
 	 * Constant for UTC character {@value}.
 	 */
 	public static final char UTC = 'Z';
+
+	/**
+	 * Constant defining structured data map entry for structure identifier.
+	 */
+	public static final String SYSLOG_STRUCT_ID = "struct.id"; // NON-NLS
 }

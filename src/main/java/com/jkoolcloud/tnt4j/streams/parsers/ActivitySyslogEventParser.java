@@ -28,9 +28,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.graylog2.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.graylog2.syslog4j.server.SyslogServerEventIF;
 import org.graylog2.syslog4j.server.impl.event.SyslogServerEvent;
@@ -40,7 +40,7 @@ import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.streams.utils.SyslogUtils;
-import com.jkoolcloud.tnt4j.tracker.TimeTracker;
+import com.jkoolcloud.tnt4j.streams.utils.Utils;
 
 /**
  * Implements an activity data parser that assumes each activity data item is an Syslog server event
@@ -109,11 +109,6 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 	private static final String ATTR_APPL_NAME = "appl.name"; // NON-NLS
 	private static final String ATTR_APPL_PID = "appl.pid"; // NON-NLS
 
-	/*
-	 * Timing map maintains the number of nanoseconds since last event for a specific server/application combo.
-	 */
-	private static final TimeTracker TIME_TRACKER = TimeTracker.newTracker(10000, TimeUnit.DAYS.toMillis(30));
-
 	/**
 	 * Constructs a new ActivitySyslogEventParser.
 	 */
@@ -172,16 +167,19 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		SyslogServerEventIF event = (SyslogServerEventIF) data;
 
 		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(RAW_ACTIVITY_STRING_KEY, Utils.getString(event.getRaw()));
 
 		Date date = (event.getDate() == null ? new Date() : event.getDate());
 		String facility = SyslogUtils.getFacilityString(event.getFacility());
 		OpLevel level = SyslogUtils.getOpLevel(event.getLevel());
+		int priority = (event.getFacility() << 3) + event.getLevel();
 
 		dataMap.put(EventName.name(), facility);
 		dataMap.put(Severity.name(), level);
 		dataMap.put(FIELD_FACILITY, facility);
 		dataMap.put(FIELD_HOSTNAME, event.getHost());
 		dataMap.put(FIELD_LEVEL, event.getLevel());
+		dataMap.put(FIELD_PRIORITY, priority);
 
 		InetSocketAddress from = null;
 		if (event instanceof SyslogServerEvent) {
@@ -207,8 +205,9 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		}
 
 		String eventKey = String.format("%s/%s", dataMap.get(Location.name()), dataMap.get(ResourceName.name())); // NON-NLS
-		dataMap.put(EndTime.name(), date.getTime() * 1000);
-		dataMap.put(ElapsedTime.name(), getUsecSinceLastEvent(eventKey));
+		long eventTime = date.getTime();
+		dataMap.put(EndTime.name(), eventTime * 1000);
+		dataMap.put(ElapsedTime.name(), getUsecSinceLastEvent(eventKey, eventTime));
 
 		return suppress(dataMap);
 	}
@@ -240,8 +239,7 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		Long pid = (Long) map.get(ATTR_APPL_PID);
 
 		dataMap.put(Tag.name(), new String[] { serverName, appName });
-		dataMap.put(ProcessId.name(), pid);
-		dataMap.put(ThreadId.name(), pid);
+		SyslogUtils.assignPid(String.valueOf(pid), dataMap);
 		dataMap.put(ResourceName.name(), appName);
 		dataMap.put(EventName.name(), facility);
 
@@ -249,7 +247,7 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		dataMap.put(ApplName.name(), appName);
 		dataMap.put(ServerName.name(), serverName);
 
-		dataMap.put(Message.name(), event.getMessage());
+		dataMap.put(Message.name(), StringUtils.trim(event.getMessage()));
 	}
 
 	/**
@@ -273,13 +271,13 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		// if (StringUtils.isNotEmpty(msgId)) {
 		// dataMap.put(TrackingId.name(), msgId);
 		// }
-		SyslogUtils.assignPid(sEvent.getProcessId(), dataMap);
+		SyslogUtils.assignPid(StringUtils.isEmpty(sEvent.getProcessId()) ? sMessage.getProcId() : sEvent.getProcessId(),
+				dataMap);
 
 		// set the appropriate source
 		dataMap.put(ApplName.name(), sEvent.getApplicationName());
 		dataMap.put(ServerName.name(), sEvent.getHost());
-		dataMap.put(Message.name(), sMessage.getMessage());
-		dataMap.put(ProcessId.name(), sMessage.getProcId());
+		dataMap.put(Message.name(), StringUtils.trim(sMessage.getMessage()));
 
 		// process structured event attributes into snapshot
 		extractStructuredData(sMessage, dataMap);
@@ -343,16 +341,5 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 			map.put(ATTR_APPL_PID, 0L);
 		}
 		return map;
-	}
-
-	/**
-	 * Obtain elapsed microseconds since last event.
-	 *
-	 * @param key
-	 *            timer key
-	 * @return elapsed microseconds since last event
-	 */
-	public static long getUsecSinceLastEvent(String key) {
-		return TimeUnit.NANOSECONDS.toMicros(TIME_TRACKER.hitAndGet(key));
 	}
 }

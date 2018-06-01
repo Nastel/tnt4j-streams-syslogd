@@ -16,19 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package com.jkoolcloud.tnt4j.streams;
+package com.jkoolcloud.tnt4j.streams.parsers;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-
-import com.jkoolcloud.tnt4j.streams.configure.sax.ConfigParserHandlerTest;
-import com.jkoolcloud.tnt4j.streams.parsers.AllParsersTests;
 
 /**
  * @author akausinis
  * @version 1.0
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ ConfigParserHandlerTest.class, AllParsersTests.class })
-public class AllSyslogdStreamTests {
+@Suite.SuiteClasses({})
+public class AllParsersTests {
 }

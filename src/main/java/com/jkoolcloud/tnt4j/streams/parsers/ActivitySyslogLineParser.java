@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.lang.Exception;
 import java.nio.CharBuffer;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -79,7 +78,7 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * <li>for activity properties:</li>
  * <ul>
  * <li>facility - resolved log line facility name. If resolved 'priority' is {@code null} - then value is
- * '{@link com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants.Facility#USER}'</li>
+ * {@code "user"}</li>
  * <li>level - resolved log line level. If resolved 'priority' is {@code null} - then value is
  * {@value com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants#DEFAULT_LEVEL}</li>
  * <li>hostname - resolved log line host name</li>
@@ -215,12 +214,8 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 	 * Syslog log lines parser for RFC 3164 and 5424.
 	 */
 	private class SyslogParser extends CharBufferParser<String, Map<String, ?>> {
-		private static final String SYSLOG_STRUCT_ID = "struct.id"; // NON-NLS
-
 		// As defined in RFC 5424.
 		private static final int MAX_SUPPORTED_VERSION = 1;
-
-		private final Map<String, Long> EVENT_TIMESTAMP_MAP = new HashMap<>(8);
 
 		/**
 		 * Construct a new Syslog log lines parser.
@@ -380,7 +375,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 			String appName = null;
 			String procId = null;
 			String msgId = null;
-			Map<String, Object> structuredData = null;
+			Map<String, Map<String, Object>> structuredData = null;
 
 			if (version >= 1) {
 				appName = readWordOrNil(cb, 20);
@@ -432,9 +427,10 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 		 *            the resolved application message
 		 */
 		private Map<String, Object> createFieldMap(int version, Integer priority, Calendar date, String hostName,
-				String appName, String procId, String msgId, Map<String, Object> structuredData, String appMsg) {
+				String appName, String procId, String msgId, Map<String, Map<String, Object>> structuredData,
+				String appMsg) {
 			Map<String, Object> map = new HashMap<>(16);
-			int facility = priority == null ? DEFAULT_FACILITY.ordinal() : priority / 8;
+			int facility = priority == null ? DEFAULT_FACILITY : priority / 8;
 			int level = priority == null ? DEFAULT_LEVEL : priority % 8;
 			String facilityStr = SyslogUtils.getFacilityString(facility);
 
@@ -479,27 +475,6 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 			map.put(ElapsedTime.name(), getUsecSinceLastEvent(eventKey, eventTime));
 
 			return map;
-		}
-
-		/**
-		 * Obtain elapsed microseconds since last log event.
-		 *
-		 * @param eventKey
-		 *            event key
-		 * @param eventTime
-		 *            current event timestamp value
-		 * @return elapsed microseconds since last event
-		 */
-		private long getUsecSinceLastEvent(String eventKey, long eventTime) {
-			synchronized (EVENT_TIMESTAMP_MAP) {
-				Long prev_ts = EVENT_TIMESTAMP_MAP.put(eventKey, eventTime);
-
-				if (prev_ts == null) {
-					prev_ts = eventTime;
-				}
-
-				return TimeUnit.MILLISECONDS.toMicros(eventTime - prev_ts);
-			}
 		}
 
 		/**
@@ -598,7 +573,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 		 * @throws IOException
 		 *             if unexpected character is found while parsing
 		 */
-		private Map<String, Object> readStructuredData(CharBuffer cb) throws IOException {
+		private Map<String, Map<String, Object>> readStructuredData(CharBuffer cb) throws IOException {
 			int c = read(cb);
 
 			if (c == MINUS) {
@@ -610,15 +585,17 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 						"ActivitySyslogLineParser.unexpected.char", OB, (char) c));
 			}
 
-			Map<String, Object> sdm = new HashMap<>();
+			Map<String, Map<String, Object>> sdm = new HashMap<>();
 			StringBuilder sb = new StringBuilder();
+			Map<String, Object> structData;
 
 			while (c == OB) {
+				structData = new HashMap<>();
 				// Read structured data id
 				while ((c = read(cb)) != SPACE && c != CB) {
 					sb.append((char) c);
 				}
-				sdm.put(SYSLOG_STRUCT_ID, sb.toString());
+				sdm.put(sb.toString(), structData);
 				sb.setLength(0);
 
 				String paramName;
@@ -641,7 +618,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 							sb.append((char) c);
 						}
 					}
-					sdm.put(paramName, sb.toString());
+					structData.put(paramName, sb.toString());
 					sb.setLength(0);
 
 					c = read(cb);
