@@ -34,6 +34,7 @@
         <field name="level" locator="level" locator-type="Label" value-type="id"/>
         <field name="hostname" locator="hostname" locator-type="Label"/>
         <field name="hostaddr" locator="hostaddr" locator-type="Label"/>
+        <field name="priority" locator="priority" locator-type="Label"/>
 
         <!-- properties from Syslog message/structured data -->
         <!-- automatically puts all resolved map entries as custom activity properties -->
