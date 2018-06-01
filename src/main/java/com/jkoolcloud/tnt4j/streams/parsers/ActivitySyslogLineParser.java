@@ -68,7 +68,7 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * <li>ProcessId - resolved log line process id</li>
  * <li>ThreadId - same as 'ProcessId'</li>
  * <li>Message - resolved log line application message</li>
- * <li>Severity - resolved log line level mapped to {@link OpLevel}</li>
+ * <li>Severity - resolved log line level mapped to value from {@link OpLevel} enumeration</li>
  * <li>ApplName - resolved log line application name</li>
  * <li>ServerName - resolved log line host name</li>
  * <li>EndTime - resolved log line timestamp value in microseconds</li>

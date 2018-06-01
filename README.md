@@ -132,6 +132,39 @@ This parser has no additional configuration parameters.
 
 Also see ['Abstract Syslog parser'](#abstract-syslog-parser).
 
+This parser resolved data map may contain such entries:
+ * for activity fields:
+    * `EventType` - resolved from log event application message contained variable named `opt`
+    * `EventName` - resolved log event facility name, or application message contained variable named `opn`
+    * `Exception` - resolved from log event application message contained variable named `exc`
+    * `UserName` - resolved from log event application message contained variable named `usr`
+    * `ResourceName` - resolved log event application name, or application message contained variable named `rsn`
+    * `Location` - resolved log event host name/address, or application message contained variable named `loc`
+    * `Tag` - resolved set of values {`host name`, `application name`} for RFC 3164 and set of values {`facility name`, `host name`, 
+    `application name`, `message id`} for RFC 5424, or application message contained variable named `tag`
+    * `Correlator` - resolved from log event application message contained variable named `cid`
+    * `ProcessId` - resolved log event process id
+    * `ThreadId` - same as `ProcessId`
+    * `Message` - resolved log event application message
+    * `Severity` - resolved log event level mapped to value from [`OpLevel`](https://github.com/Nastel/TNT4J/blob/master/src/main/java/com/jkoolcloud/tnt4j/core/OpLevel.java) enumeration
+    * `ApplName` - resolved log event application name`
+    * `ServerName` - resolved log event host name
+    * `EndTime` - resolved log event timestamp value in microseconds
+    * `ElapsedTime` - calculated time difference between same host and app events in microseconds
+    * `MsgCharSet` - resolved log event char set name
+        
+ * for activity properties:
+    * `facility` - resolved log event facility name
+    * `level` - resolved log event level
+    * `hostname` - resolved log event host name
+    * `hostaddr` - resolved log event host address
+    * `priority` - resolved log line priority
+ 
+ * maps of resolved additional custom activity properties:
+    * `SyslogMap` - map of resolved RFC 5424 structured data: contains sub-map for every found structure, but can be flattened to single 
+    level map (if only one structure is available) using parser property `FlattenStructuredData`
+    * `SyslogVars` - map of resolved application message contained (varName=varValue) variables
+
 #### Activity Syslog line parser
 
  * CharSet - name of char set used by Syslog lines parser. Default value - `UTF-8`. (Optional)
@@ -143,6 +176,39 @@ Also see ['Abstract Syslog parser'](#abstract-syslog-parser).
 
 Also see ['Abstract Syslog parser'](#abstract-syslog-parser).
 
+This parser resolved data map may contain such entries:
+ * for activity fields:
+    * `EventType` - resolved from log line application message contained variable named `opt`
+    * `EventName` - resolved log line facility name, or application message contained variable named `opn`
+    * `Exception` - resolved from log line application message contained variable named `exc`
+    * `UserName` - resolved from log line application message contained variable named `usr`
+    * `ResourceName` - resolved log line application name, or application message contained variable named `rsn`
+    * `Location` - resolved log line host name/address, or application message contained variable named `loc`
+    * `Tag` - resolved set of values {`host name`, `application name`} for RFC 3164 and set of values {`facility name`, `host name`, 
+    `application name`, `message id`} for RFC 5424, or application message contained variable named `tag`
+    * `Correlator` - resolved from log line application message contained variable named `cid`
+    * `ProcessId` - resolved log line process id
+    * `ThreadId` - same as `ProcessId`
+    * `Message` - resolved log line application message
+    * `Severity` - resolved log line level mapped to value from [`OpLevel`](https://github.com/Nastel/TNT4J/blob/master/src/main/java/com/jkoolcloud/tnt4j/core/OpLevel.java) enumeration
+    * `ApplName` - resolved log line application name
+    * `ServerName` - resolved log line host name
+    * `EndTime` - resolved log line timestamp value in microseconds
+    * `ElapsedTime` - calculated time difference between same host and app events in microseconds
+    * `MsgCharSet` - char set name used by parser
+ 
+ * for activity properties:
+    * `facility` - resolved log line facility name. If resolved `priority` is `null` - then value is `user`
+    * `level` - resolved log line level. If resolved `priority` is `null` - then value is `INFO`
+    * `hostname` - resolved log line host name
+    * `version` - resolved log line Syslog version (`0` for `RFC 3164`, `1` for `RFC 5424`)
+    * `priority` - resolved log line priority
+ 
+ * maps of resolved additional custom activity properties:
+    * `SyslogMap` - map of resolved RFC 5424 structured data: contains sub-map for every found structure, but can be flattened to single 
+    level map (if only one structure is available) using parser property `FlattenStructuredData`
+    * `SyslogVars` - map of resolved application message contained `varName=varValue` variables
+ 
 How to Build TNT4J-Streams-Syslogd
 =========================================
 

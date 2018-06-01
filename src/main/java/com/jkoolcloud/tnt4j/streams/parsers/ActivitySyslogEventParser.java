@@ -75,7 +75,7 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * <li>ProcessId - resolved log event process id</li>
  * <li>ThreadId - same as 'ProcessId'</li>
  * <li>Message - resolved log event application message</li>
- * <li>Severity - resolved log event level mapped to {@link OpLevel}</li>
+ * <li>Severity - resolved log event level mapped to value from {@link OpLevel} enumeration</li>
  * <li>ApplName - resolved log event application name</li>
  * <li>ServerName - resolved log event host name</li>
  * <li>EndTime - resolved log event timestamp value in microseconds</li>
@@ -88,6 +88,7 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * <li>level - resolved log event level</li>
  * <li>hostname - resolved log event host name</li>
  * <li>hostaddr - resolved log event host address</li>
+ * <li>priority - resolved log event priority</li>
  * </ul>
  * <li>maps of resolved additional custom activity properties:</li>
  * <ul>
