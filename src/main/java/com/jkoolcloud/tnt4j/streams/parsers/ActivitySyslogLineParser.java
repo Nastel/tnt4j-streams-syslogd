@@ -87,7 +87,9 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * </ul>
  * <li>maps of resolved additional custom activity properties:</li>
  * <ul>
- * <li>SyslogMap - map of resolved RFC 5424 structured data</li>
+ * <li>SyslogMap - map of resolved RFC 5424 structured data: contains sub-map for every found structure, but can be
+ * flattened to single level map (if only one structure is available) using parser property
+ * {@code "FlattenStructuredData"}</li>
  * <li>SyslogVars - map of resolved application message contained (varName=varValue) variables</li>
  * </ul>
  * </ul>
