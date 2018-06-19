@@ -2,7 +2,7 @@
 TNT4J Streams for handling Syslog messages.
 
 TNT4J-Streams-Syslogd is extension of TNT4J-Streams to give ability of streaming Syslog events/log entries as activity events to
-JKoolCloud.
+[jKoolCloud](https://www.jkoolcloud.com).
 
 TNT4J-Streams-Syslogd is under LGPLv2.1 license as dependent Syslog4j itself.
 
