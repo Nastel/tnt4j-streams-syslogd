@@ -162,6 +162,11 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 	}
 
 	@Override
+	public Object getProperty(String name) {
+		return super.getProperty(name);
+	}
+
+	@Override
 	protected Map<String, Object> getDataMap(Object data) {
 		if (data == null) {
 			return null;

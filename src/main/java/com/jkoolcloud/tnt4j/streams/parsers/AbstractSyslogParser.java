@@ -133,6 +133,27 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 		}
 	}
 
+	@Override
+	public Object getProperty(String name) {
+		if (SyslogParserProperties.PROP_SUPPRESS_LEVEL.equalsIgnoreCase(name)) {
+			return suppressionLevel;
+		}
+		if (SyslogParserProperties.PROP_SUPPRESS_CACHE_SIZE.equalsIgnoreCase(name)) {
+			return cacheSize;
+		}
+		if (SyslogParserProperties.PROP_SUPPRESS_CACHE_EXPIRE.equalsIgnoreCase(name)) {
+			return cacheExpireDuration;
+		}
+		if (SyslogParserProperties.PROP_SUPPRESS_IGNORED_FIELDS.equalsIgnoreCase(name)) {
+			return ignoredFields;
+		}
+		if (SyslogParserProperties.PROP_FLATTEN_STRUCTURED_DATA.equalsIgnoreCase(name)) {
+			return flattenStructuredData;
+		}
+
+		return super.getProperty(name);
+	}
+
 	/**
 	 * Determines if log entry has to be suppressed depending on {@link #suppressionLevel} value. Calculates MD5 hash
 	 * for not ignored log entry fields. Having MD5 hash checks log message occurrences count in messages suppression

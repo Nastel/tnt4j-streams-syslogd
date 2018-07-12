@@ -162,6 +162,15 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 	}
 
 	@Override
+	public Object getProperty(String name) {
+		if (SyslogParserProperties.PROP_CHAR_SET.equalsIgnoreCase(name)) {
+			return streamCharSet;
+		}
+
+		return super.getProperty(name);
+	}
+
+	@Override
 	protected Map<String, Object> getDataMap(Object data) {
 		if (data == null) {
 			return null;
