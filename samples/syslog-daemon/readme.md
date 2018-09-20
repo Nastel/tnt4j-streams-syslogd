@@ -1,7 +1,7 @@
 #### Syslog daemon (Syslogd)
 
 This sample shows how to stream activity events from Syslogd received log events data. `SyslogdStream` starts Syslogd server depending on 
-defined configuration. 
+defined configuration.
 
 Sample stream configuration: [`tnt-data-source.xml`](./tnt-data-source.xml)
 

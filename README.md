@@ -14,7 +14,7 @@ Why TNT4J-Streams-Syslogd
 
  * Allows to stream activities parsed from Syslog daemon (Syslogd) events data.
  * Allows to stream activities parsed from Syslog log files.
- 
+
 **NOTE:** Currently supports [`RFC 3164`](https://tools.ietf.org/html/rfc3164) and the Structured Syslog protocol [`RFC 5424`](https://tools.ietf.org/html/rfc5424).
 
 Importing TNT4J-Streams-Syslogd project into IDE
@@ -58,7 +58,7 @@ and JavaDocs.
 #### Syslog daemon (Syslogd)
 
 This sample shows how to stream activity events from Syslogd received log events data. `SyslogdStream` starts Syslogd server depending on 
-defined configuration. 
+defined configuration.
 
 Sample files can be found in [`samples/syslog-daemon`](./samples/syslog-daemon/) directory.
 
@@ -114,7 +114,7 @@ Also see ['Generic streams parameters'](https://github.com/Nastel/tnt4j-streams/
  Default value - `10`. (Optional)
  * `FlattenStructuredData` - flag indicating to flatten structured data map if there is only one structure available. Default value - 
  `false`. (Optional)
- 
+
     sample:
 ```xml
     <property name="SuppressMessagesLevel" value="10"/>
@@ -128,7 +128,7 @@ Also see ['Activity map parser'](https://github.com/Nastel/tnt4j-streams/blob/ma
 
 #### Activity Syslog event parser
 
-This parser has no additional configuration parameters. 
+This parser has no additional configuration parameters.
 
 Also see ['Abstract Syslog parser'](#abstract-syslog-parser).
 
@@ -152,14 +152,14 @@ This parser resolved data map may contain such entries:
     * `EndTime` - resolved log event timestamp value in microseconds
     * `ElapsedTime` - calculated time difference between same host and app events in microseconds
     * `MsgCharSet` - resolved log event char set name
-        
+
  * for activity properties:
     * `facility` - resolved log event facility name
     * `level` - resolved log event level
     * `hostname` - resolved log event host name
     * `hostaddr` - resolved log event host address
     * `priority` - resolved log line priority
- 
+
  * maps of resolved additional custom activity properties:
     * `SyslogMap` - map of resolved RFC 5424 structured data: contains sub-map for every found structure, but can be flattened to single 
     level map (if only one structure is available) using parser property `FlattenStructuredData`
@@ -172,7 +172,7 @@ This parser resolved data map may contain such entries:
     sample:
 ```xml
     <property name="CharSet" value="ISO-8859-1"/>
-``` 
+```
 
 Also see ['Abstract Syslog parser'](#abstract-syslog-parser).
 
@@ -196,19 +196,19 @@ This parser resolved data map may contain such entries:
     * `EndTime` - resolved log line timestamp value in microseconds
     * `ElapsedTime` - calculated time difference between same host and app events in microseconds
     * `MsgCharSet` - char set name used by parser
- 
+
  * for activity properties:
     * `facility` - resolved log line facility name. If resolved `priority` is `null` - then value is `user`
     * `level` - resolved log line level. If resolved `priority` is `null` - then value is `INFO`
     * `hostname` - resolved log line host name
     * `version` - resolved log line Syslog version (`0` for `RFC 3164`, `1` for `RFC 5424`)
     * `priority` - resolved log line priority
- 
+
  * maps of resolved additional custom activity properties:
     * `SyslogMap` - map of resolved RFC 5424 structured data: contains sub-map for every found structure, but can be flattened to single 
     level map (if only one structure is available) using parser property `FlattenStructuredData`
     * `SyslogVars` - map of resolved application message contained `varName=varValue` variables
- 
+
 How to Build TNT4J-Streams-Syslogd
 =========================================
 
@@ -243,7 +243,7 @@ So resuming build process quick "how to build" steps would be like this:
 1. if `tnt4j-streams` not built yet build it: run `mvn clean install` for a [`pom.xml`](https://github.com/Nastel/tnt4j-streams/blob/master/pom.xml) 
 file located in `tnt4j-streams` directory. 
 2. now you can build `tnt4j-streams-syslogd`: run `mvn clean install` for a [`pom.xml`](./pom.xml) file located in `tnt4j-streams-syslogd` 
-directory. 
+directory.
 
 ## Running samples
 
