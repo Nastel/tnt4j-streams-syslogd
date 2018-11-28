@@ -26,7 +26,6 @@ import java.lang.Exception;
 import java.nio.CharBuffer;
 import java.util.*;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.jkoolcloud.tnt4j.core.OpLevel;
@@ -143,21 +142,14 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 	}
 
 	@Override
-	public void setProperties(Collection<Map.Entry<String, String>> props) {
-		super.setProperties(props);
+	public void setProperty(String name, String value) {
+		super.setProperty(name, value);
 
-		if (CollectionUtils.isNotEmpty(props)) {
-			for (Map.Entry<String, String> prop : props) {
-				String name = prop.getKey();
-				String value = prop.getValue();
+		if (SyslogParserProperties.PROP_CHAR_SET.equalsIgnoreCase(name)) {
+			streamCharSet = value;
 
-				if (SyslogParserProperties.PROP_CHAR_SET.equalsIgnoreCase(name)) {
-					streamCharSet = value;
-
-					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
-							"ActivityParser.setting", name, value);
-				}
-			}
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+					"ActivityParser.setting", name, value);
 		}
 	}
 

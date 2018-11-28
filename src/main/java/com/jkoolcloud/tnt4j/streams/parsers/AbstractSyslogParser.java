@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -98,38 +97,31 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	protected final ReentrantLock cacheLock = new ReentrantLock();
 
 	@Override
-	public void setProperties(Collection<Map.Entry<String, String>> props) {
-		super.setProperties(props);
+	public void setProperty(String name, String value) {
+		super.setProperty(name, value);
 
-		if (CollectionUtils.isNotEmpty(props)) {
-			for (Map.Entry<String, String> prop : props) {
-				String name = prop.getKey();
-				String value = prop.getValue();
-
-				if (SyslogParserProperties.PROP_SUPPRESS_LEVEL.equalsIgnoreCase(name)) {
-					suppressionLevel = NumberUtils.toInt(value, DEFAULT_SUPPRESSION_LEVEL);
-					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
-							"ActivityParser.setting", name, value);
-				} else if (SyslogParserProperties.PROP_SUPPRESS_CACHE_SIZE.equalsIgnoreCase(name)) {
-					cacheSize = NumberUtils.toLong(value, DEFAULT_MAX_CACHE_SIZE);
-					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
-							"ActivityParser.setting", name, value);
-				} else if (SyslogParserProperties.PROP_SUPPRESS_CACHE_EXPIRE.equalsIgnoreCase(name)) {
-					cacheExpireDuration = NumberUtils.toLong(value, DEFAULT_CACHE_EXPIRE_DURATION);
-					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
-							"ActivityParser.setting", name, value);
-				} else if (SyslogParserProperties.PROP_SUPPRESS_IGNORED_FIELDS.equalsIgnoreCase(name)) {
-					if (StringUtils.isNotEmpty(value)) {
-						ignoredFields = Arrays.asList(Utils.splitValue(value));
-						logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
-								"ActivityParser.setting", name, value);
-					}
-				} else if (SyslogParserProperties.PROP_FLATTEN_STRUCTURED_DATA.equalsIgnoreCase(name)) {
-					flattenStructuredData = Utils.toBoolean(value);
-					logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
-							"ActivityParser.setting", name, value);
-				}
+		if (SyslogParserProperties.PROP_SUPPRESS_LEVEL.equalsIgnoreCase(name)) {
+			suppressionLevel = NumberUtils.toInt(value, DEFAULT_SUPPRESSION_LEVEL);
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+					"ActivityParser.setting", name, value);
+		} else if (SyslogParserProperties.PROP_SUPPRESS_CACHE_SIZE.equalsIgnoreCase(name)) {
+			cacheSize = NumberUtils.toLong(value, DEFAULT_MAX_CACHE_SIZE);
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+					"ActivityParser.setting", name, value);
+		} else if (SyslogParserProperties.PROP_SUPPRESS_CACHE_EXPIRE.equalsIgnoreCase(name)) {
+			cacheExpireDuration = NumberUtils.toLong(value, DEFAULT_CACHE_EXPIRE_DURATION);
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+					"ActivityParser.setting", name, value);
+		} else if (SyslogParserProperties.PROP_SUPPRESS_IGNORED_FIELDS.equalsIgnoreCase(name)) {
+			if (StringUtils.isNotEmpty(value)) {
+				ignoredFields = Arrays.asList(Utils.splitValue(value));
+				logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+						"ActivityParser.setting", name, value);
 			}
+		} else if (SyslogParserProperties.PROP_FLATTEN_STRUCTURED_DATA.equalsIgnoreCase(name)) {
+			flattenStructuredData = Utils.toBoolean(value);
+			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
+					"ActivityParser.setting", name, value);
 		}
 	}
 

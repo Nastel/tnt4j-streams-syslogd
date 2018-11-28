@@ -19,10 +19,7 @@
 package com.jkoolcloud.tnt4j.streams.inputs;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.Map;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.graylog2.syslog4j.Syslog;
 import org.graylog2.syslog4j.SyslogConfigIF;
@@ -99,21 +96,15 @@ public class SyslogdFileStream extends SyslogdStream {
 	}
 
 	@Override
-	public void setProperties(Collection<Map.Entry<String, String>> props) {
-		super.setProperties(props);
+	public void setProperty(String name, String value) {
+		super.setProperty(name, value);
 
-		if (CollectionUtils.isNotEmpty(props)) {
-			for (Map.Entry<String, String> prop : props) {
-				String name = prop.getKey();
-				String value = prop.getValue();
-				if (StreamProperties.PROP_FILENAME.equalsIgnoreCase(name)) {
-					fileName = value;
-				} else if (SyslogStreamProperties.PROP_FACILITY.equalsIgnoreCase(name)) {
-					facility = value;
-				} else if (SyslogStreamProperties.PROP_LEVEL.equalsIgnoreCase(name)) {
-					level = value;
-				}
-			}
+		if (StreamProperties.PROP_FILENAME.equalsIgnoreCase(name)) {
+			fileName = value;
+		} else if (SyslogStreamProperties.PROP_FACILITY.equalsIgnoreCase(name)) {
+			facility = value;
+		} else if (SyslogStreamProperties.PROP_LEVEL.equalsIgnoreCase(name)) {
+			level = value;
 		}
 	}
 
