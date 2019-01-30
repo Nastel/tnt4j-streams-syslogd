@@ -213,7 +213,7 @@ How to Build TNT4J-Streams-Syslogd
 =========================================
 
 ## Requirements
-* JDK 1.7+
+* JDK 1.8+
 * [Apache Maven 3](https://maven.apache.org/)
 * [TNT4J-Streams](https://github.com/Nastel/tnt4j-streams) `core` module in particular
 
