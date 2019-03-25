@@ -96,6 +96,13 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 	protected final ReentrantLock digestLock = new ReentrantLock();
 	protected final ReentrantLock cacheLock = new ReentrantLock();
 
+	/**
+	 * Constructs a new AbstractSyslogParser.
+	 */
+	protected AbstractSyslogParser() {
+		super();
+	}
+
 	@Override
 	public void setProperty(String name, String value) {
 		super.setProperty(name, value);
