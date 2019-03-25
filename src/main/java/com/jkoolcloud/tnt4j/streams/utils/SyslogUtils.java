@@ -121,8 +121,8 @@ public final class SyslogUtils {
 	 *            associated with key, value pair
 	 */
 	private static void mapToTyped(Map<String, Object> map, String key, String value) {
-		if (Character.isDigit(value.charAt(0))) {
-			Number num = null;
+		Number num = null;
+		if (StringUtils.isNotEmpty(value) && Character.isDigit(value.charAt(0))) {
 			try {
 				num = Long.valueOf(value);
 			} catch (Exception el) {
@@ -131,11 +131,9 @@ public final class SyslogUtils {
 				} catch (Exception ed) {
 				}
 			}
-
-			map.put(key, num == null ? value : num);
 		}
 
-		map.put(key, value);
+		map.put(key, num == null ? value : num);
 	}
 
 	/**
