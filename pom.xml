@@ -76,7 +76,7 @@
         <gpg.skip.sign>true</gpg.skip.sign>
         <build.assemblies.attach>false</build.assemblies.attach>
 
-        <syslog4j.version>0.9.58</syslog4j.version>
+        <syslog4j.version>0.9.60</syslog4j.version>
     </properties>
 
     <profiles>
