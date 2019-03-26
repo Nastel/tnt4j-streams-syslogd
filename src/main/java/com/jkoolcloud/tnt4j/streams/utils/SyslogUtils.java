@@ -37,6 +37,8 @@ import org.graylog2.syslog4j.util.SyslogUtility;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.core.OpType;
 import com.jkoolcloud.tnt4j.logger.AppenderConstants;
+import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
+import com.jkoolcloud.tnt4j.sink.EventSink;
 
 /**
  * Utility methods used by Syslog module.
@@ -44,16 +46,13 @@ import com.jkoolcloud.tnt4j.logger.AppenderConstants;
  * @version $Revision: 1 $
  */
 public final class SyslogUtils {
+	private static final EventSink LOGGER = DefaultEventSinkFactory.defaultEventSink(SyslogUtils.class);
 
 	/*
-	 * Regular expression pattern to detect {@code name=value} or {@code name="value"} pairs.
+	 * Regular expression pattern to detect {@code name=value}, {@code name="value"}, {@code name(value)} pairs.
 	 */
-	private static final Pattern VARIABLES_PATTERN = Pattern
-			.compile("([^=,\\s]+)\\s*=\\s*(?:\"((?:[^\"]|\"\")*)\"|([^,\\s\"]*)),?");
-	/*
-	 * Regular expression pattern to detect {@code name(value)} pairs.
-	 */
-	private static final Pattern VARIABLES_PATTERN2 = Pattern.compile("(\\S+)\\s*[(\\[{](\\S+)[)\\]}]");
+	private static final Pattern VARIABLES_PATTERN = Pattern.compile(
+			"(?<key>[^=,\\s(]+)\\s*(?:(?:=\\s*[\"(](?<value1>[^\")]*)[\")])|(?:=\\s*(?<value2>.*?)[,\\s]+)|(?:\\((?<value3>.*?)\\)))");
 
 	private SyslogUtils() {
 	}
@@ -93,7 +92,6 @@ public final class SyslogUtils {
 		Map<String, Object> map = new HashMap<>();
 
 		parserVariablePairs(message, VARIABLES_PATTERN, map);
-		parserVariablePairs(message, VARIABLES_PATTERN2, map);
 
 		return map;
 	}
@@ -101,12 +99,22 @@ public final class SyslogUtils {
 	private static void parserVariablePairs(String str, Pattern pattern, Map<String, Object> map) {
 		Matcher matcher = pattern.matcher(str);
 		while (matcher.find()) {
-			String key = matcher.group(1);
-			String val = matcher.group(2);
-			if (val == null) {
-				val = matcher.group(3);
+			String key = matcher.group("key"); // NON-NLS
+			if (StringUtils.isEmpty(key)) {
+				LOGGER.log(OpLevel.WARNING, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
+						"SyslogUtils.variable.key.empty", matcher.group(0));
+				continue;
 			}
-			mapToTyped(map, key, val);
+
+			String val = matcher.group("value1"); // NON-NLS
+			if (val == null) {
+				val = matcher.group("value2"); // NON-NLS
+			}
+			if (val == null) {
+				val = matcher.group("value3"); // NON-NLS
+			}
+
+			mapToTyped(map, key.trim(), val);
 		}
 	}
 
