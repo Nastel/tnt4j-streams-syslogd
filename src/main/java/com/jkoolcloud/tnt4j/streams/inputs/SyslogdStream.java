@@ -26,10 +26,10 @@ import org.graylog2.syslog4j.server.*;
 import org.graylog2.syslog4j.server.impl.net.tcp.TCPNetSyslogServerConfigIF;
 
 import com.jkoolcloud.tnt4j.core.OpLevel;
-import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.streams.configure.StreamProperties;
 import com.jkoolcloud.tnt4j.streams.configure.SyslogStreamProperties;
+import com.jkoolcloud.tnt4j.streams.utils.LoggerUtils;
 import com.jkoolcloud.tnt4j.streams.utils.StreamsResources;
 import com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants;
 
@@ -55,7 +55,7 @@ import com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants;
  * @see com.jkoolcloud.tnt4j.streams.parsers.ActivityParser#isDataClassSupported(Object)
  */
 public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
-	private static final EventSink LOGGER = DefaultEventSinkFactory.defaultEventSink(SyslogdStream.class);
+	private static final EventSink LOGGER = LoggerUtils.getLoggerSink(SyslogdStream.class);
 
 	private static final String DEFAULT_HOST = "0.0.0.0"; // NON-NLS
 

@@ -36,8 +36,8 @@ import org.graylog2.syslog4j.server.impl.event.SyslogServerEvent;
 import org.graylog2.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
 
 import com.jkoolcloud.tnt4j.core.OpLevel;
-import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
+import com.jkoolcloud.tnt4j.streams.utils.LoggerUtils;
 import com.jkoolcloud.tnt4j.streams.utils.SyslogUtils;
 import com.jkoolcloud.tnt4j.streams.utils.Utils;
 
@@ -104,7 +104,7 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * @version $Revision: 1 $
  */
 public class ActivitySyslogEventParser extends AbstractSyslogParser {
-	private static final EventSink LOGGER = DefaultEventSinkFactory.defaultEventSink(ActivitySyslogEventParser.class);
+	private static final EventSink LOGGER = LoggerUtils.getLoggerSink(ActivitySyslogEventParser.class);
 
 	private static final String ATTR_SERVER_NAME = "server.name"; // NON-NLS
 	private static final String ATTR_APPL_PART = "appl.part"; // NON-NLS

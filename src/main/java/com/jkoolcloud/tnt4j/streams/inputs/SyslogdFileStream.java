@@ -32,10 +32,10 @@ import org.graylog2.syslog4j.util.SyslogUtility;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jkoolcloud.tnt4j.core.OpLevel;
-import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.streams.configure.StreamProperties;
 import com.jkoolcloud.tnt4j.streams.configure.SyslogStreamProperties;
+import com.jkoolcloud.tnt4j.streams.utils.LoggerUtils;
 import com.jkoolcloud.tnt4j.streams.utils.StreamsResources;
 import com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants;
 import com.jkoolcloud.tnt4j.streams.utils.Utils;
@@ -61,7 +61,7 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * @see com.jkoolcloud.tnt4j.streams.parsers.ActivityParser#isDataClassSupported(Object)
  */
 public class SyslogdFileStream extends SyslogdStream {
-	private static final EventSink LOGGER = DefaultEventSinkFactory.defaultEventSink(SyslogdFileStream.class);
+	private static final EventSink LOGGER = LoggerUtils.getLoggerSink(SyslogdFileStream.class);
 
 	// Stream properties
 	private String fileName = null;

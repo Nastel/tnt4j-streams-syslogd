@@ -37,7 +37,6 @@ import org.graylog2.syslog4j.util.SyslogUtility;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.core.OpType;
 import com.jkoolcloud.tnt4j.logger.AppenderConstants;
-import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 
 /**
@@ -46,7 +45,7 @@ import com.jkoolcloud.tnt4j.sink.EventSink;
  * @version $Revision: 1 $
  */
 public final class SyslogUtils {
-	private static final EventSink LOGGER = DefaultEventSinkFactory.defaultEventSink(SyslogUtils.class);
+	private static final EventSink LOGGER = LoggerUtils.getLoggerSink(SyslogUtils.class);
 
 	/*
 	 * Regular expression pattern to detect {@code name=value}, {@code name="value"}, {@code name(value)} pairs.

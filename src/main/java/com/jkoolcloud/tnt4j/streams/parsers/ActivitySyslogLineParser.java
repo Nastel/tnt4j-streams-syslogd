@@ -29,7 +29,6 @@ import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 
 import com.jkoolcloud.tnt4j.core.OpLevel;
-import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.streams.configure.SyslogParserProperties;
 import com.jkoolcloud.tnt4j.streams.utils.*;
@@ -101,7 +100,7 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * @version $Revision: 1 $
  */
 public class ActivitySyslogLineParser extends AbstractSyslogParser {
-	private static final EventSink LOGGER = DefaultEventSinkFactory.defaultEventSink(ActivitySyslogLineParser.class);
+	private static final EventSink LOGGER = LoggerUtils.getLoggerSink(ActivitySyslogLineParser.class);
 
 	private static final String DEFAULT_CHAR_SET = Utils.UTF8;
 
