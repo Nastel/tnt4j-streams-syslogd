@@ -79,19 +79,6 @@
         <syslog4j.version>0.9.60</syslog4j.version>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>doclint-java8-disable</id>
-            <activation>
-                <jdk>[1.8,)</jdk>
-            </activation>
-            <properties>
-                <javadoc.opts>-Xdoclint:none</javadoc.opts>
-                <javadoc.failOnError>false</javadoc.failOnError>
-            </properties>
-        </profile>
-    </profiles>
-
     <build>
         <defaultGoal>clean install</defaultGoal>
         <resources>
@@ -205,8 +192,8 @@
                     <version>true</version>
                     <nodeprecatedlist>false</nodeprecatedlist>
                     <nodeprecated>false</nodeprecated>
-                    <additionalOptions>${javadoc.opts}</additionalOptions>
-                    <failOnError>${javadoc.failOnError}</failOnError>
+                    <failOnError>false</failOnError>
+                    <doclint>all</doclint>
                 </configuration>
                 <executions>
                     <execution>
