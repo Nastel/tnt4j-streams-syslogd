@@ -41,7 +41,7 @@ Also see TNT4J-Streams README document chapter ['Running TNT4J-Streams'](https:/
     * use [`bin/tnt4j-streams.bat`](./bin/tnt4j-streams.bat) or [`bin/tnt4j-streams.sh`](./bin/tnt4j-streams.sh) to run standalone application
 * As API integrated into your product
     * Write streams configuration file. See ['Streams configuration'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#streams-configuration) chapter for more details
-    * use `StreamsAgent.runFromAPI(configFileName)` in your code
+    * use `StreamsAgent.runFromAPI(new CfgStreamsBuilder().setConfig(configFileName))` in your code
 
 ## Samples
 
