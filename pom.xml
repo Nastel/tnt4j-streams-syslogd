@@ -14,7 +14,7 @@
     <!--</prerequisites>-->
 
     <name>tnt4j-streams-syslogd</name>
-    <url>${project.organization.url}</url>
+    <url>https://github.com/Nastel/tnt4j-streams-syslogd</url>
     <description>TNT4J Syslog streams for Java</description>
     <licenses>
         <license>
