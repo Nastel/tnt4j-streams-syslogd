@@ -180,7 +180,7 @@ public abstract class AbstractSyslogParser extends AbstractActivityMapParser {
 					msc = buildCache(cacheSize, cacheExpireDuration);
 				}
 
-				String byteData = new String(getMD5(dataMap, ignoredFields));
+				String byteData = Utils.getString(getMD5(dataMap, ignoredFields));
 
 				invocations = msc.getIfPresent(byteData);
 				if (invocations == null) {
