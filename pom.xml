@@ -113,6 +113,12 @@
                 <skip.assembly.pack>false</skip.assembly.pack>
             </properties>
         </profile>
+        <profile>
+            <id>run-tests</id>
+            <properties>
+                <skip.tests>false</skip.tests>
+            </properties>
+        </profile>
     </profiles>
 
     <build>
@@ -326,6 +332,12 @@
             <groupId>org.graylog2</groupId>
             <artifactId>syslog4j</artifactId>
             <version>${syslog4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-lang3</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
