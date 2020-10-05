@@ -26,7 +26,7 @@ public interface SyslogParserProperties extends ParserProperties {
 	/**
 	 * Constant for name of built-in parser {@value} property.
 	 */
-	String PROP_CHAR_SET = "CharSet"; // NON-NLS
+	String PROP_CHARSET = "CharSet"; // NON-NLS
 
 	/**
 	 * Constant for name of built-in parser {@value} property.
