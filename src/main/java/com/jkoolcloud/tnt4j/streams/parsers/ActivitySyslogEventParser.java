@@ -212,14 +212,16 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		return suppress(dataMap);
 	}
 
+	private static final String[] ACTIVITY_DATA_TYPES = { "SYSLOG EVENT" }; // NON-NLS
+
 	/**
 	 * Returns type of RAW activity data entries.
 	 *
-	 * @return type of RAW activity data entries - Syslog event
+	 * @return type of RAW activity data entries - {@code "SYSLOG EVENT"}
 	 */
 	@Override
-	protected String getActivityDataType() {
-		return "SYSLOG EVENT"; // NON-NLS
+	protected String[] getActivityDataType() {
+		return ACTIVITY_DATA_TYPES;
 	}
 
 	/**

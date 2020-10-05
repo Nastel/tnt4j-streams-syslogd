@@ -144,7 +144,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 	public void setProperty(String name, String value) {
 		super.setProperty(name, value);
 
-		if (SyslogParserProperties.PROP_CHAR_SET.equalsIgnoreCase(name)) {
+		if (SyslogParserProperties.PROP_CHARSET.equalsIgnoreCase(name)) {
 			streamCharSet = value;
 
 			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(StreamsResources.RESOURCE_BUNDLE_NAME),
@@ -154,7 +154,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 
 	@Override
 	public Object getProperty(String name) {
-		if (SyslogParserProperties.PROP_CHAR_SET.equalsIgnoreCase(name)) {
+		if (SyslogParserProperties.PROP_CHARSET.equalsIgnoreCase(name)) {
 			return streamCharSet;
 		}
 
@@ -202,14 +202,16 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 	// return ai;
 	// }
 
+	private static final String[] ACTIVITY_DATA_TYPES = { "SYSLOG LINE" }; // NON-NLS
+
 	/**
 	 * Returns type of RAW activity data entries.
 	 *
-	 * @return type of RAW activity data entries - Syslog line
+	 * @return type of RAW activity data entries - {@code "SYSLOG LINE"}
 	 */
 	@Override
-	protected String getActivityDataType() {
-		return "SYSLOG LINE"; // NON-NLS
+	protected String[] getActivityDataType() {
+		return ACTIVITY_DATA_TYPES;
 	}
 
 	/**
