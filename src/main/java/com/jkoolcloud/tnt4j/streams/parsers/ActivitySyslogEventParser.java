@@ -311,7 +311,7 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 	}
 
 	/**
-	 * Parse Syslog header attributes into a map. Message structure: <server> <appl-part>:<message>
+	 * Parse Syslog header attributes into a map. Message structure: {@code <server> <appl-part>:<message>}
 	 *
 	 * @param event
 	 *            Syslog event
