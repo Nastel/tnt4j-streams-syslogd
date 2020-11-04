@@ -18,7 +18,7 @@ NAME=tnt4j-streams-syslogd
 EXEC="/usr/bin/jsvc"
 
 # The path to the folder containing tnt4j-streams-syslogd-*.jar
-FILE_PATH="/home/tnt4j-streams-syslogd-1.11.0/"
+FILE_PATH="/home/tnt4j-streams-syslogd-1.11.4/"
 
 PARSER_CONFIG=$FILE_PATH/config/tnt-data-source.xml
 
