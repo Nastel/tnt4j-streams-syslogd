@@ -138,7 +138,7 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 	 */
 	@Override
 	protected boolean isDataClassSupportedByParser(Object data) {
-		return SyslogServerEventIF.class.isInstance(data);
+		return data instanceof SyslogServerEventIF;
 	}
 
 	@Override

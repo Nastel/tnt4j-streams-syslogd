@@ -137,7 +137,7 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 	 */
 	@Override
 	protected boolean isDataClassSupportedByParser(Object data) {
-		return String.class.isInstance(data);
+		return data instanceof String;
 	}
 
 	@Override
@@ -472,8 +472,8 @@ public class ActivitySyslogLineParser extends AbstractSyslogParser {
 
 			// extract name=value pairs if available
 			SyslogUtils.extractVariables(appMsg, map);
-			String eventKey = String.format("%s/%s", (String) map.get(Location.name()), // NON-NLS
-					(String) map.get(ResourceName.name()));
+			String eventKey = String.format("%s/%s", map.get(Location.name()), // NON-NLS
+					map.get(ResourceName.name()));
 			long eventTime = date.getTimeInMillis();
 			map.put(EndTime.name(), eventTime * 1000);
 			map.put(ElapsedTime.name(), getUsecSinceLastEvent(eventKey, eventTime));
