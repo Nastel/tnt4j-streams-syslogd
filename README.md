@@ -55,7 +55,7 @@ Also see TNT4J-Streams README document chapter ['Running TNT4J-Streams'](https:/
 
 ### Running samples
 When release assemblies are built, samples are located in [`samples`](./samples/) directory, e.g.,
-`build/tnt4j-streams-syslogd-1.12.0-SNAPSHOT/samples`.
+`build/tnt4j-streams-syslogd-1.11.6/samples`.
 To run desired sample:
 * go to sample directory
 * run `run.bat` or `run.sh` depending on your OS
