@@ -40,6 +40,14 @@ Also see TNT4J-Streams README document chapter ['Running TNT4J-Streams'](https:/
     * configure your loggers
     * use [`bin/tnt4j-streams.bat`](./bin/tnt4j-streams.bat) or [`bin/tnt4j-streams.sh`](./bin/tnt4j-streams.sh) to run standalone application
 * As API integrated into your product
+    * Use Maven dependency:
+      ```xml
+          <dependency>
+              <groupId>com.jkoolcloud.tnt4j.streams</groupId>
+              <artifactId>tnt4j-streams-syslogd</artifactId>
+              <version>1.11.6</version>
+          </dependency>
+      ``` 
     * Write streams configuration file. See ['Streams configuration'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#streams-configuration) chapter for more details
     * use `StreamsAgent.runFromAPI(new CfgStreamsBuilder().setConfig(configFileName))` in your code
 
@@ -217,12 +225,12 @@ How to Build TNT4J-Streams-Syslogd
 * [Apache Maven 3](https://maven.apache.org/)
 * [TNT4J-Streams](https://github.com/Nastel/tnt4j-streams) `core` module in particular
 
-All other required dependencies are defined in project [`pom.xml`](./pom.xml) file. If maven is running online mode it should download these 
+All other required dependencies are defined in project [`pom.xml`](./pom.xml) file. If Maven is running online mode it should download these 
 defined dependencies automatically.
 
 ### Manually installed dependencies
 
-**NOTE:** If you have build and installed TNT4J-Streams into your local maven repository, you don't need to install
+**NOTE:** If you have build and installed TNT4J-Streams into your local Maven repository, you don't need to install
 it manually.
 
 `TNT4J-Streams-Syslogd` project does not require any manually downloaded dependencies at the moment.
@@ -230,16 +238,18 @@ it manually.
 **NOTE:** also see TNT4J-Streams README document chapter ['Manually installed dependencies'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#manually-installed-dependencies).
 
 ## Building
-* To build the project, run maven goals `clean package`
-* To build the project and install to local repo, run maven goals `clean install`
+* To build the project, run Maven goals `clean package`
+* To build the project and install to local repo, run Maven goals `clean install`
 * To make distributable release assemblies use one of profiles: `pack-bin` or `pack-all`:
-    * containing only binary distribution: run `mvn -P pack-bin`
-    * containing binary, source and javadoc distribution: run `mvn -P pack-all`
+    * containing only binary (including `test` package) distribution: run `mvn -P pack-bin`
+    * containing binary (including `test` package), `source` and `javadoc` distribution: run `mvn -P pack-all`
+* To make maven required `source` and `javadoc` packages, use profile `pack-maven`
+* To make maven central compliant release having `source`, `javadoc` and all signed packages, use `maven-release` profile
 
-Release assemblies are built to `../build/tnt4j-streams-syslogd` directory.
+Release assemblies are built to `build/` directory.
 
-**NOTE:** sometimes maven fails to correctly handle dependencies. If dependency configuration looks fine, but maven still complains about 
-missing dependencies try to delete local maven repository by hand: e.g., on MS Windows delete contents of `c:\Users\[username]\.m2\repository` 
+**NOTE:** sometimes Maven fails to correctly handle dependencies. If dependency configuration looks fine, but Maven still complains about 
+missing dependencies try to delete local Maven repository by hand: e.g., on MS Windows delete contents of `c:\Users\[username]\.m2\repository` 
 directory.
 
 So resuming build process quick "how to build" steps would be like this:
@@ -259,7 +269,7 @@ Testing of TNT4J-Streams-Syslogd
 * [JUnit 4](http://junit.org/)
 * [Mockito](http://mockito.org/)
 
-## Testing using maven
+## Testing using Maven
 Maven tests run is disabled by default. To enable Maven to run tests set Maven command line argument 
 `-DskipTests=false`.
 
