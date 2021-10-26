@@ -45,7 +45,7 @@ Also see TNT4J-Streams README document chapter ['Running TNT4J-Streams'](https:/
           <dependency>
               <groupId>com.jkoolcloud.tnt4j.streams</groupId>
               <artifactId>tnt4j-streams-syslogd</artifactId>
-              <version>1.11.7</version>
+              <version>1.12.0</version>
           </dependency>
       ``` 
     * Write streams configuration file. See ['Streams configuration'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#streams-configuration) chapter for more details
@@ -55,7 +55,7 @@ Also see TNT4J-Streams README document chapter ['Running TNT4J-Streams'](https:/
 
 ### Running samples
 When release assemblies are built, samples are located in [`samples`](./samples/) directory, e.g.,
-`build/tnt4j-streams-syslogd-1.11.7/samples`.
+`build/tnt4j-streams-syslogd-1.12.0/samples`.
 To run desired sample:
 * go to sample directory
 * run `run.bat` or `run.sh` depending on your OS
