@@ -168,6 +168,7 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 	}
 
 	private class SyslogDataReceiver extends InputProcessor implements SyslogServerSessionEventHandlerIF {
+		private static final long serialVersionUID = 1429130323098657827L;
 
 		private SyslogServerIF server;
 
@@ -189,9 +190,9 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
 					"SyslogdStream.starting.server", SyslogServer.getVersion());
 
-			SyslogServerIF syslogServer = SyslogServer.getInstance(protocol);
+			server = SyslogServer.getInstance(protocol);
 
-			SyslogServerConfigIF syslogServerConfig = syslogServer.getConfig();
+			SyslogServerConfigIF syslogServerConfig = server.getConfig();
 			syslogServerConfig.setUseStructuredData(true);
 
 			if (host != null) {
@@ -226,7 +227,6 @@ public class SyslogdStream extends AbstractBufferedStream<SyslogServerEventIF> {
 			// syslogServerConfig.addEventHandler(eventHandler);
 			// }
 
-			server = SyslogServer.getInstance(protocol);
 			logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
 					"SyslogdStream.server.initialized", SyslogServer.getVersion());
 		}
