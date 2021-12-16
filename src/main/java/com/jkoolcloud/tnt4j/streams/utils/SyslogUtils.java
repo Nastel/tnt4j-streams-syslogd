@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2019, JKOOL LLC.
+ * Copyright (C) 2015-2021, JKOOL LLC.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -51,6 +51,9 @@ public final class SyslogUtils {
 	 * Regular expression pattern to detect {@code name=value}, {@code name="value"}, {@code name(value)} pairs.
 	 */
 	private static final Pattern VARIABLES_PATTERN = Pattern.compile(
+			// "(?<key>[^=,\\s(]+)\\s*((\\((?<value1>.*?)\\))|(=\\((?<value2>.*?)\\))|(=\\s*(?:\"(?<value3>(?:[^\"]|\"\")*)\"|([^,\\s\"]*)))),?");
+			// "(?<key>[^=,\\s(]+)\\s*((\\((?<value1>.*?)\\))|(=\\s*(?:[\"(]((?:[^\"()]|\"\"|\\(\\))*)[\")]|([^,\\s\"()]*)))),?");
+			// "(?<key>[^=,\\s(]+)\\s*(?:(?:\\((.*?)\\))|(?:=\\s*(?:[\"(]((?:[^\"()]|\"\"|\\(\\))*)[\")]|([^,\\s\"()]*))))");
 			"(?<key>[^=,\\s(]+)\\s*(?:(?:=\\s*[\"(](?<value1>[^\")]*)[\")])|(?:=\\s*(?<value2>.*?)[,\\s]+)|(?:\\((?<value3>.*?)\\)))");
 
 	private SyslogUtils() {
