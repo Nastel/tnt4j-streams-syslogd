@@ -137,8 +137,8 @@ and ['Buffered streams parameters'](https://github.com/Nastel/tnt4j-streams/blob
 * `SuppressIgnoredFields` - Syslog message ignored fields list used to compare if message contents are same. Default value - [`EndTime`,
   `ElapsedTime`, `Tag`]. (Optional)
 * `SuppressCacheSize` - maximal Syslog messages suppression cache entries count. Default value - `100`. (Optional)
-* `SuppressCacheExpireDurationMinutes` - Syslog messages suppression cache entries expiration duration value in minutes. Default value
-    - `10`. (Optional)
+* `SuppressCacheExpireDurationMinutes` - Syslog messages suppression cache entries expiration duration value in minutes. Default value -
+  `10`. (Optional)
 * `FlattenStructuredData` - flag indicating to flatten structured data map if there is only one structure available. Default value -
   `false`. (Optional)
 
