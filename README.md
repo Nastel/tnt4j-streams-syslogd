@@ -1,6 +1,7 @@
 # tnt4j-streams-syslogd
 
 -----------------------
+
 **NOTE:** `tnt4j-streams-syslogd` version `1.13.0` migrated logger to `log4j2`. In case you have changed default `tnt4j-streams-syslogd`
 logger configuration using previous `tnt4j-streams-syslogd` versions, please check new logger configuration
 file [log4j2.xml](./config/log4j2.xml).
@@ -16,6 +17,7 @@ file [log4j2.xml](./config/log4j2.xml).
 1. `Log4j2` used asynchronous logging techniques noticeably increases application performance comparing to `Log4j12`. See
    [Log4j 2.x Asynchronous Logging Performance report](https://logging.apache.org/log4j/2.x/manual/async.html#Asynchronous_Logging_Performance)
    as reference.
+ 
 -----------------------
 
 TNT4J Streams for handling Syslog messages.
@@ -31,8 +33,8 @@ in [README document](https://github.com/Nastel/tnt4j-streams/blob/master/README.
 Why TNT4J-Streams-Syslogd
 ======================================
 
-* Allows to stream activities parsed from Syslog daemon (Syslogd) events data.
-* Allows to stream activities parsed from Syslog log files.
+* Allows streaming activities parsed from Syslog daemon (Syslogd) events data.
+* Allows streaming activities parsed from Syslog log files.
 
 **NOTE:** Currently supports [`RFC 3164`](https://tools.ietf.org/html/rfc3164) and the Structured Syslog
 protocol [`RFC 5424`](https://tools.ietf.org/html/rfc5424).
@@ -83,7 +85,7 @@ chapter ['Running TNT4J-Streams'](https://github.com/Nastel/tnt4j-streams/blob/m
 
 ### Running samples
 
-When release assemblies are built, samples are located in [`samples`](./samples/) directory, e.g.,
+When release assemblies are built, samples are located in [`samples`](./samples) directory, e.g.,
 `build/tnt4j-streams-syslogd-1.13.2/samples`. To run desired sample:
 * go to sample directory
 * run `run.bat` or `run.sh` depending on your OS
@@ -97,7 +99,7 @@ and JavaDocs.
 This sample shows how to stream activity events from Syslogd received log events data. `SyslogdStream` starts Syslogd server depending on
 defined configuration.
 
-Sample files can be found in [`samples/syslog-daemon`](./samples/syslog-daemon/) directory.
+Sample files can be found in [`samples/syslog-daemon`](./samples/syslog-daemon) directory.
 
 See sample [`readme.md`](/samples/syslog-daemon/readme.md) file for more details.
 
@@ -105,7 +107,7 @@ See sample [`readme.md`](/samples/syslog-daemon/readme.md) file for more details
 
 This sample shows how to stream activity events from Syslog log file(s) entries.
 
-Sample files can be found in [`samples/syslog-file`](./samples/syslog-file/) directory.
+Sample files can be found in [`samples/syslog-file`](./samples/syslog-file) directory.
 
 See sample [`readme.md`](/samples/syslog-file/readme.md) file for more details.
 
@@ -125,7 +127,7 @@ chapter ['Configuring TNT4J-Streams'](https://github.com/Nastel/tnt4j-streams/bl
 * `Timeout` - server communication timeout, where `0` means - server implementation dependent timeout handling. Actual if `Protocol`
   property value is set to `tcp`. Default value - `0`. (Optional)
 
-  sample:
+Configuration sample:
 ```xml
     <property name="Protocol" value="udp"/>
     <property name="Host" value="0.0.0.0"/>
@@ -154,7 +156,7 @@ and ['Buffered streams parameters'](https://github.com/Nastel/tnt4j-streams/blob
 * `FlattenStructuredData` - flag indicating to flatten structured data map if there is only one structure available. Default value -
   `false`. (Optional)
 
-  sample:
+Configuration sample:
 ```xml
     <property name="SuppressMessagesLevel" value="10"/>
     <property name="SuppressIgnoredFields" value="EndTime|ElapsedTime|Tag"/>
@@ -209,7 +211,7 @@ This parser resolved data map may contain such entries:
 
 * CharSet - name of char set used by Syslog lines parser. Default value - `UTF-8`. (Optional)
 
-  sample:
+Configuration sample:
 ```xml
     <property name="CharSet" value="ISO-8859-1"/>
 ```
