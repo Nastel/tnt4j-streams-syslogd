@@ -17,7 +17,7 @@ file [log4j2.xml](./config/log4j2.xml).
 1. `Log4j2` used asynchronous logging techniques noticeably increases application performance comparing to `Log4j12`. See
    [Log4j 2.x Asynchronous Logging Performance report](https://logging.apache.org/log4j/2.x/manual/async.html#Asynchronous_Logging_Performance)
    as reference.
- 
+
 -----------------------
 
 TNT4J Streams for handling Syslog messages.
@@ -70,11 +70,11 @@ chapter ['Running TNT4J-Streams'](https://github.com/Nastel/tnt4j-streams/blob/m
 * As API integrated into your product
     * Use Maven dependency:
       ```xml
-          <dependency>
-              <groupId>com.jkoolcloud.tnt4j.streams</groupId>
-              <artifactId>tnt4j-streams-syslogd</artifactId>
-              <version>1.13.2</version>
-          </dependency>
+      <dependency>
+          <groupId>com.jkoolcloud.tnt4j.streams</groupId>
+          <artifactId>tnt4j-streams-syslogd</artifactId>
+          <version>1.13.2</version>
+      </dependency>
       ``` 
     * Write streams configuration file.
       See ['Streams configuration'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#streams-configuration) chapter for more
@@ -129,10 +129,10 @@ chapter ['Configuring TNT4J-Streams'](https://github.com/Nastel/tnt4j-streams/bl
 
 Configuration sample:
 ```xml
-    <property name="Protocol" value="udp"/>
-    <property name="Host" value="0.0.0.0"/>
-    <property name="Port" value="5114"/>
-    <property name="Timeout" value="60"/>
+<property name="Protocol" value="udp"/>
+<property name="Host" value="0.0.0.0"/>
+<property name="Port" value="5114"/>
+<property name="Timeout" value="60"/>
 ```
 
 Also see ['Generic streams parameters'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#generic-streams-parameters)
@@ -158,11 +158,11 @@ and ['Buffered streams parameters'](https://github.com/Nastel/tnt4j-streams/blob
 
 Configuration sample:
 ```xml
-    <property name="SuppressMessagesLevel" value="10"/>
-    <property name="SuppressIgnoredFields" value="EndTime|ElapsedTime|Tag"/>
-    <property name="SuppressCacheSize" value="1000"/>
-    <property name="SuppressCacheExpireDurationMinutes" value="30"/>
-    <property name="FlattenStructuredData" value="true"/>
+<property name="SuppressMessagesLevel" value="10"/>
+<property name="SuppressIgnoredFields" value="EndTime|ElapsedTime|Tag"/>
+<property name="SuppressCacheSize" value="1000"/>
+<property name="SuppressCacheExpireDurationMinutes" value="30"/>
+<property name="FlattenStructuredData" value="true"/>
 ```
 
 Also see ['Activity map parser'](https://github.com/Nastel/tnt4j-streams/blob/master/README.md#activity-map-parser).
@@ -213,7 +213,7 @@ This parser resolved data map may contain such entries:
 
 Configuration sample:
 ```xml
-    <property name="CharSet" value="ISO-8859-1"/>
+<property name="CharSet" value="ISO-8859-1"/>
 ```
 
 Also see ['Abstract Syslog parser'](#abstract-syslog-parser).

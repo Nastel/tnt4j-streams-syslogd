@@ -12,7 +12,7 @@ and parser configuration path.
 
 #### Manual install
 
-1) Edit the script `./nix/tnt4j-streams-service.sh` and replace following tokens:
+1. Edit the script `./nix/tnt4j-streams-service.sh` and replace following tokens:
 
     * `<NAME>` = service's name
     * `<DESCRIPTION>` = Describe your service here (be concise)
@@ -23,25 +23,25 @@ and parser configuration path.
     * `<TNT4J_PROPERTIES>` = TNT4J event sink configuration
     * `<LOG4J_PROPERTIES>` = Logger configuration
 
-2) Copy to `/etc/init.d`:
+1. Copy to `/etc/init.d`:
 
-```sh
-    cp "./nix/tnt4j-streams-service.sh" "/etc/init.d/tnt4j-streams`"
-    chmod +x /etc/init.d/tnt4j-streams
-```
+   ```sh
+   cp "./nix/tnt4j-streams-service.sh" "/etc/init.d/tnt4j-streams`"
+   chmod +x /etc/init.d/tnt4j-streams
+   ```
 
-3) Start and test your service:
+1. Start and test your service:
 
-```sh
-    service tnt4j-streams start
-    service tnt4j-streams stop
-```
+   ```sh
+   service tnt4j-streams start
+   service tnt4j-streams stop
+   ```
 
-4) Install service to be run at boot-time:
+1. Install service to be run at boot-time:
 
-```sh
-    update-rc.d tnt4j-streams defaults
-```
+   ```sh
+   update-rc.d tnt4j-streams defaults
+   ```
 
 ### MS Windows system
 #### Manual install

@@ -57,7 +57,7 @@ resolved data is "interesting" and particular set of those additional attributes
 But if you know possible content of those maps, may select just some particular set of "interesting" entries of those maps to stream. In 
 this case comment out field mappings for `SyslogMap` and `SyslogVars`, and put activity event mappings like this:
 ```xml
-    <field name="propName1" locator="SyslogVars.propName1" locator-type="Label"/>
-    <field name="propName2" locator="SyslogVars.propName2" locator-type="Label" datatype="Number" format="####0.00"/>
-    <field name="propName3" locator="SyslogMap.propName3" locator-type="Label"/>
+<field name="propName1" locator="SyslogVars.propName1" locator-type="Label"/>
+<field name="propName2" locator="SyslogVars.propName2" locator-type="Label" datatype="Number" format="####0.00"/>
+<field name="propName3" locator="SyslogMap.propName3" locator-type="Label"/>
 ```
