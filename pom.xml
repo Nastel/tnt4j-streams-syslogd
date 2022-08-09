@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (C) 2015-2021, JKOOL LLC.
+  ~ Copyright 2015-2022 JKOOL, LLC.
   ~
   ~ This library is free software; you can redistribute it and/or
   ~ modify it under the terms of the GNU Lesser General Public
@@ -188,18 +188,35 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>${release.deploy.dir}</directory>
-                            <includes>
-                                <include>${release.deploy.finalName}/</include>
-                                <include>${release.deploy.finalName}.*</include>
-                            </includes>
-                        </fileset>
-                    </filesets>
-                </configuration>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>clean-target</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>clean-build</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${assembly.skipAssembly}</skip>
+                            <filesets>
+                                <fileset>
+                                    <directory>${release.deploy.dir}</directory>
+                                    <includes>
+                                        <include>${release.deploy.finalName}/</include>
+                                        <include>${release.deploy.finalName}.*</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -224,7 +241,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.2</version>
                 <configuration>
                     <archive>
                         <!--<index>true</index>-->
@@ -437,13 +454,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.2</version>
+            <version>5.9.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
-            <version>5.8.2</version>
+            <version>5.9.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
