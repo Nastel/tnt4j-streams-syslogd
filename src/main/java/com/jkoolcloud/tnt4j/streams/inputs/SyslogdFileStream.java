@@ -18,7 +18,12 @@
 
 package com.jkoolcloud.tnt4j.streams.inputs;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.apache.commons.lang3.StringUtils;
 import org.graylog2.syslog4j.Syslog;
@@ -179,7 +184,7 @@ public class SyslogdFileStream extends SyslogdStream {
 
 	private void sendFromTextFile(SyslogIF syslog) throws IOException, InterruptedException {
 		int syslogLevel = SyslogUtility.getLevel(level);
-		InputStream is = fileName == null ? System.in : new FileInputStream(fileName);
+		InputStream is = fileName == null ? System.in : Files.newInputStream(Paths.get(fileName));
 
 		logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
 				"SyslogdStream.file.send.start", fileName);
