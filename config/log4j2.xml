@@ -22,7 +22,8 @@
 <Configuration strict="true"
                xmlns="http://logging.apache.org/log4j/2.0/config"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config">
+               xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config
+                                   https://raw.githubusercontent.com/apache/logging-log4j2/master/log4j-core/src/main/resources/Log4j-config.xsd">
     <Properties>
         <Property name="tnt4j.streams.log.filename">logs/tnt4j-streams.log</Property>
         <Property name="tnt4j.activities.log.filename">logs/tnt4j-streams-activities.log</Property>
@@ -77,19 +78,19 @@
     </Appenders>
     <Loggers>
         <!-- ### jKool LLC TNT4J Streams log level and appenders used -->
-        <asyncRoot level="INFO">
+        <AsyncRoot level="INFO">
             <AppenderRef ref="console"/>
             <AppenderRef ref="file"/>
-        </asyncRoot>
+        </AsyncRoot>
         <!-- ### streams API logger -->
-        <asyncLogger name="com.jkoolcloud.tnt4j.streams" level="DEBUG"/>
+        <AsyncLogger name="com.jkoolcloud.tnt4j.streams" level="DEBUG"/>
         <!-- ### tnt4j API logger -->
-        <!-- <asyncLogger name="com.jkoolcloud.tnt4j" level="DEBUG"/> -->
+        <!-- <AsyncLogger name="com.jkoolcloud.tnt4j" level="DEBUG"/> -->
         <!-- ### jesl API logger -->
-        <!-- <asyncLogger name="com.jkoolcloud.jesl" level="DEBUG"/> -->
+        <!-- <AsyncLogger name="com.jkoolcloud.jesl" level="DEBUG"/> -->
         <!-- #### streamed activity entities logger #### -->
-        <asyncLogger name="com.jkoolcloud.tnt4j.streams.activities_log" level="INFO" additivity="false">
+        <AsyncLogger name="com.jkoolcloud.tnt4j.streams.activities_log" level="INFO" additivity="false">
             <AppenderRef ref="activities_log"/>
-        </asyncLogger>
+        </AsyncLogger>
     </Loggers>
 </Configuration>
