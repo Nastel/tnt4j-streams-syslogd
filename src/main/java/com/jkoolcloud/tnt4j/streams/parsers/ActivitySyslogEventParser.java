@@ -22,7 +22,6 @@ import static com.jkoolcloud.tnt4j.streams.fields.StreamFieldType.*;
 import static com.jkoolcloud.tnt4j.streams.utils.SyslogStreamConstants.*;
 
 import java.lang.Exception;
-import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,6 +29,7 @@ import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.graylog2.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.graylog2.syslog4j.server.SyslogServerEventIF;
 import org.graylog2.syslog4j.server.impl.event.SyslogServerEvent;
@@ -184,9 +184,7 @@ public class ActivitySyslogEventParser extends AbstractSyslogParser {
 		InetSocketAddress from = null;
 		if (event instanceof SyslogServerEvent) {
 			try {
-				Field addressField = event.getClass().getField("inetAddress"); // NON-NLS
-				addressField.setAccessible(true);
-				from = (InetSocketAddress) addressField.get(event);
+				from = (InetSocketAddress) FieldUtils.readDeclaredField(event, "inetAddress", true); // NON-NLS
 			} catch (Exception exc) {
 			}
 		}
