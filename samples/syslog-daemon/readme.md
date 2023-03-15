@@ -51,7 +51,7 @@ Parser resolved data map may contain such entries:
     * `SyslogMap` - map of resolved [`RFC 5424`](https://tools.ietf.org/html/rfc5424) structured data
     * `SyslogVars` - map of resolved application message contained (varName=varValue) variables
 
-By default stream will put all resolved values form `SyslogMap` and `SyslogVars` as activity event properties. It is useful when all 
+By default, stream will put all resolved values form `SyslogMap` and `SyslogVars` as activity event properties. It is useful when all 
 resolved data is "interesting" and particular set of those additional attributes is unknown.
 
 But if you know possible content of those maps, may select just some particular set of "interesting" entries of those maps to stream. In 
