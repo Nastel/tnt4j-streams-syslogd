@@ -189,8 +189,7 @@ public class SyslogdFileStream extends SyslogdStream {
 		logger().log(OpLevel.DEBUG, StreamsResources.getBundle(SyslogStreamConstants.RESOURCE_BUNDLE_NAME),
 				"SyslogdStream.file.send.start", fileName);
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		try {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
 			String line;
 			while ((line = br.readLine()) != null && !line.isEmpty()) {
 				if (!line.startsWith("{")) {
@@ -201,8 +200,6 @@ public class SyslogdFileStream extends SyslogdStream {
 					jsonSyslog(syslog, line);
 				}
 			}
-		} finally {
-			Utils.close(br);
 		}
 	}
 
