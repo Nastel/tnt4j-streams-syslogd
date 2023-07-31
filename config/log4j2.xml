@@ -83,7 +83,7 @@
             <AppenderRef ref="file"/>
         </AsyncRoot>
         <!-- ### streams API logger -->
-        <AsyncLogger name="com.jkoolcloud.tnt4j.streams" level="DEBUG"/>
+        <AsyncLogger name="com.jkoolcloud.tnt4j.streams" level="INFO"/>
         <!-- ### tnt4j API logger -->
         <!-- <AsyncLogger name="com.jkoolcloud.tnt4j" level="DEBUG"/> -->
         <!-- ### jesl API logger -->
