@@ -107,7 +107,7 @@
         <syslog4j.version>0.9.62</syslog4j.version>
 
         <junit.version>5.10.1</junit.version>
-        <mockito.version>5.8.0</mockito.version>
+        <mockito.version>5.10.0</mockito.version>
     </properties>
 
     <profiles>
