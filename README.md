@@ -2,6 +2,12 @@
 
 -----------------------
 
+**NOTE:** `tnt4j-streams-syslogd` version `2.x` migrated to Java 11 and bumped SLF4J from `1.7.x` to `2.x`.
+
+Latest Java 8 compliant `tnt4j-streams-syslogd` version is `1.15.x`.
+
+-----------------------
+
 **NOTE:** `tnt4j-streams-syslogd` version `1.13.0` migrated logger to `log4j2`. In case you have changed default `tnt4j-streams-syslogd`
 logger configuration using previous `tnt4j-streams-syslogd` versions, please check new logger configuration
 file [log4j2.xml](./config/log4j2.xml).
@@ -73,7 +79,7 @@ chapter ['Running TNT4J-Streams'](https://github.com/Nastel/tnt4j-streams/blob/m
       <dependency>
           <groupId>com.jkoolcloud.tnt4j.streams</groupId>
           <artifactId>tnt4j-streams-syslogd</artifactId>
-          <version>1.15.1</version>
+          <version>2.1.0</version>
       </dependency>
       ``` 
     * Write streams configuration file.
@@ -86,7 +92,7 @@ chapter ['Running TNT4J-Streams'](https://github.com/Nastel/tnt4j-streams/blob/m
 ### Running samples
 
 When release assemblies are built, samples are located in [`samples`](./samples) directory, e.g.,
-`build/tnt4j-streams-syslogd-1.15.1/samples`. To run desired sample:
+`build/tnt4j-streams-syslogd-2.1.0/samples`. To run desired sample:
 * go to sample directory
 * run `run.bat` or `run.sh` depending on your OS
 
