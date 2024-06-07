@@ -197,6 +197,7 @@
                     <verbose>${maven.compiler.verbose}</verbose>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
+                    <release>${maven.compiler.target}</release>
                     <debuglevel>${maven.compiler.debuglevel}</debuglevel>
                     <fork>${maven.compiler.fork}</fork>
                 </configuration>
