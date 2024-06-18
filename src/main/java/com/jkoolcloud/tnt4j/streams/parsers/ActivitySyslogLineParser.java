@@ -44,7 +44,7 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * <p>
  * This parser resolved data map may contain such entries:
  * <ul>
- * <li>for activity fields:</li>
+ * <li>for activity fields:
  * <ul>
  * <li>EventType - resolved from log line application message contained variable named
  * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_TYPE_LABEL}</li>
@@ -73,7 +73,8 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * <li>ElapsedTime - calculated time difference between same host and app events in microseconds</li>
  * <li>MsgCharSet - char set name used by parser</li>
  * </ul>
- * <li>for activity properties:</li>
+ * </li>
+ * <li>for activity properties:
  * <ul>
  * <li>facility - resolved log line facility name. If resolved 'priority' is {@code null} - then value is
  * {@code "user"}</li>
@@ -83,13 +84,15 @@ import com.jkoolcloud.tnt4j.streams.utils.*;
  * <li>version - resolved log line Syslog version ('0' for RFC 3164, '1' for RFC 5424)</li>
  * <li>priority - resolved log line priority</li>
  * </ul>
- * <li>maps of resolved additional custom activity properties:</li>
+ * </li>
+ * <li>maps of resolved additional custom activity properties:
  * <ul>
  * <li>SyslogMap - map of resolved RFC 5424 structured data: contains sub-map for every found structure, but can be
  * flattened to single level map (if only one structure is available) using parser property
  * {@code "FlattenStructuredData"}</li>
  * <li>SyslogVars - map of resolved application message contained (varName=varValue) variables</li>
  * </ul>
+ * </li>
  * </ul>
  * <p>
  * This parser supports the following properties (in addition to those supported by {@link AbstractSyslogParser}):

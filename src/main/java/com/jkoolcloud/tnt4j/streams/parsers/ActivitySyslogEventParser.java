@@ -42,8 +42,8 @@ import com.jkoolcloud.tnt4j.streams.utils.SyslogUtils;
 import com.jkoolcloud.tnt4j.streams.utils.Utils;
 
 /**
- * Implements an activity data parser that assumes each activity data item is an Syslog server event
- * {@link SyslogServerEventIF}. Parser resolved event data fields are put into {@link Map} and afterwards mapped into
+ * Implements an activity data parser that assumes each activity data item is a Syslog server event
+ * {@link SyslogServerEventIF}. Parser resolved event data fields are put into {@link Map} and afterward mapped into
  * activity fields and properties according to defined parser configuration.
  * <p>
  * Map entries containing values as internal {@link Map}s are automatically mapped into activity properties. If only
@@ -52,7 +52,7 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * <p>
  * This parser resolved data map may contain such entries:
  * <ul>
- * <li>for activity fields:</li>
+ * <li>for activity fields:
  * <ul>
  * <li>EventType - resolved from log event application message contained variable named
  * {@value com.jkoolcloud.tnt4j.logger.AppenderConstants#PARAM_OP_TYPE_LABEL}</li>
@@ -81,7 +81,8 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * <li>ElapsedTime - calculated time difference between same host and app events in microseconds</li>
  * <li>MsgCharSet - resolved log event char set name</li>
  * </ul>
- * <li>for activity properties:</li>
+ * </li>
+ * <li>for activity properties:
  * <ul>
  * <li>facility - resolved log event facility name</li>
  * <li>level - resolved log event level</li>
@@ -89,13 +90,15 @@ import com.jkoolcloud.tnt4j.streams.utils.Utils;
  * <li>hostaddr - resolved log event host address</li>
  * <li>priority - resolved log event priority</li>
  * </ul>
- * <li>maps of resolved additional custom activity properties:</li>
+ * </li>
+ * <li>maps of resolved additional custom activity properties:
  * <ul>
  * <li>SyslogMap - map of resolved RFC 5424 structured data: contains sub-map for every found structure, but can be
  * flattened to single level map (if only one structure is available) using parser property
  * {@code "FlattenStructuredData"}</li>
  * <li>SyslogVars - map of resolved application message contained (varName=varValue) variables</li>
  * </ul>
+ * </li>
  * </ul>
  * <p>
  * This activity parser supports configuration properties from {@link AbstractSyslogParser} (and higher hierarchy
